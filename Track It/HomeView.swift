@@ -10,6 +10,18 @@ import SwiftUI
 struct HomeView: View {
     @State private var tab: String = "home"
     @State private var xOffset = -116
+    @State private var stopWatchActive: Bool = false
+    @StateObject private var stopwatch = Stopwatch()
+
+    var timeString: String {
+        let minutes = Int(stopwatch.counter) / 60
+        let seconds = Int(stopwatch.counter) % 60
+        let milliseconds = Int(
+            (stopwatch.counter.truncatingRemainder(dividingBy: 1)) * 100
+        )
+
+        return String(format: "%02d:%02d.%02d", minutes, seconds, milliseconds)
+    }
 
     var body: some View {
         ZStack {
@@ -25,32 +37,48 @@ struct HomeView: View {
                     .offset(y: 90)
                     HStack {
                         Button {
+                            stopwatch.reset()
                         } label: {
-                            Image(systemName: "xmark")
+                            Image(systemName: "arrow.clockwise")
                                 .font(.system(size: 30))
-                                .foregroundStyle(.red.opacity(0.8))
-                        }.frame(width: 60, height: 60)
-                            .background(.red.opacity(0.2))
-                            .clipShape(Capsule())
+                                .foregroundStyle(.accentGrey)
+                        }
+                        .frame(width: 60, height: 60)
+                        .background(.accentGrey.opacity(0.5))
+                        .clipShape(Capsule())
 
                         HStack {
-                            Text("0 1 : 0 2 . 0 5")
-                                .font(.custom("PTSans-NarrowBold", size: 40))
-                                // .font(.system(size: 30))
-
+                            Text(timeString)
+                                .font(.custom("PTSans-NarrowBold", size: 50))
                                 .foregroundStyle(.steelBlue)
                         }
                         .frame(width: 200, height: 70)
                         //.background(.accent)
                         .cornerRadius(10)
                         Button {
+                            withAnimation(.smooth(duration: 0.2)) {
+                                if stopwatch.isRunning {
+                                    stopwatch.pause()
+                                } else {
+                                    stopwatch.start()
+                                }
+                            }
                         } label: {
-                            Image(systemName: "play.fill")
-                                .font(.system(size: 30))
-                                .foregroundStyle(Color.green)
+                            Image(
+                                systemName: !stopwatch.isRunning
+                                    ? "play.fill" : "xmark"
+                            )
+                            .font(.system(size: 30))
+                            .foregroundStyle(
+                                !stopwatch.isRunning
+                                    ? Color.green : .red.opacity(0.8)
+                            )
                         }
                         .frame(width: 60, height: 60)
-                        .background(Color.green.opacity(0.3))
+                        .background(
+                            !stopwatch.isRunning
+                                ? Color.green.opacity(0.3) : .red.opacity(0.2)
+                        )
                         .clipShape(Capsule())
                     }
                     .frame(width: 349, height: 80)
@@ -60,10 +88,15 @@ struct HomeView: View {
 
                 }
                 Spacer()
+                VStack {
 
+                }
+                .frame(width: 400, height: 640)
+                .background(.primaryBlue)
                 HStack {
                     Button(action: {
-                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4)) {
+                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
+                        {
                             tab = "home"
                             xOffset = -116
                         }
@@ -83,7 +116,8 @@ struct HomeView: View {
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
 
                     Button(action: {
-                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4)) {
+                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
+                        {
                             tab = "add"
                             xOffset = -58
                         }
@@ -103,7 +137,8 @@ struct HomeView: View {
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
 
                     Button(action: {
-                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4)) {
+                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
+                        {
                             tab = "chart"
                             xOffset = 0
                         }
@@ -123,7 +158,8 @@ struct HomeView: View {
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
 
                     Button(action: {
-                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4)) {
+                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
+                        {
                             tab = "search"
                             xOffset = 59
                         }
@@ -143,7 +179,8 @@ struct HomeView: View {
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
 
                     Button(action: {
-                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4)) {
+                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
+                        {
                             tab = "settings"
                             xOffset = 116
                         }
@@ -166,43 +203,43 @@ struct HomeView: View {
                 .frame(width: 300, height: 60)
                 .background(.primaryBlue)
                 .cornerRadius(30)
-                
+
                 Rectangle()
-                .fill(.pinkAccent.opacity(0.3))
-                .frame(width: 50, height: 40)
-                .cornerRadius(50)
-                .offset(x: CGFloat(xOffset), y: -58)
-//                if (tab == "home") {
-//                    Rectangle()
-//                        .fill(.pinkAccent.opacity(0.3))
-//                        .frame(width: 50, height: 40)
-//                        .cornerRadius(50)
-//                        .offset(x: -116, y: -58)
-//                } else if (tab == "add") {
-//                    Rectangle()
-//                        .fill(.pinkAccent.opacity(0.3))
-//                        .frame(width: 50, height: 40)
-//                        .cornerRadius(50)
-//                        .offset(x: -58, y: -58)
-//                } else if (tab == "chart") {
-//                    Rectangle()
-//                        .fill(.pinkAccent.opacity(0.3))
-//                        .frame(width: 50, height: 40)
-//                        .cornerRadius(50)
-//                        .offset(x: 0, y: -58)
-//                } else if (tab == "search") {
-//                    Rectangle()
-//                        .fill(.pinkAccent.opacity(0.3))
-//                        .frame(width: 50, height: 40)
-//                        .cornerRadius(50)
-//                        .offset(x: 59, y: -58)
-//                } else {
-//                    Rectangle()
-//                        .fill(.pinkAccent.opacity(0.3))
-//                        .frame(width: 50, height: 40)
-//                        .cornerRadius(50)
-//                        .offset(x: 116, y: -58)
-//                }
+                    .fill(.pinkAccent.opacity(0.3))
+                    .frame(width: 50, height: 40)
+                    .cornerRadius(50)
+                    .offset(x: CGFloat(xOffset), y: -58)
+                //                if (tab == "home") {
+                //                    Rectangle()
+                //                        .fill(.pinkAccent.opacity(0.3))
+                //                        .frame(width: 50, height: 40)
+                //                        .cornerRadius(50)
+                //                        .offset(x: -116, y: -58)
+                //                } else if (tab == "add") {
+                //                    Rectangle()
+                //                        .fill(.pinkAccent.opacity(0.3))
+                //                        .frame(width: 50, height: 40)
+                //                        .cornerRadius(50)
+                //                        .offset(x: -58, y: -58)
+                //                } else if (tab == "chart") {
+                //                    Rectangle()
+                //                        .fill(.pinkAccent.opacity(0.3))
+                //                        .frame(width: 50, height: 40)
+                //                        .cornerRadius(50)
+                //                        .offset(x: 0, y: -58)
+                //                } else if (tab == "search") {
+                //                    Rectangle()
+                //                        .fill(.pinkAccent.opacity(0.3))
+                //                        .frame(width: 50, height: 40)
+                //                        .cornerRadius(50)
+                //                        .offset(x: 59, y: -58)
+                //                } else {
+                //                    Rectangle()
+                //                        .fill(.pinkAccent.opacity(0.3))
+                //                        .frame(width: 50, height: 40)
+                //                        .cornerRadius(50)
+                //                        .offset(x: 116, y: -58)
+                //                }
             }
         }
         .edgesIgnoringSafeArea(.all)
