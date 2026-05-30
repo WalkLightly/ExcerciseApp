@@ -55,6 +55,8 @@ struct HomeView: View {
                         .frame(width: 200, height: 70)
                         //.background(.accent)
                         .cornerRadius(10)
+                        .sensoryFeedback(.impact(weight: .heavy), trigger: stopwatch.isRunning)
+
                         Button {
                             withAnimation(.smooth(duration: 0.2)) {
                                 if stopwatch.isRunning {
@@ -80,6 +82,8 @@ struct HomeView: View {
                                 ? Color.green.opacity(0.3) : .red.opacity(0.2)
                         )
                         .clipShape(Capsule())
+                        .sensoryFeedback(.impact(weight: .heavy), trigger: stopwatch.isRunning)
+
                     }
                     .frame(width: 349, height: 80)
                     .background(.darkBlue)
@@ -209,38 +213,12 @@ struct HomeView: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .offset(x: CGFloat(xOffset), y: -58)
-                //                if (tab == "home") {
-                //                    Rectangle()
-                //                        .fill(.pinkAccent.opacity(0.3))
-                //                        .frame(width: 50, height: 40)
-                //                        .cornerRadius(50)
-                //                        .offset(x: -116, y: -58)
-                //                } else if (tab == "add") {
-                //                    Rectangle()
-                //                        .fill(.pinkAccent.opacity(0.3))
-                //                        .frame(width: 50, height: 40)
-                //                        .cornerRadius(50)
-                //                        .offset(x: -58, y: -58)
-                //                } else if (tab == "chart") {
-                //                    Rectangle()
-                //                        .fill(.pinkAccent.opacity(0.3))
-                //                        .frame(width: 50, height: 40)
-                //                        .cornerRadius(50)
-                //                        .offset(x: 0, y: -58)
-                //                } else if (tab == "search") {
-                //                    Rectangle()
-                //                        .fill(.pinkAccent.opacity(0.3))
-                //                        .frame(width: 50, height: 40)
-                //                        .cornerRadius(50)
-                //                        .offset(x: 59, y: -58)
-                //                } else {
-                //                    Rectangle()
-                //                        .fill(.pinkAccent.opacity(0.3))
-                //                        .frame(width: 50, height: 40)
-                //                        .cornerRadius(50)
-                //                        .offset(x: 116, y: -58)
-                //                }
+         
             }
+            VStack {
+                AddItem()
+            }
+            .offset(x: 0, y: tab == "add" ? 90 : 2000)
         }
         .edgesIgnoringSafeArea(.all)
     }
