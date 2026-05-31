@@ -113,7 +113,7 @@ struct CalendarView: View {
     }
 
     var dayOfWeekStack: some View {
-        HStack(spacing: -53) {
+        HStack(spacing: 1) {
             Text("Sun").dayOfWeek()
             Text("Mon").dayOfWeek()
             Text("Tue").dayOfWeek()
@@ -122,7 +122,7 @@ struct CalendarView: View {
             Text("Fri").dayOfWeek()
             Text("Sat").dayOfWeek()
         }
-        .padding(.bottom, 30)
+        .padding(.bottom, 10)
     }
 
     var calendarGrid: some View {
