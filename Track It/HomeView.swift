@@ -219,6 +219,7 @@ struct HomeView: View {
                 AddItem()
             }
             .offset(x: 0, y: tab == "add" ? 90 : 2000)
+            .opacity(tab == "add" ? 1 : 0.2)
         }
         .edgesIgnoringSafeArea(.all)
     }

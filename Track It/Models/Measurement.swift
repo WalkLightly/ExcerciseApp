@@ -15,7 +15,7 @@ import Foundation
 
 struct Measurement {
     var id: String
-    var name: String
+    var bodyPart: String
     var measurement: String
     var dateRecorded: Date
 }
