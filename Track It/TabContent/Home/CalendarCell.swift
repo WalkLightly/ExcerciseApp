@@ -18,20 +18,62 @@ struct CalendarCell: View {
         VStack {
             if monthStruct().monthType == MonthType.Current {
                 Text(monthStruct().day())
-                    .font(.custom("Inder-Regular", size: 20))
+                    .font(.custom("Poppins-Regular", size: 15))
+                HStack(spacing: -10) {
+                    // loop over the excercises for this day
+                    if monthStruct().dayInt == 4 {
+                        Rectangle()
+                            .fill(.shouldersAccent)
+                            .frame(width: 20, height: 20)
+                            .clipShape(Capsule())
+                        Rectangle()
+                            .fill(.legsAccent)
+                            .frame(width: 20, height: 20)
+                            .clipShape(Capsule())
+                        Rectangle()
+                            .fill(.absAccent)
+                            .frame(width: 20, height: 20)
+                            .clipShape(Capsule())
+                    } else if monthStruct().dayInt == 5 {
+                        Rectangle()
+                            .fill(.chestAccent)
+                            .frame(width: 20, height: 20)
+                            .clipShape(Capsule())
+                        Rectangle()
+                            .fill(.tricepsAccent)
+                            .frame(width: 20, height: 20)
+                            .clipShape(Capsule())
+                        Rectangle()
+                            .fill(.cardioAccent)
+                            .frame(width: 20, height: 20)
+                            .clipShape(Capsule())
+                    }
+                    else if monthStruct().dayInt == 6 {
+                       Rectangle()
+                           .fill(.backAccent)
+                           .frame(width: 20, height: 20)
+                           .clipShape(Capsule())
+                       Rectangle()
+                           .fill(.bicepsAccent)
+                           .frame(width: 20, height: 20)
+                           .clipShape(Capsule())
+                       Rectangle()
+                           .fill(.cardioAccent)
+                           .frame(width: 20, height: 20)
+                           .clipShape(Capsule())
+                   }
+                }
+                .padding(.top, -10)
 
             } else {
                 Text("")
             }
-            Rectangle()
-                .fill(.brown)
-                .frame(width: 45, height: 10)
-                .cornerRadius(10)
         }
         .foregroundColor(.white)
         .frame(width: 53, height: 53)
         .background(
-            monthStruct().monthType == MonthType.Current ? .darkBlue : .grayBlue
+            monthStruct().monthType == MonthType.Current
+                ? .darkBlue : .grayBlue.opacity(0.1)
         )
         .cornerRadius(10)
     }

@@ -17,21 +17,27 @@ struct DateScrollerView: View
         HStack
         {
             Spacer()
-            Button(action: previousMonth)
+            Button(action:  {withAnimation(.smooth(duration: 0.3, extraBounce: 0.3))
+                {previousMonth() }})
             {
                 Image(systemName: "arrow.left")
                     .imageScale(.large)
+                    .foregroundStyle(.steelBlue)
                     .font(Font.title.weight(.bold))
             }
             Text(CalendarHelper().monthYearString(dateHolder.date))
-                .font(.title)
+                .font(.custom("Inder-Regular", size: 30))
                 .bold()
-                .animation(.none)
+                .transition(
+                    .move(edge: .leading).combined(with: .opacity)
+                )
                 .frame(maxWidth: .infinity)
-            Button(action: nextMonth)
+            Button(action:  {withAnimation(.smooth(duration: 0.3, extraBounce: 0.3))
+                {nextMonth() }})
             {
                 Image(systemName: "arrow.right")
                     .imageScale(.large)
+                    .foregroundStyle(.steelBlue)
                     .font(Font.title.weight(.bold))
             }
             Spacer()
@@ -51,6 +57,9 @@ struct DateScrollerView: View
 
 struct DateScrollerView_Previews: PreviewProvider {
     static var previews: some View {
+        let dateHolder = DateHolder()
+
         DateScrollerView()
+            .environmentObject(dateHolder)
     }
 }

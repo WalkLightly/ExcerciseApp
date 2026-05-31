@@ -17,6 +17,90 @@ struct CalendarView: View {
     var body: some View {
 
         VStack(spacing: 1) {
+            // shoulders/legs triceps/chest biceps/back abs cardio
+            // clicking one of thes up top, show which days of the month I did each one for
+            VStack(alignment: .leading) {
+                HStack {
+                    VStack(spacing: -1) {
+                        Text("Shoulders")
+                            .padding(10)
+                            .foregroundStyle(.black)
+                    }
+                    .frame(height: 30)
+                    .background(.shouldersAccent)
+                    .cornerRadius(20)
+                    
+                    VStack(spacing: -1) {
+                        Text("Legs")
+                            .padding(10)
+                            .foregroundStyle(.black)
+                        
+                    }
+                    .frame(height:  30)
+                    .background(.legsAccent)
+                    .cornerRadius(20)
+                    
+                    VStack(spacing: -1) {
+                        Text("Triceps")
+                            .padding(10)
+                            .foregroundStyle(.black)
+                        
+                    }
+                    .frame(height:  30)
+                    .background(.tricepsAccent)
+                    .cornerRadius(20)
+                    
+                    VStack(spacing: -1) {
+                        Text("Chest")
+                            .padding(15)
+                            .foregroundStyle(.black)
+                        
+                    }
+                    .frame(height:  30)
+                    .background(.chestAccent)
+                    .cornerRadius(20)
+                }
+                HStack {
+                    VStack(spacing: -1) {
+                        Text("Back")
+                            .padding(10)
+                            .foregroundStyle(.black)
+                    }
+                    .frame(height:  30)
+                    .background(.backAccent)
+                    .cornerRadius(20)
+                    VStack(spacing: -1) {
+                        Text("Biceps")
+                            .padding(10)
+                            .foregroundStyle(.black)
+                        
+                    }
+                    .frame(height:  30)
+                    .background(.bicepsAccent)
+                    .cornerRadius(20)
+                    
+                    VStack(spacing: -1) {
+                        Text("Cardio")
+                            .padding(10)
+                            .foregroundStyle(.black)
+                        
+                    }
+                    .frame(height:  30)
+                    .background(.cardioAccent)
+                    .cornerRadius(20)
+                    
+                    VStack(spacing: -1) {
+                        Text("Abs")
+                            .padding(10)
+                            .foregroundStyle(.black)
+                        
+                    }
+                    .frame(height:  30)
+                    .background(.absAccent)
+                    .cornerRadius(20)
+                }
+            }
+            .padding(.leading, -50)
             DateScrollerView()
                 .environmentObject(dateHolder)
                 .padding()
@@ -25,6 +109,7 @@ struct CalendarView: View {
             calendarGrid
 
         }
+        .padding(10)
     }
 
     var dayOfWeekStack: some View {
@@ -66,6 +151,9 @@ struct CalendarView: View {
                 }
             }
         }
+        .transition(
+            .move(edge: .leading).combined(with: .opacity)
+        )
     }
 }
 

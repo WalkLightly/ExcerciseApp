@@ -100,6 +100,7 @@ struct HomeView: View {
                 }
                 .frame(width: 400, height: 640)
                 .background(.primaryBlue)
+                .cornerRadius(10)
                 HStack {
                     Button(action: {
                         withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
