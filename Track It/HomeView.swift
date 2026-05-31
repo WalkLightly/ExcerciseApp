@@ -96,10 +96,10 @@ struct HomeView: View {
                     let dateHolder = DateHolder()
                     CalendarView()
                         .environmentObject(dateHolder)
-                    Spacer()
+                    //Spacer()
                 }
                 .frame(width: 400, height: 640)
-                .background(.primaryBlue)
+                //.background(.primaryBlue)
                 .cornerRadius(10)
                 HStack {
                     Button(action: {

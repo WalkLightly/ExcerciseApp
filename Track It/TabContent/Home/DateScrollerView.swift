@@ -22,7 +22,7 @@ struct DateScrollerView: View
             {
                 Image(systemName: "arrow.left")
                     .imageScale(.large)
-                    .foregroundStyle(.steelBlue)
+                    .foregroundStyle(.cardioAccent)
                     .font(Font.title.weight(.bold))
             }
             Text(CalendarHelper().monthYearString(dateHolder.date))
@@ -37,7 +37,7 @@ struct DateScrollerView: View
             {
                 Image(systemName: "arrow.right")
                     .imageScale(.large)
-                    .foregroundStyle(.steelBlue)
+                    .foregroundStyle(.cardioAccent)
                     .font(Font.title.weight(.bold))
             }
             Spacer()
