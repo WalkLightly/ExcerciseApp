@@ -1,5 +1,5 @@
 import Foundation
-import Combine
+internal import Combine
 
 class Stopwatch: ObservableObject {
     @Published var counter: Double = 0.0

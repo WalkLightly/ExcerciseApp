@@ -447,7 +447,7 @@ struct AddItem: View {
 
                 }
                 .frame(width: 180, height: 50)
-                .background(.pinkAccent.opacity(0.7))
+                .background(.pinkAccent)
                 .cornerRadius(30)
             }
         }

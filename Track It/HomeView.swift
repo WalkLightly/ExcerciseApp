@@ -93,7 +93,10 @@ struct HomeView: View {
                 }
                 Spacer()
                 VStack {
-
+                    let dateHolder = DateHolder()
+                    CalendarView()
+                        .environmentObject(dateHolder)
+                    Spacer()
                 }
                 .frame(width: 400, height: 640)
                 .background(.primaryBlue)
