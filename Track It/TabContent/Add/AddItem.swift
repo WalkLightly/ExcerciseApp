@@ -12,6 +12,7 @@ struct AddItem: View {
     @State private var tab = "excercise"
     @State private var xOffset = -116
     @State private var chosenFont = "PTSans-Narrow"
+    @State private var chosenFontBold = "PTSans-NarrowBold"
 
     // excercise obj
     @State private var eName: String = ""
@@ -46,7 +47,7 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Name")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                         TextField("", text: $eName)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
@@ -63,7 +64,7 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Location")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                         TextField("", text: $location)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
@@ -84,7 +85,7 @@ struct AddItem: View {
                                                 .foregroundStyle(.darkBlue)
                                                 .font(
                                                     .custom(
-                                                        chosenFont,
+                                                        chosenFontBold,
                                                         size: 20
                                                     )
                                                 )
@@ -114,7 +115,7 @@ struct AddItem: View {
                                             Text("Add")
                                                 .font(
                                                     .custom(
-                                                        chosenFont,
+                                                        chosenFontBold,
                                                         size: 25
                                                     )
                                                 )
@@ -175,7 +176,7 @@ struct AddItem: View {
                                                     || muscleGroup.count == 0
                                                     ? .gray : .steelBlue
                                             )
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                             .foregroundColor(Color.white)
                                             .cornerRadius(10)
                                     }
@@ -187,7 +188,7 @@ struct AddItem: View {
                                 }
                             }
                         }
-                        .frame(width: 380, height: 440)
+                        .frame(width: 380, height: 425)
                         .transition(
                             .move(edge: .leading).combined(with: .opacity)
                         )
@@ -201,11 +202,11 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Weight")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                         TextField("", text: $weight)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                             .padding(.leading, 5)
                                             .padding(.top, -15)
                                         Rectangle()
@@ -218,7 +219,7 @@ struct AddItem: View {
                                     HStack {
                                         Text("Date: ")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                         VStack {
                                             
                                         Text(weighDate.formatted())
@@ -246,7 +247,7 @@ struct AddItem: View {
                                                 weight == ""
                                                     ? .gray : .steelBlue
                                             )
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                             .foregroundColor(Color.white)
                                             .cornerRadius(10)
                                     }
@@ -256,7 +257,7 @@ struct AddItem: View {
                                 }
                             }
                         }
-                        .frame(width: 380, height: 290)
+                        .frame(width: 380, height: 225)
                         .transition(
                             .move(edge: .leading).combined(with: .opacity)
                         )
@@ -270,8 +271,8 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Body Part")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
-                                        TextField("", text: $weight)
+                                            .font(.custom(chosenFontBold, size: 20))
+                                        TextField("", text: $bodyPart)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
                                             .font(.custom(chosenFont, size: 20))
@@ -287,8 +288,8 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Measurement (inches)")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
-                                        TextField("", text: $weight)
+                                            .font(.custom(chosenFontBold, size: 20))
+                                        TextField("", text: $measurement)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
                                             .font(.custom(chosenFont, size: 20))
@@ -304,7 +305,7 @@ struct AddItem: View {
                                     HStack {
                                         Text("Date: ")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                         VStack {
                                             
                                         Text(weighDate.formatted())
@@ -329,20 +330,20 @@ struct AddItem: View {
                                         Text("Add Measurement")
                                             .frame(width: 350, height: 50)
                                             .background(
-                                                weight == ""
+                                                (measurement == "" || bodyPart == "")
                                                     ? .gray : .steelBlue
                                             )
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFontBold, size: 20))
                                             .foregroundColor(Color.white)
                                             .cornerRadius(10)
                                     }
                                     .padding(.top, 20)
-                                    .disabled(weight == "")
+                                    .disabled(measurement == "" || bodyPart == "")
 
                                 }
                             }
                         }
-                        .frame(width: 380, height: 350)
+                        .frame(width: 380, height: 310)
                         .transition(
                             .move(edge: .leading).combined(with: .opacity)
                         )
@@ -451,7 +452,7 @@ struct AddItem: View {
             }
         }
         .onAppear {
-            tab = "measurement"
+            tab = "weight"
         }
     }
 }
