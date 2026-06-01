@@ -30,21 +30,9 @@ struct CalendarCell: View {
                             .fill(.legsAccent)
                             .frame(width: 20, height: 20)
                             .clipShape(Capsule())
-                        Rectangle()
-                            .fill(.absAccent)
-                            .frame(width: 20, height: 20)
-                            .clipShape(Capsule())
                     } else if monthStruct().dayInt == 5 {
                         Rectangle()
                             .fill(.chestAccent)
-                            .frame(width: 20, height: 20)
-                            .clipShape(Capsule())
-                        Rectangle()
-                            .fill(.tricepsAccent)
-                            .frame(width: 20, height: 20)
-                            .clipShape(Capsule())
-                        Rectangle()
-                            .fill(.cardioAccent)
                             .frame(width: 20, height: 20)
                             .clipShape(Capsule())
                     }
@@ -64,6 +52,7 @@ struct CalendarCell: View {
                    }
                 }
                 .padding(.top, -10)
+                .frame(height: 15)
 
             } else {
                 Text("")

@@ -111,7 +111,7 @@ struct CalendarView: View {
 
         }
     
-    .background(.primaryBlue)
+        .background(.cornflowerBlue)
     .cornerRadius(10)
 //        .padding(10)
     }
@@ -126,7 +126,10 @@ struct CalendarView: View {
             Text("Fri").dayOfWeek()
             Text("Sat").dayOfWeek()
         }
+        .frame(width: 380)
         .padding(.bottom, 10)
+        .background(.backgroundBlue)
+        .cornerRadius(10)
     }
 
     var calendarGrid: some View {
@@ -172,5 +175,6 @@ extension Text {
         self.frame(maxWidth: 375)
             .padding(.top, 1)
             .font(.custom("Inder-Regular", size: 20))
+            .foregroundStyle(.grayBlue)
     }
 }

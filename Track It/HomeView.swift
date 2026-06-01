@@ -96,10 +96,11 @@ struct HomeView: View {
                     let dateHolder = DateHolder()
                     CalendarView()
                         .environmentObject(dateHolder)
-                    //Spacer()
+                        .padding(.top, -10)
+                    Spacer()
                 }
-                .frame(width: 400, height: 640)
-                //.background(.primaryBlue)
+                .frame(width: 400, height: 720)
+               // .background(.primaryBlue)
                 .cornerRadius(10)
                 HStack {
                     Button(action: {
@@ -226,6 +227,7 @@ struct HomeView: View {
             .opacity(tab == "add" ? 1 : 0.2)
         }
         .edgesIgnoringSafeArea(.all)
+        .frame(width: .infinity, height: 1000)
     }
 }
 
