@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var dateHolder = DateHolder()
+
     @State private var tab: String = "home"
     @State private var xOffset = -116
     @State private var stopWatchActive: Bool = false
@@ -92,15 +94,14 @@ struct HomeView: View {
 
                 }
                 Spacer()
-                VStack {
-                    let dateHolder = DateHolder()
+                ScrollView {
                     CalendarView()
                         .environmentObject(dateHolder)
-                        .padding(.top, -10)
-                    Spacer()
+                    ExcerciseDay()
+                        .padding(.top, 30)
                 }
                 .frame(width: 400, height: 720)
-               // .background(.primaryBlue)
+                //.background(.primaryBlue)
                 .cornerRadius(10)
                 HStack {
                     Button(action: {
@@ -223,7 +224,7 @@ struct HomeView: View {
             VStack {
                 AddItem()
             }
-            .offset(x: 0, y: tab == "add" ? 90 : 2000)
+            .offset(x: 0, y: tab == "add" ? 110 : 2000)
             .opacity(tab == "add" ? 1 : 0.2)
         }
         .edgesIgnoringSafeArea(.all)
