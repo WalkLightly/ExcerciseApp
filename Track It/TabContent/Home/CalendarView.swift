@@ -19,88 +19,88 @@ struct CalendarView: View {
         VStack {
             // shoulders/legs triceps/chest biceps/back abs cardio
             // clicking one of thes up top, show which days of the month I did each one for
-//            VStack(alignment: .leading) {
-//                HStack {
-//                    VStack(spacing: -1) {
-//                        Text("Shoulders")
-//                            .padding(10)
-//                            .foregroundStyle(.black)
-//                    }
-//                    .frame(height: 30)
-//                    .background(.shouldersAccent)
-//                    .cornerRadius(20)
-//                    
-//                    VStack(spacing: -1) {
-//                        Text("Legs")
-//                            .padding(10)
-//                            .foregroundStyle(.black)
-//                        
-//                    }
-//                    .frame(height:  30)
-//                    .background(.legsAccent)
-//                    .cornerRadius(20)
-//                    
-//                    VStack(spacing: -1) {
-//                        Text("Triceps")
-//                            .padding(10)
-//                            .foregroundStyle(.black)
-//                        
-//                    }
-//                    .frame(height:  30)
-//                    .background(.tricepsAccent)
-//                    .cornerRadius(20)
-//                    
-//                    VStack(spacing: -1) {
-//                        Text("Chest")
-//                            .padding(15)
-//                            .foregroundStyle(.black)
-//                        
-//                    }
-//                    .frame(height:  30)
-//                    .background(.chestAccent)
-//                    .cornerRadius(20)
-//                }
-//                HStack {
-//                    VStack(spacing: -1) {
-//                        Text("Back")
-//                            .padding(10)
-//                            .foregroundStyle(.black)
-//                    }
-//                    .frame(height:  30)
-//                    .background(.backAccent)
-//                    .cornerRadius(20)
-//                    VStack(spacing: -1) {
-//                        Text("Biceps")
-//                            .padding(10)
-//                            .foregroundStyle(.black)
-//                        
-//                    }
-//                    .frame(height:  30)
-//                    .background(.bicepsAccent)
-//                    .cornerRadius(20)
-//                    
-//                    VStack(spacing: -1) {
-//                        Text("Cardio")
-//                            .padding(10)
-//                            .foregroundStyle(.black)
-//                        
-//                    }
-//                    .frame(height:  30)
-//                    .background(.cardioAccent)
-//                    .cornerRadius(20)
-//                    
-//                    VStack(spacing: -1) {
-//                        Text("Abs")
-//                            .padding(10)
-//                            .foregroundStyle(.black)
-//                        
-//                    }
-//                    .frame(height:  30)
-//                    .background(.absAccent)
-//                    .cornerRadius(20)
-//                }
-//            }
-//            .padding(.leading, -50)
+            //            VStack(alignment: .leading) {
+            //                HStack {
+            //                    VStack(spacing: -1) {
+            //                        Text("Shoulders")
+            //                            .padding(10)
+            //                            .foregroundStyle(.black)
+            //                    }
+            //                    .frame(height: 30)
+            //                    .background(.shouldersAccent)
+            //                    .cornerRadius(20)
+            //
+            //                    VStack(spacing: -1) {
+            //                        Text("Legs")
+            //                            .padding(10)
+            //                            .foregroundStyle(.black)
+            //
+            //                    }
+            //                    .frame(height:  30)
+            //                    .background(.legsAccent)
+            //                    .cornerRadius(20)
+            //
+            //                    VStack(spacing: -1) {
+            //                        Text("Triceps")
+            //                            .padding(10)
+            //                            .foregroundStyle(.black)
+            //
+            //                    }
+            //                    .frame(height:  30)
+            //                    .background(.tricepsAccent)
+            //                    .cornerRadius(20)
+            //
+            //                    VStack(spacing: -1) {
+            //                        Text("Chest")
+            //                            .padding(15)
+            //                            .foregroundStyle(.black)
+            //
+            //                    }
+            //                    .frame(height:  30)
+            //                    .background(.chestAccent)
+            //                    .cornerRadius(20)
+            //                }
+            //                HStack {
+            //                    VStack(spacing: -1) {
+            //                        Text("Back")
+            //                            .padding(10)
+            //                            .foregroundStyle(.black)
+            //                    }
+            //                    .frame(height:  30)
+            //                    .background(.backAccent)
+            //                    .cornerRadius(20)
+            //                    VStack(spacing: -1) {
+            //                        Text("Biceps")
+            //                            .padding(10)
+            //                            .foregroundStyle(.black)
+            //
+            //                    }
+            //                    .frame(height:  30)
+            //                    .background(.bicepsAccent)
+            //                    .cornerRadius(20)
+            //
+            //                    VStack(spacing: -1) {
+            //                        Text("Cardio")
+            //                            .padding(10)
+            //                            .foregroundStyle(.black)
+            //
+            //                    }
+            //                    .frame(height:  30)
+            //                    .background(.cardioAccent)
+            //                    .cornerRadius(20)
+            //
+            //                    VStack(spacing: -1) {
+            //                        Text("Abs")
+            //                            .padding(10)
+            //                            .foregroundStyle(.black)
+            //
+            //                    }
+            //                    .frame(height:  30)
+            //                    .background(.absAccent)
+            //                    .cornerRadius(20)
+            //                }
+            //            }
+            //            .padding(.leading, -50)
             DateScrollerView()
                 .environmentObject(dateHolder)
                 .padding()
@@ -110,10 +110,16 @@ struct CalendarView: View {
                 .padding(.bottom, 15)
 
         }
-    
+        .frame(width: 400)
         .background(.cornflowerBlue)
-    .cornerRadius(10)
-//        .padding(10)
+        .cornerRadius(10)
+        .shadow(
+            color: .white.opacity(0.9),  // Soft, subtle shadow color
+            radius: 4,  // Blur radius
+            x: 0,  // Horizontal offset
+            y: 0  // Vertical offset (pushes shadow down)
+        )
+        //        .padding(10)
     }
 
     var dayOfWeekStack: some View {

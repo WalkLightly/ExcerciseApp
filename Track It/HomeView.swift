@@ -96,11 +96,14 @@ struct HomeView: View {
                 Spacer()
                 ScrollView {
                     CalendarView()
+                        .frame(width: 430)
                         .environmentObject(dateHolder)
-                    ExcerciseDay()
+                        .padding(.top, 8)
+                    WorkoutDay()
                         .padding(.top, 30)
+                        .padding(.bottom, 10)
                 }
-                .frame(width: 400, height: 720)
+                .frame(width: 450, height: 720)
                 //.background(.primaryBlue)
                 .cornerRadius(10)
                 HStack {
