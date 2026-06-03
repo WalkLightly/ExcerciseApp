@@ -250,7 +250,8 @@ struct HomeView: View {
                     .padding(.top, 50)
                     Text("lbs")
                         .font(.custom("Inder-Regular", size: 35))
-                        .padding(.top, 40)
+                        .foregroundStyle(.darkBlue)
+                        .padding(.top, 30)
 
 
                 }
