@@ -14,6 +14,8 @@ struct HomeView: View {
     @State private var xOffset = -116
     @State private var stopWatchActive: Bool = false
     @State private var newSetWeight: String = ""
+    
+    @State private var showNew : Bool = true
 
     @StateObject private var stopwatch = Stopwatch()
 
@@ -232,70 +234,73 @@ struct HomeView: View {
                     .offset(x: CGFloat(xOffset), y: -58)
 
             }
-            VStack {
-                HStack {
-                    VStack {
-                        TextField("", text: $newSetWeight)
-                            .frame(width: 200, height: 55)
+            if (showNew) {
+                VStack {
+                    HStack {
+                        VStack {
+                            TextField("", text: $newSetWeight)
+                                .frame(width: 200, height: 55)
+                                .foregroundStyle(.darkBlue)
+                                .font(.custom("Inder-Regular", size: 40))
+                                .padding(.leading, 5)
+                                .padding(.top, -15)
+                                .multilineTextAlignment(.trailing)
+                            Rectangle()
+                                .fill(.darkBlue)
+                                .frame(width: 200, height: 2)
+                                .offset(y: -8)
+                        }
+                        .padding(.top, 50)
+                        Text("lbs")
+                            .font(.custom("Inder-Regular", size: 35))
                             .foregroundStyle(.darkBlue)
-                            .font(.custom("Inder-Regular", size: 40))
-                            .padding(.leading, 5)
-                            .padding(.top, -15)
-                            .multilineTextAlignment(.trailing)
+                            .padding(.top, 30)
+                        
+                        
+                    }
+                    //                Text("Are you sure you want to delete this item?")
+                    //                    .font(.custom("Inder-Regular", size: 20))
+                    //                    .foregroundColor(Color.black)
+                    //                    .padding(.top, 20)
+                    //                    .frame(width: 300, height: 110)
+                    .frame(width: 300, height: 110)
+                    .background(
                         Rectangle()
-                            .fill(.darkBlue)
-                            .frame(width: 200, height: 2)
-                            .offset(y: -8)
+                            .fill(Color.black.opacity(0.3))  // Set the border color
+                            .frame(height: 1),  // Set the border thickness (height)
+                        alignment: .bottom  // Align the rectangle to the bottom
+                    )
+                    HStack {
+                        Button {
+                            //showConfirmDeleteDialog = false
+                            showNew = false
+                        } label: {
+                            Text("Cancel")
+                                .font(.custom("Inder-Regular", size: 23))
+                                .foregroundStyle(.skyBlue)
+                        }
+                        .frame(width: 130)
+                        Rectangle()
+                            .fill(Color.black.opacity(0.3))  // Set the border color
+                            .frame(width: 1, height: 55)
+                        Button {
+                            // showConfirmDeleteDialog = false
+                        } label: {
+                            Text("Delete")
+                                .foregroundStyle(Color(red: 195/255, green: 27/255, blue: 4/255))
+                                .font(.custom("Inder-Regular", size: 23))
+                        }
+                        .frame(width: 130)
                     }
-                    .padding(.top, 50)
-                    Text("lbs")
-                        .font(.custom("Inder-Regular", size: 35))
-                        .foregroundStyle(.darkBlue)
-                        .padding(.top, 30)
-
-
+                    .frame(width: 300, height: 40)
+                    .padding(.bottom, 20)
                 }
-                //                Text("Are you sure you want to delete this item?")
-                //                    .font(.custom("Inder-Regular", size: 20))
-                //                    .foregroundColor(Color.black)
-                //                    .padding(.top, 20)
-                //                    .frame(width: 300, height: 110)
-                .frame(width: 300, height: 110)
-                .background(
-                    Rectangle()
-                        .fill(Color.black.opacity(0.3))  // Set the border color
-                        .frame(height: 1),  // Set the border thickness (height)
-                    alignment: .bottom  // Align the rectangle to the bottom
-                )
-                HStack {
-                    Button {
-                        //showConfirmDeleteDialog = false
-                    } label: {
-                        Text("Cancel")
-                            .font(.custom("Inder-Regular", size: 23))
-                            .foregroundStyle(.skyBlue)
-                    }
-                    .frame(width: 130)
-                    Rectangle()
-                        .fill(Color.black.opacity(0.3))  // Set the border color
-                        .frame(width: 1, height: 55)
-                    Button {
-                        // showConfirmDeleteDialog = false
-                    } label: {
-                        Text("Delete")
-                            .foregroundStyle(Color(red: 195/255, green: 27/255, blue: 4/255))
-                            .font(.custom("Inder-Regular", size: 23))
-                    }
-                    .frame(width: 130)
-                }
-                .frame(width: 300, height: 40)
-                .padding(.bottom, 20)
+                .frame(width: 300, height: 150)
+                .background(.brown)
+                .cornerRadius(20)
+                .offset(x: 0, y: 50)
+                .shadow(color: Color.black.opacity(0.3), radius: 2, x: 1, y: 2)
             }
-            .frame(width: 300, height: 150)
-            .background(.brown)
-            .cornerRadius(20)
-            .offset(x: 0, y: 50)
-            .shadow(color: Color.black.opacity(0.3), radius: 2, x: 1, y: 2)
             
             VStack {
                 AddItem()
