@@ -12,6 +12,18 @@ struct AddingNewExcercise: Hashable {
     var addedIn: Bool
 }
 
+var MuscleGroupColorMap: [String: Color] = [
+    "Shoulders": .shouldersAccent,
+    "Legs": .legsAccent,
+    "Triceps": .tricepsAccent,
+    "Chest": .chestAccent,
+    "Back": .backAccent,
+    "Biceps": .bicepsAccent,
+    "Cardio": .cardioAccent,
+    "Abs": .absAccent,
+    "Muscle Group": .black,
+]
+
 struct HomeView: View {
     @State private var dateHolder = DateHolder()
 
@@ -32,17 +44,7 @@ struct HomeView: View {
 
     @StateObject private var stopwatch = Stopwatch()
 
-    var MuscleGroupColorMap: [String: Color] = [
-        "Shoulders": .shouldersAccent,
-        "Legs": .legsAccent,
-        "Triceps": .tricepsAccent,
-        "Chest": .chestAccent,
-        "Back": .backAccent,
-        "Biceps": .bicepsAccent,
-        "Cardio": .cardioAccent,
-        "Abs": .absAccent,
-        "Muscle Group": .black,
-    ]
+   
 
     var timeString: String {
         let minutes = Int(stopwatch.counter) / 60
@@ -268,97 +270,7 @@ struct HomeView: View {
 
             }
             if showAddSetModal {
-                VStack {
-                    VStack {
-                        HStack {
-                            Button {
-
-                            } label: {
-                                Text("💀")
-                                    .font(
-                                        Font.system(
-                                            size: 60,
-                                            weight: .bold,
-                                            design: .default
-                                        )
-                                    )
-                                    .offset(y: 5)
-                            }
-                            .background(
-                                Rectangle()
-                                    .fill(Color.black.opacity(0.3))
-                                    .frame(width: 1, height: 110),
-                                alignment: .trailing
-                            )
-                            VStack {
-                                VStack {
-
-                                    TextField("", text: $newSetWeight)
-                                        .frame(width: 150, height: 55)
-                                        .foregroundStyle(.darkBlue)
-                                        .font(
-                                            .custom("Inder-Regular", size: 40)
-                                        )
-                                        .multilineTextAlignment(.trailing)
-                                        .padding(5)
-                                        .padding(.trailing, 15)
-                                }
-                                .frame(width: 150, height: 55)
-                                .background(Color.brown.brightness(-0.05))
-                                .offset(y: -18)
-                            }
-                            .padding(.top, 50)
-                            Text("lbs")
-                                .font(.custom("Inder-Regular", size: 35))
-                                .foregroundStyle(.darkBlue)
-                                .padding(.top, 10)
-
-                        }
-                        .frame(width: 300, height: 110)
-                        .background(
-                            Rectangle()
-                                .fill(Color.black.opacity(0.3))
-                                .frame(height: 1),
-                            alignment: .bottom
-                        )
-                        HStack {
-                            Button {
-                                //showConfirmDeleteDialog = false
-                                showAddSetModal = false
-                            } label: {
-                                Text("Delete")
-                                    .foregroundStyle(
-                                        Color(
-                                            red: 195 / 255,
-                                            green: 27 / 255,
-                                            blue: 4 / 255
-                                        )
-                                    )
-                                    .font(.custom("Inder-Regular", size: 23))
-                            }
-                            .frame(width: 130)
-                            Rectangle()
-                                .fill(Color.black.opacity(0.3))
-                                .frame(width: 1, height: 55)
-                            Button {
-                                // showConfirmDeleteDialog = false
-                            } label: {
-                                Text("Save")
-                                    .font(.custom("Inder-Regular", size: 23))
-                                    .foregroundStyle(.primaryBlue)
-                            }
-                            .frame(width: 130)
-                        }
-                        .frame(width: 300, height: 40)
-                        .padding(.bottom, 20)
-                    }
-                    .frame(width: 300, height: 150)
-                    .background(.brown)
-                    .cornerRadius(20)
-                    .offset(x: 0, y: 50)
-                }
-                .frame(width: 600, height: 1000)
-                .background(.black.opacity(0.7))
+                AddSetModalView(newSetWeight: $newSetWeight, showAddSetModal: $showAddSetModal)
             } else if showAddWorkoutDayMuscleGroup {
                 VStack {
                     VStack {
@@ -470,7 +382,7 @@ struct HomeView: View {
                                                     size: 25
                                                 )
                                             )
-                                            .foregroundStyle(.skyBlue)
+                                            .foregroundStyle(.steelBlue)
                                     }
                                     .padding(.top, 5)
                                     .padding(.trailing, 15)
@@ -647,17 +559,21 @@ struct HomeView: View {
                                     .font(.custom("Inder-Regular", size: 23))
                             }
                             .frame(width: 150)
+                            .padding(.trailing, 20)
                             Rectangle()
                                 .fill(Color.black.opacity(0.3))
-                                .frame(width: 1, height: 55)
+                                .frame(width: 1, height: 70)
+                                .padding(.top, 10)
                             Button {
-                                //showAddWorkoutDayMuscleGroup = false
+                                showAddWorkoutDayMuscleGroup = false
                             } label: {
                                 Text("Save")
                                     .font(.custom("Inder-Regular", size: 23))
-                                    .foregroundStyle(.primaryBlue)
+                                    .foregroundStyle(newMuscleGroup == "Muscle Group" ? .gray : .primaryBlue)
                             }
                             .frame(width: 150)
+                            .padding(.leading, 10)
+                            .disabled(newMuscleGroup == "Muscle Group")
                         }
                         .frame(width: 300, height: 60)
                     }
