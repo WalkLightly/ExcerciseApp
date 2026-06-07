@@ -80,7 +80,7 @@ struct AddItem: View {
                                                 )
                                             )
                                         TextField("", text: $location)
-                                            .frame(width: 350, height: 40)
+                                            .frame(width: 350, height: 45)
                                             .foregroundStyle(.white)
                                             .font(.custom(chosenFont, size: 20))
                                             .padding(.leading, 5)

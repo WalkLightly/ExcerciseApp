@@ -15,6 +15,7 @@ struct MockExc : Hashable {
 
 struct WorkoutDayView: View {
     let addNewSet: () -> Void
+    let addNewMuscleGroup: () -> Void
     
     @State private var mockMsclGroup: String = "Legs"
     @State private var mockExcercises: [String] = ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]
@@ -36,7 +37,7 @@ struct WorkoutDayView: View {
                     .padding(.leading, 20)
                 Spacer()
                 Button {
-                    excerciseList.insert( MockExc(id: "3", msclGroup: "Arms", mockExcercises: ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]), at: 0)
+                    addNewMuscleGroup()// excerciseList.insert( MockExc(id: "3", msclGroup: "Arms", mockExcercises: ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]), at: 0)
                 } label: {
                     Image(systemName: "plus")
                         .foregroundStyle(.darkBlue)
@@ -86,5 +87,5 @@ struct WorkoutDayView: View {
 }
 
 #Preview {
-    WorkoutDayView(addNewSet: {})
+    WorkoutDayView(addNewSet: {}, addNewMuscleGroup: {})
 }

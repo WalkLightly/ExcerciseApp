@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+struct AddingNewExcercise: Hashable {
+    var name: String
+    var addedIn: Bool
+}
+
 struct HomeView: View {
     @State private var dateHolder = DateHolder()
 
@@ -17,9 +22,26 @@ struct HomeView: View {
 
     @State private var showAddSetModal: Bool = false
     @State private var showAddExerciseModal: Bool = false
-    @State private var showAddMuscleGroupModal: Bool = false
+    @State private var showAddWorkoutDayMuscleGroup: Bool = true
+
+    @State private var newMuscleGroup: String = "Chest"
+    @State private var newExcercises: [AddingNewExcercise] = []
+    @State private var newExcerciseName: String = ""
+    @State private var showMuscleGroupDropdown: Bool = true
 
     @StateObject private var stopwatch = Stopwatch()
+
+    var MuscleGroupColorMap: [String: Color] = [
+        "Shoulders": .shouldersAccent,
+        "Legs": .legsAccent,
+        "Triceps": .tricepsAccent,
+        "Chest": .chestAccent,
+        "Back": .backAccent,
+        "Biceps": .bicepsAccent,
+        "Cardio": .cardioAccent,
+        "Abs": .absAccent,
+        "None": .black,
+    ]
 
     var timeString: String {
         let minutes = Int(stopwatch.counter) / 60
@@ -30,10 +52,10 @@ struct HomeView: View {
 
         return String(format: "%02d:%02d.%02d", minutes, seconds, milliseconds)
     }
-    
+
     // toggle modal buttons
     func addNewSet() { showAddSetModal = true }
-    func addNewMuscleGroup() { showAddMuscleGroupModal = true }
+    func addNewMuscleGroup() { showAddWorkoutDayMuscleGroup = true }
     func addNewExcercise() { showAddExerciseModal = true }
 
     var body: some View {
@@ -116,9 +138,12 @@ struct HomeView: View {
                         .frame(width: 430)
                         .environmentObject(dateHolder)
                         .padding(.top, 8)
-                    WorkoutDayView(addNewSet: addNewSet)
-                        .padding(.top, 30)
-                        .padding(.bottom, 10)
+                    WorkoutDayView(
+                        addNewSet: addNewSet,
+                        addNewMuscleGroup: addNewMuscleGroup
+                    )
+                    .padding(.top, 30)
+                    .padding(.bottom, 10)
                 }
                 .frame(width: 450, height: 720)
                 //.background(.primaryBlue)
@@ -243,7 +268,6 @@ struct HomeView: View {
             }
             if showAddSetModal {
                 VStack {
-
                     VStack {
                         HStack {
                             Button {
@@ -331,6 +355,279 @@ struct HomeView: View {
                     .background(.brown)
                     .cornerRadius(20)
                     .offset(x: 0, y: 50)
+                }
+                .frame(width: 600, height: 1000)
+                .background(.black.opacity(0.7))
+            } else if showAddWorkoutDayMuscleGroup {
+                VStack {
+                    VStack {
+                        HStack(alignment: .top) {
+                            Rectangle()
+                                .fill(
+                                    Color(
+                                        MuscleGroupColorMap[newMuscleGroup]
+                                            ?? .gray
+                                    )
+                                )
+                                .frame(width: 20)
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    VStack {
+                                        Text("Muscle Group")
+                                            .font(
+                                                .custom(
+                                                    "PTSans-Narrow",
+                                                    size: 35
+                                                )
+                                            )
+                                            .foregroundStyle(.white)
+                                            .padding(.leading, 20)
+                                            .padding(.trailing, 20)
+                                    }
+                                    .background(.darkBlue)
+                                    .cornerRadius(5)
+                                    .padding(5)
+                                    .overlay(
+                                        VStack(alignment: .leading) {
+                                            ForEach(
+                                                MuscleGroupColorMap.sorted(by: {
+                                                    $0.key < $1.key
+                                                }),
+                                                id: \.key
+                                            ) {
+                                                muscleGroup in
+
+                                                HStack {
+                                                    Text(muscleGroup.key)
+                                                        .font(
+                                                            .custom(
+                                                                "PTSans-Narrow",
+                                                                size: 25
+                                                            )
+                                                        )
+                                                        .padding(.leading, 5)
+                                                        .padding(.trailing, 5)
+                                                    Spacer()
+                                                }
+                                                Spacer()
+                                            }
+                                        }
+                                        .frame(width: 200, height: 100)
+                                        .background(.white)
+                                        .clipShape(
+                                            UnevenRoundedRectangle(
+                                                topLeadingRadius: 0,
+                                                bottomLeadingRadius: 10,
+                                                bottomTrailingRadius: 10,
+                                                topTrailingRadius: 0
+                                            )
+                                        )
+                                        .offset(x: -2, y: 75)
+                                    )
+                                    Spacer()
+                                    Button {
+                                        newExcercises.insert(
+                                            AddingNewExcercise(
+                                                name: "",
+                                                addedIn: false
+                                            ),
+                                            at: 0
+                                        )
+                                    } label: {
+                                        Text("Add")
+                                            .font(
+                                                .custom(
+                                                    "PTSans-NarrowBold",
+                                                    size: 25
+                                                )
+                                            )
+                                            .foregroundStyle(.skyBlue)
+                                    }
+                                    .padding(.top, 5)
+                                    .padding(.trailing, 15)
+                                }
+                                ScrollView {
+                                    ForEach($newExcercises, id: \.self) {
+                                        $excercise in
+                                        VStack {
+                                            if excercise.addedIn {
+                                                HStack {
+                                                    Text(excercise.name)
+                                                        .font(
+                                                            .custom(
+                                                                "Inder-Regular",
+                                                                size: 18
+                                                            )
+                                                        )
+                                                        .foregroundStyle(
+                                                            .darkBlue
+                                                        )
+                                                        .padding(.leading, 10)
+                                                        .padding(.top, 10)
+                                                    Spacer()
+                                                }
+                                            } else {
+                                                HStack {
+                                                    VStack {
+                                                        TextField(
+                                                            "",
+                                                            text:
+                                                                $newExcerciseName
+                                                        )
+                                                        .font(
+                                                            .custom(
+                                                                "Inder-Regular",
+                                                                size: 18
+                                                            )
+                                                        )
+                                                        .frame(width: 300)
+                                                        .padding(.leading, 10)
+                                                    }
+                                                    .frame(
+                                                        width: 300,
+                                                        height: 30
+                                                    )
+                                                    .background(
+                                                        Color.gray.brightness(
+                                                            0.30
+                                                        )
+                                                    )
+                                                    .foregroundStyle(.darkBlue)
+                                                    .cornerRadius(10)
+                                                    .padding(.leading, 5)
+                                                    .padding(.top, 5)
+                                                    Spacer()
+                                                }
+                                            }
+                                            if excercise.addedIn {
+                                                Spacer()
+                                            } else {
+                                                HStack {
+                                                    Spacer()
+                                                    HStack(spacing: 30) {
+                                                        Button {
+                                                            newExcercises
+                                                                .removeFirst()
+                                                            newExcerciseName =
+                                                                ""
+                                                        } label: {
+                                                            Text("Cancel")
+                                                                .font(
+                                                                    .custom(
+                                                                        "Inder-Regular",
+                                                                        size: 18
+                                                                    )
+                                                                )
+                                                                .foregroundStyle(
+                                                                    .red
+                                                                )
+                                                        }
+                                                        Button {
+                                                            excercise.addedIn =
+                                                                true
+                                                            excercise.name =
+                                                                newExcerciseName
+                                                            newExcerciseName =
+                                                                ""
+                                                        } label: {
+                                                            Text("Save")
+                                                                .font(
+                                                                    .custom(
+                                                                        "Inder-Regular",
+                                                                        size: 18
+                                                                    )
+                                                                )
+                                                                .foregroundStyle(
+                                                                    newExcerciseName
+                                                                        != ""
+                                                                        ? .blue
+                                                                        : .gray
+                                                                )
+
+                                                        }
+                                                        .disabled(
+                                                            newExcerciseName
+                                                                == ""
+                                                        )
+                                                    }
+                                                    .padding(.trailing, 10)
+                                                    .padding(.bottom, 5)
+                                                }
+                                            }
+                                        }
+                                        .frame(width: 330, height: 70)
+                                        .background(
+                                            excercise.addedIn
+                                                ? .white : .offWhite
+                                        )
+                                        .cornerRadius(10)
+                                        .shadow(
+                                            color: Color.black.opacity(0.4),
+                                            radius: 2,
+                                            x: 1,
+                                            y: 2
+                                        )
+                                        .padding(.trailing, 5)
+                                        .padding(.leading, 5)
+                                        .padding(.top, 5)
+                                    }
+                                }
+                                .padding(.top, 5)
+                                .padding(.bottom, 20)
+                            }
+                            Spacer()
+
+                        }
+                        .frame(width: 380, height: 400)
+                        .background(.offWhite)
+                        .clipShape(
+                            UnevenRoundedRectangle(
+                                topLeadingRadius: 0,
+                                bottomLeadingRadius: 0,
+                                bottomTrailingRadius: 10,
+                                topTrailingRadius: 10
+                            )
+                        )
+
+                        HStack {
+                            Button {
+                                showAddWorkoutDayMuscleGroup = false
+                            } label: {
+                                Text("Delete")
+                                    .foregroundStyle(
+                                        Color(
+                                            red: 195 / 255,
+                                            green: 27 / 255,
+                                            blue: 4 / 255
+                                        )
+                                    )
+                                    .font(.custom("Inder-Regular", size: 23))
+                            }
+                            .frame(width: 150)
+                            Rectangle()
+                                .fill(Color.black.opacity(0.3))
+                                .frame(width: 1, height: 55)
+                            Button {
+                                //showAddWorkoutDayMuscleGroup = false
+                            } label: {
+                                Text("Save")
+                                    .font(.custom("Inder-Regular", size: 23))
+                                    .foregroundStyle(.primaryBlue)
+                            }
+                            .frame(width: 150)
+                        }
+                        .frame(width: 300, height: 60)
+                    }
+                    .frame(width: 400, height: 500)
+                    .background(.white)
+                    .cornerRadius(20)
+                    .offset(x: 0, y: 50)
+                    .shadow(
+                        color: .white.opacity(0.9),
+                        radius: 4,
+                        x: 0,
+                        y: 0
+                    )
                 }
                 .frame(width: 600, height: 1000)
                 .background(.black.opacity(0.7))
