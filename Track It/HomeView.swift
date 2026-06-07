@@ -24,10 +24,11 @@ struct HomeView: View {
     @State private var showAddExerciseModal: Bool = false
     @State private var showAddWorkoutDayMuscleGroup: Bool = true
 
-    @State private var newMuscleGroup: String = "Chest"
+    @State private var newMuscleGroup: String = "Muscle Group"
     @State private var newExcercises: [AddingNewExcercise] = []
+        //AddingNewExcercise(name: "test", addedIn: true) ]
     @State private var newExcerciseName: String = ""
-    @State private var showMuscleGroupDropdown: Bool = true
+    @State private var showMuscleGroupDropdown: Bool = false
 
     @StateObject private var stopwatch = Stopwatch()
 
@@ -40,7 +41,7 @@ struct HomeView: View {
         "Biceps": .bicepsAccent,
         "Cardio": .cardioAccent,
         "Abs": .absAccent,
-        "None": .black,
+        "Muscle Group": .black,
     ]
 
     var timeString: String {
@@ -372,57 +373,85 @@ struct HomeView: View {
                                 .frame(width: 20)
                             VStack(alignment: .leading) {
                                 HStack {
-                                    VStack {
-                                        Text("Muscle Group")
-                                            .font(
-                                                .custom(
-                                                    "PTSans-Narrow",
-                                                    size: 35
+                                    VStack(alignment: .leading) {
+                                        HStack {
+                                            Text(newMuscleGroup)
+                                                .font(
+                                                    .custom(
+                                                        "PTSans-Narrow",
+                                                        size: 35
+                                                    )
                                                 )
-                                            )
-                                            .foregroundStyle(.white)
-                                            .padding(.leading, 20)
-                                            .padding(.trailing, 20)
+                                                .foregroundStyle(.white)
+                                                .padding(.leading, 20)
+                                                .padding(.trailing, 20)
+                                                .onTapGesture {
+                                                    showMuscleGroupDropdown = true;
+                                                }
+                                                .background(.darkBlue)
+                                                .cornerRadius(5)
+                                            Spacer()
+                                        }
+                                    
                                     }
-                                    .background(.darkBlue)
-                                    .cornerRadius(5)
+                                    .frame(width: 220)
                                     .padding(5)
                                     .overlay(
-                                        VStack(alignment: .leading) {
-                                            ForEach(
-                                                MuscleGroupColorMap.sorted(by: {
-                                                    $0.key < $1.key
-                                                }),
-                                                id: \.key
-                                            ) {
-                                                muscleGroup in
-
-                                                HStack {
-                                                    Text(muscleGroup.key)
-                                                        .font(
-                                                            .custom(
-                                                                "PTSans-Narrow",
-                                                                size: 25
-                                                            )
-                                                        )
-                                                        .padding(.leading, 5)
-                                                        .padding(.trailing, 5)
-                                                    Spacer()
+                                        showMuscleGroupDropdown ?
+                                            ScrollView {
+                                                VStack {
+                                                    ForEach(
+                                                        MuscleGroupColorMap.sorted(by: {
+                                                            $0.key < $1.key
+                                                        }),
+                                                        id: \.key
+                                                    ) {
+                                                        muscleGroup in
+                                                        if muscleGroup.key != "Muscle Group" {
+                                                            HStack {
+                                                                Rectangle()
+                                                                    .fill(
+                                                                        Color(
+                                                                            muscleGroup.value
+                                                                        )
+                                                                    )
+                                                                    .frame(width: 10)
+                                                                Text(muscleGroup.key)
+                                                                    .font(
+                                                                        .custom(
+                                                                            "PTSans-Narrow",
+                                                                            size: 25
+                                                                        )
+                                                                    )
+                                                                    .padding(.leading, 5)
+                                                                    .padding(.trailing, 5)
+                                                                    .padding(.top, -5)
+                                                                    .foregroundStyle(.darkBlue)
+                                                                Spacer()
+                                                            }
+                                                            .frame(height: 40)
+                                                            .onTapGesture {
+                                                                showMuscleGroupDropdown = false;
+                                                                newMuscleGroup = muscleGroup.key
+                                                            }
+                                                        }
+                                                    }
                                                 }
-                                                Spacer()
                                             }
-                                        }
-                                        .frame(width: 200, height: 100)
-                                        .background(.white)
-                                        .clipShape(
-                                            UnevenRoundedRectangle(
-                                                topLeadingRadius: 0,
-                                                bottomLeadingRadius: 10,
-                                                bottomTrailingRadius: 10,
-                                                topTrailingRadius: 0
+                                            .frame(width: 200, height: 200)
+                                            .background(.white)
+                                            .clipShape(
+                                                UnevenRoundedRectangle(
+                                                    topLeadingRadius: 0,
+                                                    bottomLeadingRadius: 10,
+                                                    bottomTrailingRadius: 10,
+                                                    topTrailingRadius: 0
+                                                )
                                             )
-                                        )
-                                        .offset(x: -2, y: 75)
+                                            .offset(x: -10, y: 125)
+                                        :
+                                        nil
+                                        
                                     )
                                     Spacer()
                                     Button {
@@ -465,6 +494,20 @@ struct HomeView: View {
                                                         .padding(.leading, 10)
                                                         .padding(.top, 10)
                                                     Spacer()
+                                                    Button {
+                                                        if let index = newExcercises.firstIndex(of: excercise) {
+                                                            newExcercises.remove(at: index)
+                                                        }
+                                                    } label: {
+                                                        Image(
+                                                            systemName:
+                                                                "trash"
+                                                        )
+                                                        .font(.system(size: 20))
+                                                        .foregroundStyle(.red.opacity(0.5))
+                                                        .padding(.top, 10)
+                                                        .padding(.trailing, 5)
+                                                    }
                                                 }
                                             } else {
                                                 HStack {

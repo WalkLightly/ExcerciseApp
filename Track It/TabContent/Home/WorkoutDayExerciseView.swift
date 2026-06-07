@@ -25,6 +25,17 @@ struct WorkoutDayExerciseView: View {
                         .padding(.leading, 10)
                         .padding(.top, 10)
                     Spacer()
+                    Button {
+                    } label: {
+                        Image(
+                            systemName:
+                                "trash"
+                        )
+                        .font(.system(size: 20))
+                        .foregroundStyle(.red.opacity(0.5))
+                        .padding(.top, 15)
+                        .padding(.trailing, 5)
+                    }
                 }
                 Spacer()
                 HStack(spacing: 30) {
