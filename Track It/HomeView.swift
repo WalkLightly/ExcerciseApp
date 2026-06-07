@@ -10,6 +10,7 @@ import SwiftUI
 struct AddingNewExcercise: Hashable {
     var name: String
     var addedIn: Bool
+    var sets : [String] = []
 }
 
 var MuscleGroupColorMap: [String: Color] = [
@@ -24,8 +25,24 @@ var MuscleGroupColorMap: [String: Color] = [
     "Muscle Group": .black,
 ]
 
+
 struct HomeView: View {
     @State private var dateHolder = DateHolder()
+    
+    @State private var data: [MuscleGroupWorkout] = [
+        MuscleGroupWorkout(
+            id: "s1",
+            muscleGroup: "Shoulders",
+            excercises: [ex1, ex2, ex3, ex4],
+            date: Date()
+        ),
+        MuscleGroupWorkout(
+            id: "l3",
+            muscleGroup: "Legs",
+            excercises: [ex3, ex4],
+            date: Date()
+        ),
+    ]
 
     @State private var tab: String = "home"
     @State private var xOffset = -116
@@ -34,7 +51,7 @@ struct HomeView: View {
 
     @State private var showAddSetModal: Bool = false
     @State private var showAddExerciseModal: Bool = false
-    @State private var showAddWorkoutDayMuscleGroup: Bool = true
+    @State private var showAddWorkoutDayMuscleGroup: Bool = false
 
     @State private var newMuscleGroup: String = "Muscle Group"
     @State private var newExcercises: [AddingNewExcercise] = []
@@ -143,7 +160,8 @@ struct HomeView: View {
                         .padding(.top, 8)
                     WorkoutDayView(
                         addNewSet: addNewSet,
-                        addNewMuscleGroup: addNewMuscleGroup
+                        addNewMuscleGroup: addNewMuscleGroup,
+                        workoutData: $data
                     )
                     .padding(.top, 30)
                     .padding(.bottom, 10)

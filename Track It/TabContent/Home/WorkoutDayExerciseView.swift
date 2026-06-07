@@ -9,15 +9,14 @@ import SwiftUI
 
 struct WorkoutDayExerciseView: View {
     let addNewSet: () -> Void
-    @Binding var excercise: String
-    @State var sets: [String]
     @State var showModal: Bool = true
+    @Binding var excercise: ExcerciseWorkout
 
     var body: some View {
         ZStack {
             VStack {
                 HStack {
-                    Text(excercise)
+                    Text(excercise.name)
                         .font(
                             .custom("Inder-Regular", size: 18)
                         )
@@ -40,7 +39,7 @@ struct WorkoutDayExerciseView: View {
                 Spacer()
                 HStack(spacing: 30) {
                     HStack(spacing: 0) {
-                        ForEach(sets, id: \.self) {
+                        ForEach(excercise.sets, id: \.self) {
                             excerciseSet in
                             VStack {
                                 Text(excerciseSet)
@@ -91,7 +90,6 @@ struct WorkoutDayExerciseView: View {
 #Preview {
     WorkoutDayExerciseView(
         addNewSet: {},
-        excercise: .constant("Romanian DeadLift"),
-        sets: ["25", "30", "35"]
+        excercise: .constant(ex1),
     )
 }

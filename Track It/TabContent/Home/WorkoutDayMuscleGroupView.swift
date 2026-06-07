@@ -11,13 +11,12 @@ struct WorkoutDayMuscleGroupView: View {
 
     let addNewSet: () -> Void
     @Binding var muscleGroup: String
-    @Binding var excercises: [String]
-    @State private var sets: [String] = ["13", "15", "19"]
+    @Binding var excercises: [ExcerciseWorkout]
 
     var body: some View {
         HStack(alignment: .top) {
             Rectangle()
-                .fill(.shouldersAccent)
+                .fill(MuscleGroupColorMap[muscleGroup] ?? .darkBlue)
                 .frame(width: 20)
             VStack(alignment: .leading) {
                 HStack {
@@ -33,15 +32,11 @@ struct WorkoutDayMuscleGroupView: View {
                     .padding(5)
                     Spacer()
                     Button {
-                        excercises.insert("Calf Raises", at: 0)
+                      //  excercises.insert("Calf Raises", at: 0)
                     } label: {
                         Text("Add")
                         .font(.custom("PTSans-NarrowBold", size: 25))
                         .foregroundStyle(.skyBlue)
-
-//                        Image(systemName: "plus")
-//                            .foregroundStyle(.darkBlue)
-//                            .font(.system(size: 30))
                     }
                     .padding(.top, 5)
                     .padding(.trailing, 15)
@@ -49,7 +44,7 @@ struct WorkoutDayMuscleGroupView: View {
                 ScrollView {
                     ForEach($excercises, id: \.self) {
                         $excercise in
-                        WorkoutDayExerciseView(addNewSet: addNewSet, excercise: $excercise, sets: sets)
+                        WorkoutDayExerciseView(addNewSet: addNewSet, excercise: $excercise)
                     }
                 }
                 .padding(.top, 5)
@@ -83,6 +78,6 @@ struct WorkoutDayMuscleGroupView: View {
     WorkoutDayMuscleGroupView(
         addNewSet: {},
         muscleGroup: .constant("Shoulders"),
-        excercises: .constant(["Romanian Dead Lift", "Leg Press", "Lunges"])
+        excercises: .constant([])
     )
 }

@@ -16,6 +16,7 @@ struct MockExc : Hashable {
 struct WorkoutDayView: View {
     let addNewSet: () -> Void
     let addNewMuscleGroup: () -> Void
+    @Binding var workoutData: [MuscleGroupWorkout]
     
     @State private var mockMsclGroup: String = "Legs"
     @State private var mockExcercises: [String] = ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]
@@ -47,11 +48,10 @@ struct WorkoutDayView: View {
                 .padding(.trailing, 15)
             }
             ScrollView {
-               
-                ForEach($excerciseList, id: \.self) {
-                    exc in
+                ForEach($workoutData, id: \.self) {
+                    $exc in
                     HStack(alignment: .top) {
-                        WorkoutDayMuscleGroupView(addNewSet: addNewSet, muscleGroup: exc.msclGroup, excercises: exc.mockExcercises)
+                        WorkoutDayMuscleGroupView(addNewSet: addNewSet, muscleGroup: $exc.muscleGroup, excercises: $exc.excercises)
                     }
                     .frame(width: 380, height: 300)
                     
@@ -72,6 +72,31 @@ struct WorkoutDayView: View {
                     )
                     .padding()
                 }
+               
+//                ForEach($excerciseList, id: \.self) {
+//                    exc in
+//                    HStack(alignment: .top) {
+//                        WorkoutDayMuscleGroupView(addNewSet: addNewSet, muscleGroup: exc.msclGroup, excercises: exc.mockExcercises)
+//                    }
+//                    .frame(width: 380, height: 300)
+//                    
+//                    .background(.offWhite)
+//                    .clipShape(
+//                        UnevenRoundedRectangle(
+//                            topLeadingRadius: 0,
+//                            bottomLeadingRadius: 0,
+//                            bottomTrailingRadius: 10,
+//                            topTrailingRadius: 10
+//                        )
+//                    )
+//                    .shadow(
+//                        color: Color.black.opacity(0.7),
+//                        radius: 5,
+//                        x: 1,
+//                        y: 2
+//                    )
+//                    .padding()
+//                }
             }
         }
         .frame(width: 400, height: 500)
@@ -87,5 +112,5 @@ struct WorkoutDayView: View {
 }
 
 #Preview {
-    WorkoutDayView(addNewSet: {}, addNewMuscleGroup: {})
+    WorkoutDayView(addNewSet: {}, addNewMuscleGroup: {}, workoutData: .constant([]))
 }
