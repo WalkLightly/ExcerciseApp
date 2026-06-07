@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WorkoutDayMuscleGroupView: View {
 
+    let addNewSet: () -> Void
     @Binding var muscleGroup: String
     @Binding var excercises: [String]
     @State private var sets: [String] = ["13", "15", "19"]
@@ -48,7 +49,7 @@ struct WorkoutDayMuscleGroupView: View {
                 ScrollView {
                     ForEach($excercises, id: \.self) {
                         $excercise in
-                        WorkoutDayExerciseView(excercise: $excercise, sets: sets)
+                        WorkoutDayExerciseView(addNewSet: addNewSet, excercise: $excercise, sets: sets)
                     }
                 }
                 .padding(.top, 5)
@@ -80,6 +81,7 @@ struct WorkoutDayMuscleGroupView: View {
 
 #Preview {
     WorkoutDayMuscleGroupView(
+        addNewSet: {},
         muscleGroup: .constant("Shoulders"),
         excercises: .constant(["Romanian Dead Lift", "Leg Press", "Lunges"])
     )

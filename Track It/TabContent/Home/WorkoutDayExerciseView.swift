@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct WorkoutDayExerciseView: View {
+    let addNewSet: () -> Void
     @Binding var excercise: String
     @State var sets: [String]
     @State var showModal: Bool = true
@@ -50,7 +51,7 @@ struct WorkoutDayExerciseView: View {
                     }
                     .frame(width: 250, height: 35)
                     Button {
-                        sets.append("90")
+                        addNewSet()//sets.append("90")
                     } label: {
                         Image(systemName: "plus")
                             .foregroundStyle(.darkBlue)
@@ -78,6 +79,7 @@ struct WorkoutDayExerciseView: View {
 
 #Preview {
     WorkoutDayExerciseView(
+        addNewSet: {},
         excercise: .constant("Romanian DeadLift"),
         sets: ["25", "30", "35"]
     )

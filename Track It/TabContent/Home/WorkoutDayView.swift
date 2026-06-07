@@ -14,6 +14,8 @@ struct MockExc : Hashable {
 }
 
 struct WorkoutDayView: View {
+    let addNewSet: () -> Void
+    
     @State private var mockMsclGroup: String = "Legs"
     @State private var mockExcercises: [String] = ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]
     
@@ -48,7 +50,7 @@ struct WorkoutDayView: View {
                 ForEach($excerciseList, id: \.self) {
                     exc in
                     HStack(alignment: .top) {
-                        WorkoutDayMuscleGroupView(muscleGroup: exc.msclGroup, excercises: exc.mockExcercises)
+                        WorkoutDayMuscleGroupView(addNewSet: addNewSet, muscleGroup: exc.msclGroup, excercises: exc.mockExcercises)
                     }
                     .frame(width: 380, height: 300)
                     
@@ -84,5 +86,5 @@ struct WorkoutDayView: View {
 }
 
 #Preview {
-    WorkoutDayView()
+    WorkoutDayView(addNewSet: {})
 }

@@ -37,7 +37,11 @@ struct AddItem: View {
     var body: some View {
         ZStack {
             VStack {
-
+                Color(.black.opacity(0.5))
+            }
+            .padding(.bottom, 470)
+            .frame(height: 1500)
+            VStack {
                 VStack {
                     if tab == "excercise" {
                         Spacer()
@@ -47,7 +51,12 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Name")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                         TextField("", text: $eName)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
@@ -64,7 +73,12 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Location")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                         TextField("", text: $location)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
@@ -176,7 +190,12 @@ struct AddItem: View {
                                                     || muscleGroup.count == 0
                                                     ? .gray : .steelBlue
                                             )
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                             .foregroundColor(Color.white)
                                             .cornerRadius(10)
                                     }
@@ -194,6 +213,12 @@ struct AddItem: View {
                         )
                         .background(.skyBlue)
                         .cornerRadius(20)
+                        .shadow(
+                            color: .white.opacity(0.9),  // Soft, subtle shadow color
+                            radius: 4,  // Blur radius
+                            x: 0,  // Horizontal offset
+                            y: 0  // Vertical offset (pushes shadow down)
+                        )
                     } else if tab == "weight" {
                         Spacer()
                         VStack {
@@ -202,11 +227,21 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Weight")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                         TextField("", text: $weight)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                             .padding(.leading, 5)
                                             .padding(.top, -15)
                                         Rectangle()
@@ -219,14 +254,24 @@ struct AddItem: View {
                                     HStack {
                                         Text("Date: ")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                         VStack {
-                                            
-                                        Text(weighDate.formatted())
-                                            .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
-                                         
-                                            .padding(5)
+
+                                            Text(weighDate.formatted())
+                                                .foregroundStyle(.darkBlue)
+                                                .font(
+                                                    .custom(
+                                                        chosenFont,
+                                                        size: 20
+                                                    )
+                                                )
+
+                                                .padding(5)
                                         }
                                         .frame(width: 180)
                                         .background(.grayBlue)
@@ -247,7 +292,12 @@ struct AddItem: View {
                                                 weight == ""
                                                     ? .gray : .steelBlue
                                             )
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                             .foregroundColor(Color.white)
                                             .cornerRadius(10)
                                     }
@@ -263,7 +313,13 @@ struct AddItem: View {
                         )
                         .background(.skyBlue)
                         .cornerRadius(20)
-                    } else if (tab == "measurement") {
+                        .shadow(
+                            color: .white.opacity(0.9),  // Soft, subtle shadow color
+                            radius: 4,  // Blur radius
+                            x: 0,  // Horizontal offset
+                            y: 0  // Vertical offset (pushes shadow down)
+                        )
+                    } else if tab == "measurement" {
                         Spacer()
                         VStack {
                             Grid {
@@ -271,7 +327,12 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Body Part")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                         TextField("", text: $bodyPart)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
@@ -288,7 +349,12 @@ struct AddItem: View {
                                     VStack(alignment: .leading) {
                                         Text("Measurement (inches)")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                         TextField("", text: $measurement)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
@@ -305,14 +371,24 @@ struct AddItem: View {
                                     HStack {
                                         Text("Date: ")
                                             .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                         VStack {
-                                            
-                                        Text(weighDate.formatted())
-                                            .foregroundStyle(.darkBlue)
-                                            .font(.custom(chosenFont, size: 20))
-                                         
-                                            .padding(5)
+
+                                            Text(weighDate.formatted())
+                                                .foregroundStyle(.darkBlue)
+                                                .font(
+                                                    .custom(
+                                                        chosenFont,
+                                                        size: 20
+                                                    )
+                                                )
+
+                                                .padding(5)
                                         }
                                         .frame(width: 180)
                                         .background(.grayBlue)
@@ -330,15 +406,23 @@ struct AddItem: View {
                                         Text("Add Measurement")
                                             .frame(width: 350, height: 50)
                                             .background(
-                                                (measurement == "" || bodyPart == "")
+                                                (measurement == ""
+                                                    || bodyPart == "")
                                                     ? .gray : .steelBlue
                                             )
-                                            .font(.custom(chosenFontBold, size: 20))
+                                            .font(
+                                                .custom(
+                                                    chosenFontBold,
+                                                    size: 20
+                                                )
+                                            )
                                             .foregroundColor(Color.white)
                                             .cornerRadius(10)
                                     }
                                     .padding(.top, 20)
-                                    .disabled(measurement == "" || bodyPart == "")
+                                    .disabled(
+                                        measurement == "" || bodyPart == ""
+                                    )
 
                                 }
                             }
@@ -349,6 +433,12 @@ struct AddItem: View {
                         )
                         .background(.skyBlue)
                         .cornerRadius(20)
+                        .shadow(
+                            color: .white.opacity(0.9),  // Soft, subtle shadow color
+                            radius: 4,  // Blur radius
+                            x: 0,  // Horizontal offset
+                            y: 0  // Vertical offset (pushes shadow down)
+                        )
                     }
                 }
                 .frame(width: 380, height: 500)
@@ -380,28 +470,6 @@ struct AddItem: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
-
-                    // body part
-                    //                    Button(action: {
-                    //                        withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
-                    //                        {
-                    //                            tab = "muscle"
-                    //                            xOffset = -58
-                    //                        }
-                    //                    }) {
-                    //                        if tab == "muscle" {
-                    //                            Image(systemName: "figure")
-                    //                                .font(.system(size: 20))
-                    //                                .foregroundStyle(.darkBlue)
-                    //                        } else {
-                    //                            Image(systemName: "figure")
-                    //                                .font(.system(size: 20))
-                    //                                .foregroundStyle(.steelBlue.opacity(0.5))
-                    //                        }
-                    //                    }
-                    //                    .frame(width: 50, height: 40)
-                    //                    .cornerRadius(50)
-                    //                    .sensoryFeedback(.impact(weight: .light), trigger: tab)
 
                     Button(action: {
                         withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
@@ -449,10 +517,11 @@ struct AddItem: View {
                 .frame(width: 180, height: 50)
                 .background(.pinkAccent)
                 .cornerRadius(30)
+
             }
         }
         .onAppear {
-            tab = "weight"
+            tab = "excercise"
         }
     }
 }
