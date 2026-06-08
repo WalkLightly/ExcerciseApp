@@ -13,6 +13,10 @@ struct WorkoutDayMuscleGroupView: View {
     @Binding var muscleGroup: String
     @Binding var excercises: [ExcerciseWorkout]
 
+    func deleteExcercise(at offsets: IndexSet) {
+        excercises.remove(atOffsets: offsets)
+    }
+    
     var body: some View {
         HStack(alignment: .top) {
             Rectangle()
@@ -42,11 +46,16 @@ struct WorkoutDayMuscleGroupView: View {
                     .padding(.trailing, 15)
                 }
                 ScrollView {
-                    ForEach($excercises, id: \.self) {
-                        $excercise in
-                        WorkoutDayExerciseView(addNewSet: addNewSet, excercise: $excercise)
+                   // List {
+                        ForEach($excercises, id: \.self) {
+                            $excercise in
+                            WorkoutDayExerciseView(addNewSet: addNewSet, excercise: $excercise)
+                        }
+                     //   .onDelete(perform: deleteExcercise)
                     }
-                }
+                    //.scrollContentBackground(.hidden)
+                   // .listStyle(.plain)
+               // }
                 .padding(.top, 5)
                 .padding(.bottom, 20)
             }

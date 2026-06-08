@@ -11,7 +11,7 @@ struct WorkoutDayExerciseView: View {
     let addNewSet: () -> Void
     @State var showModal: Bool = true
     @Binding var excercise: ExcerciseWorkout
-
+    
     var body: some View {
         ZStack {
             VStack {

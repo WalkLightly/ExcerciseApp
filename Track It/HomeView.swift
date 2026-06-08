@@ -280,6 +280,12 @@ struct HomeView: View {
                 .frame(width: 300, height: 60)
                 .background(.darkBlue)
                 .cornerRadius(30)
+                .shadow(
+                    color: .white.opacity(0.9), 
+                    radius: 4,
+                    x: 0,
+                    y: 0
+                )
 
                 Rectangle()
                     .fill(.pinkAccent.opacity(0.3))
