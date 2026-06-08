@@ -591,6 +591,8 @@ struct HomeView: View {
                                 .padding(.top, 10)
                             Button {
                                 showAddWorkoutDayMuscleGroup = false
+                                data.insert(
+                                    MuscleGroupWorkout(id: "mm4", muscleGroup: newMuscleGroup, excercises: [], date: Date()), at: 0)
                             } label: {
                                 Text("Save")
                                     .font(.custom("Inder-Regular", size: 23))
