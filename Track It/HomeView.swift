@@ -54,7 +54,7 @@ struct HomeView: View {
     @State private var showAddWorkoutDayMuscleGroup: Bool = false
 
     @State private var newMuscleGroup: String = "Muscle Group"
-    @State private var newExcercises: [AddingNewExcercise] = []
+    @State private var newExcercises: [ExcerciseWorkout] = []
         //AddingNewExcercise(name: "test", addedIn: true) ]
     @State private var newExcerciseName: String = ""
     @State private var showMuscleGroupDropdown: Bool = false
@@ -393,9 +393,13 @@ struct HomeView: View {
                                     Spacer()
                                     Button {
                                         newExcercises.insert(
-                                            AddingNewExcercise(
-                                                name: "",
-                                                addedIn: false
+                                            ExcerciseWorkout(
+                                                 id: "",
+                                                 name: newExcerciseName,
+                                                 location: "",
+                                                 muscleGroup: [newMuscleGroup],
+                                                 sets: [],
+                                                 isAddedIn: false
                                             ),
                                             at: 0
                                         )
@@ -416,7 +420,7 @@ struct HomeView: View {
                                     ForEach($newExcercises, id: \.self) {
                                         $excercise in
                                         VStack {
-                                            if excercise.addedIn {
+                                            if excercise.isAddedIn {
                                                 HStack {
                                                     Text(excercise.name)
                                                         .font(
@@ -479,7 +483,7 @@ struct HomeView: View {
                                                     Spacer()
                                                 }
                                             }
-                                            if excercise.addedIn {
+                                            if excercise.isAddedIn {
                                                 Spacer()
                                             } else {
                                                 HStack {
@@ -503,7 +507,7 @@ struct HomeView: View {
                                                                 )
                                                         }
                                                         Button {
-                                                            excercise.addedIn =
+                                                            excercise.isAddedIn =
                                                                 true
                                                             excercise.name =
                                                                 newExcerciseName
@@ -537,7 +541,7 @@ struct HomeView: View {
                                         }
                                         .frame(width: 330, height: 70)
                                         .background(
-                                            excercise.addedIn
+                                            excercise.isAddedIn
                                                 ? .white : .offWhite
                                         )
                                         .cornerRadius(10)
@@ -592,7 +596,9 @@ struct HomeView: View {
                             Button {
                                 showAddWorkoutDayMuscleGroup = false
                                 data.insert(
-                                    MuscleGroupWorkout(id: "mm4", muscleGroup: newMuscleGroup, excercises: [], date: Date()), at: 0)
+                                    MuscleGroupWorkout(id: "mm4", muscleGroup: newMuscleGroup, excercises: newExcercises, date: Date()), at: 0)
+                                newMuscleGroup = ""
+                                newExcercises = []
                             } label: {
                                 Text("Save")
                                     .font(.custom("Inder-Regular", size: 23))
