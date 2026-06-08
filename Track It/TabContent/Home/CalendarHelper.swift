@@ -23,6 +23,10 @@ class CalendarHelper
         return calendar.date(byAdding: .month, value: 1, to: date)!
     }
     
+    func monthInt(_ date: Date) -> Int {
+        return calendar.component(.month, from: date);
+    }
+    
     func minusMonth(_ date: Date) -> Date
     {
         return calendar.date(byAdding: .month, value: -1, to: date)!

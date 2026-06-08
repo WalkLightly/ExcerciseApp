@@ -89,7 +89,7 @@ struct HomeView: View {
                     .frame(width: 345, height: 30)
                     .background(.skyBlue)
                     .cornerRadius(18)
-                    .offset(y: 90)
+                    .offset(y: 100)
                     HStack {
                         Button {
                             stopwatch.reset()
@@ -149,9 +149,10 @@ struct HomeView: View {
                     .frame(width: 349, height: 80)
                     .background(.darkBlue)
                     .cornerRadius(12)
-                    .offset(y: 60)
+                    .offset(y: 70)
 
                 }
+                
                 Spacer()
                 ScrollView {
                     CalendarView()
@@ -277,7 +278,7 @@ struct HomeView: View {
 
                 }
                 .frame(width: 300, height: 60)
-                .background(.primaryBlue)
+                .background(.darkBlue)
                 .cornerRadius(30)
 
                 Rectangle()

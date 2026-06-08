@@ -13,12 +13,50 @@ struct CalendarCell: View {
     let startingSpaces: Int
     let daysInMonth: Int
     let daysInPrevMonth: Int
+    
+    func getDayBackground() -> Color {
+        
+        let calendar = Calendar.current
+        let today = Date()
 
+        // 2. Extract the specific components you need
+        let month = calendar.component(.month, from: today)
+        let day = calendar.component(.day, from: today)
+        let year = calendar.component(.year, from: today)
+        
+        if (day == monthStruct().dayInt && month == CalendarHelper().monthInt(dateHolder.date)
+        && monthStruct().monthType == MonthType.Current && year == Calendar.current.component(.year, from: dateHolder.date)) {
+            return .teal
+        } else if monthStruct().monthType == MonthType.Current {
+            return .darkBlue
+        } else {
+            return .grayBlue.opacity(0.1)
+        }
+    }
+    
+    func getDayText() -> Color {
+        let calendar = Calendar.current
+        let today = Date()
+
+        // 2. Extract the specific components you need
+        let month = calendar.component(.month, from: today)
+        let day = calendar.component(.day, from: today)
+        let year = calendar.component(.year, from: today)
+        
+        if (day == monthStruct().dayInt && month == CalendarHelper().monthInt(dateHolder.date)
+        && monthStruct().monthType == MonthType.Current && year == Calendar.current.component(.year, from: dateHolder.date)) {
+            return .darkBlue
+        } else {
+            return .white
+        }
+    }
+    
     var body: some View {
         VStack {
             if monthStruct().monthType == MonthType.Current {
                 Text(monthStruct().day())
                     .font(.custom("Poppins-Regular", size: 15))
+                    .foregroundStyle(getDayText())
                 HStack(spacing: -10) {
                     // loop over the excercises for this day
                     if monthStruct().dayInt == 4 {
@@ -36,7 +74,7 @@ struct CalendarCell: View {
                             .frame(width: 20, height: 20)
                             .clipShape(Capsule())
                     }
-                    else if monthStruct().dayInt == 6 {
+                    else if monthStruct().dayInt == 7 {
                        Rectangle()
                            .fill(.backAccent)
                            .frame(width: 20, height: 20)
@@ -61,8 +99,7 @@ struct CalendarCell: View {
         .foregroundColor(.white)
         .frame(width: 53, height: 53)
         .background(
-            monthStruct().monthType == MonthType.Current
-                ? .darkBlue : .grayBlue.opacity(0.1)
+           getDayBackground()
         )
         .cornerRadius(10)
     }
