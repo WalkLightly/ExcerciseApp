@@ -597,7 +597,7 @@ struct HomeView: View {
                                 showAddWorkoutDayMuscleGroup = false
                                 data.insert(
                                     MuscleGroupWorkout(id: "mm4", muscleGroup: newMuscleGroup, excercises: newExcercises, date: Date()), at: 0)
-                                newMuscleGroup = ""
+                                newMuscleGroup = "Muscle Group"
                                 newExcercises = []
                             } label: {
                                 Text("Save")
