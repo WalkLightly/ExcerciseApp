@@ -10,5 +10,5 @@ struct Excercise {
     var id: String
     var name: String
     var location: String
-    var muscleGroups: [String]
+    var muscleGroup: String
 }

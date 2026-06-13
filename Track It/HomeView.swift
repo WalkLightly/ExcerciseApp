@@ -397,7 +397,7 @@ struct HomeView: View {
                                                  id: "",
                                                  name: newExcerciseName,
                                                  location: "",
-                                                 muscleGroup: [newMuscleGroup],
+                                                 muscleGroup: newMuscleGroup,
                                                  sets: [],
                                                  isAddedIn: false
                                             ),
