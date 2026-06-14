@@ -35,15 +35,17 @@ struct HomeView: View {
             id: "1",
             muscleGroup: "Shoulders",
             exercises: [ex1, ex2, ex3, ex4],
-            date: Timestamp()
+            date: "01/12/2026"
         ),
         MuscleGroupWorkout(
             id: "2",
             muscleGroup: "Legs",
             exercises: [ex3, ex4],
-            date: Timestamp()
+            date: "01/12/2026"
         ),
     ]
+    
+    @StateObject private var viewModel = HomeViewModel()
 
     @State private var tab: String = "home"
     @State private var xOffset = -116
@@ -163,7 +165,7 @@ struct HomeView: View {
                     WorkoutDayView(
                         addNewSet: addNewSet,
                         addNewMuscleGroup: addNewMuscleGroup,
-                        workoutData: $data
+                        workoutData: $viewModel.exercisesForToday
                     )
                     .padding(.top, 30)
                     .padding(.bottom, 10)
@@ -596,7 +598,7 @@ struct HomeView: View {
                             Button {
                                 showAddWorkoutDayMuscleGroup = false
                                 data.insert(
-                                    MuscleGroupWorkout(id: "1", muscleGroup: newMuscleGroup, exercises: newExcercises, date: Timestamp()), at: 0)
+                                    MuscleGroupWorkout(id: "1", muscleGroup: newMuscleGroup, exercises: newExcercises, date: ""), at: 0)
                                 newMuscleGroup = "Muscle Group"
                                 newExcercises = []
                             } label: {
@@ -635,6 +637,11 @@ struct HomeView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: 400, height: 1000)
+        .onAppear() {
+            Task {
+                try await viewModel.getWorkoutsForToday(date: "01/12/2026")
+            }
+        }
     }
 }
 

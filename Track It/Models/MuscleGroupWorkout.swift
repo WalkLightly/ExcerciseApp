@@ -18,7 +18,7 @@ struct MockMuscleGroupWorkout {
             id: "1",
             muscleGroup: "Shoulders",
             exercises: [ex1, ex2, ex3, ex4],
-            date: Timestamp()
+            date: "01/12/2026"
         )
     ]
 }
@@ -27,5 +27,5 @@ struct MuscleGroupWorkout: Hashable, Codable {
     var id: String
     var muscleGroup: String
     var exercises: [ExcerciseWorkout]
-    var date: Timestamp
+    var date: String
 }

@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 struct WorkoutSet {
     var id: String
-    var date: Timestamp
+    var date: String
     var muscleGroup: String
     var reps: Int
     var weight: String

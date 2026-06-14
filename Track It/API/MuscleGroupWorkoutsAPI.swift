@@ -15,7 +15,7 @@ class MuscleGroupWorkoutsAPI {
         
     }
     
-    func getAllMuscleGroupWorkouts() async throws -> [MuscleGroupWorkout] {
+    func getAllMuscleGroupWorkoutsForDate(date: String) async throws -> [MuscleGroupWorkout] {
         var data : [MuscleGroupWorkout] = []
         var ss: [Any] = []
         
@@ -29,7 +29,7 @@ class MuscleGroupWorkoutsAPI {
                    id: document.documentID,
                    muscleGroup: dbData["muscleGroup"] as? String ?? "",
                    exercises: parseExcercisesData(dbData["exercises"]),
-                   date: dbData["date"] as? Timestamp ?? Timestamp()
+                   date: dbData["date"] as? String ?? ""
                )
                 
                 data.append(excercise)

@@ -18,5 +18,5 @@ struct Measurement {
     var id: String
     var bodyPart: String
     var measurement: String
-    var dateRecorded: Timestamp
+    var dateRecorded: String
 }

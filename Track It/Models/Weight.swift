@@ -10,5 +10,5 @@ import FirebaseFirestore
 struct Weight {
     var id: String
     var weight: Double
-    var date: Timestamp
+    var date: String
 }

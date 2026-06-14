@@ -9,7 +9,7 @@ import FirebaseFirestore
 
 struct SetsData: Codable {
     var sets: [String]
-    var date: Timestamp
+    var date: String
 }
 
 struct Excercise: Codable {
@@ -17,6 +17,6 @@ struct Excercise: Codable {
     var location: String
     var muscleGroup: String
     var startingWeight: String
-    var startingWeightDate: Timestamp
+    var startingWeightDate: String
     var workouts: [SetsData]
 }

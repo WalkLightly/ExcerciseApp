@@ -27,16 +27,7 @@ struct WorkoutDayView: View {
                     .padding(.leading, 20)
                 Spacer()
                 Button {
-                    Task {
-                        do {
-                            var data = try await MuscleGroupWorkoutsAPI.shared.getAllMuscleGroupWorkouts()
-                            
-                            //print(data)
-                        } catch {
-                            
-                        }
-                    }
-                    //addNewMuscleGroup()// excerciseList.insert( MockExc(id: "3", msclGroup: "Arms", mockExcercises: ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]), at: 0)
+                    addNewMuscleGroup()// excerciseList.insert( MockExc(id: "3", msclGroup: "Arms", mockExcercises: ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]), at: 0)
                 } label: {
                     Image(systemName: "plus")
                         .foregroundStyle(.darkBlue)
