@@ -35,34 +35,9 @@ class ExcercisesAPI {
         }
 
         return excercises
-
-        //        do {
-        //            let querySnapshot = try await db.collection("exercises")
-        //                .getDocuments()
-        //
-        //            for document in querySnapshot.documents {
-        //                let excerciseData = document.data()
-        //
-        //                var setsData =  excerciseData["workouts"]
-        //
-        //                print(setsData)
-        //
-        //                let excercise = Excercise(
-        //                    id: document.documentID,
-        //                    name: excerciseData["name"] as? String ?? "",
-        //                    location: excerciseData["location"] as? String ?? "",
-        //                    muscleGroup: excerciseData["muscleGroup"] as? String ?? "",
-        //                    startingWeight: excerciseData["startingWeight"] as? String ?? "",
-        //                    startingWeightDate: excerciseData["startingWeightDate"] as? Timestamp ?? Timestamp(),
-        //                    sets: excerciseData["workouts"] as? [SetsData] ?? [],
-        //                )
-        //
-        //                excercises.append(excercise)
-        //            }
-        //            //}
-        //            print(excercises)
-        //        } catch {
-        //            print("Error getting excercises: \(error)")
-        //        }
+    }
+    
+    func deleteWorkoutFromExerciseList(exerciseName: String, date: String) {
+        // this will be called once it's deleted yo
     }
 }

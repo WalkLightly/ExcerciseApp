@@ -1,3 +1,4 @@
+import FirebaseFirestore
 //
 //  MuscleGroupWorkoutsAPI.swift
 //  Track It
@@ -5,74 +6,79 @@
 //  Created by Michael Knight on 6/14/26.
 //
 import Foundation
-import FirebaseFirestore
 
 class MuscleGroupWorkoutsAPI {
     static let shared = MuscleGroupWorkoutsAPI()
     var db = Firestore.firestore()
-    
+
     private init() {
-        
+
     }
-    
-    func getAllMuscleGroupWorkoutsForDate(date: String) async throws -> [MuscleGroupWorkout] {
-        var data : [MuscleGroupWorkout] = []
-        var ss: [Any] = []
-        
+
+    func getAllMuscleGroupWorkoutsForDate(date: String) async throws
+        -> [MuscleGroupWorkout]
+    {
+        var data: [MuscleGroupWorkout] = []
+
         do {
-            let snapshot = try await db.collection("muscle_group_workouts").getDocuments()
-            
+            let snapshot = try await db.collection("muscle_group_workouts")
+                .getDocuments()
+
             for document in snapshot.documents {
                 let dbData = document.data()
-            
+
                 let excercise = MuscleGroupWorkout(
-                   id: document.documentID,
-                   muscleGroup: dbData["muscleGroup"] as? String ?? "",
-                   exercises: parseExcercisesData(dbData["exercises"]),
-                   date: dbData["date"] as? String ?? ""
-               )
-                
+                    id: document.documentID,
+                    muscleGroup: dbData["muscleGroup"] as? String ?? "",
+                    exercises: parseExcercisesData(
+                        data: dbData["exercises"] as? [[String: Any]] ?? [[:]]
+                    ),
+                    date: dbData["date"] as? String ?? ""
+                )
+
                 data.append(excercise)
             }
         } catch {
             print("Error fetching collection: \(error.localizedDescription)")
         }
-        
+
         print(data)
-        
+
         return data
     }
-    
-    func parseExcercisesData(_ data: Any) -> [ExcerciseWorkout] {
+
+    func removeExerciseFromWorkout(workoutId: String, exerciseName: String)
+        async throws
+    {
+        // find the correct one to delete with the workoutId, and the exercise name
+        // remove it also from the associated record in the 'exercises' db
+    }
+
+    func parseExcercisesData(data: [[String: Any]]) -> [ExcerciseWorkout] {
         var exercises: [ExcerciseWorkout] = []
-        
-        if let exerciseArray = data as? [[String: Any]] {
-            
-            // 2. Loop through each exercise dictionary in the array
-            for exercise in exerciseArray {
-                
-                // 3. Extract the string values safely using optional binding
-                let name = exercise["name"] as? String ?? ""
-                let location = exercise["location"] as? String ?? ""
-                let muscleGroup = exercise["muscleGroup"] as? String ?? ""
-                let sets = exercise["sets"] as? [String] ?? []
-                
-                exercises.append(ExcerciseWorkout(
+
+        let exerciseArray = data
+
+        for exercise in exerciseArray {
+
+            let name = exercise["name"] as? String ?? ""
+            let location = exercise["location"] as? String ?? ""
+            let muscleGroup = exercise["muscleGroup"] as? String ?? ""
+            let sets = exercise["sets"] as? [String] ?? []
+
+            exercises.append(
+                ExcerciseWorkout(
                     name: name,
                     location: location,
                     muscleGroup: muscleGroup,
                     sets: sets,
                     isAddedIn: true
-                ))
-                
-            }
-        } else {
-            print("Data is either nil or not in the expected array-of-dictionaries format.")
+                )
+            )
+
         }
-        
+
         return exercises
     }
-    
+
 }
-
-
