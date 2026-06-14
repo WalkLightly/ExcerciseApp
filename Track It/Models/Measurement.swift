@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 //let sampleBook = Book(id: "1", name: "book name", series: "The Heroes of Olympus", orderInSeries: "2", author: "some format here", genres: ["fantaqsy"], format: "some language here", ageRange: "HArry potter", language: "English")
 //
@@ -17,5 +18,5 @@ struct Measurement {
     var id: String
     var bodyPart: String
     var measurement: String
-    var dateRecorded: Date
+    var dateRecorded: Timestamp
 }

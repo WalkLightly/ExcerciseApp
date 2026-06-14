@@ -5,26 +5,27 @@
 //  Created by Michael Knight on 6/7/26.
 //
 import Foundation
+import FirebaseFirestore
 
-let ex1 = ExcerciseWorkout(id: "1", name: "Hack Squat", location: "", muscleGroup: "Legs", sets: ["12"], isAddedIn: true)
-let ex2 = ExcerciseWorkout(id: "2", name: "Bulgarian Split Squat DB", location: "", muscleGroup: "Legs", sets: ["12", "1"], isAddedIn: true)
-let ex3 = ExcerciseWorkout(id: "3", name: "Leg Press", location: "By Front", muscleGroup: "Legs", sets: ["12"], isAddedIn: true)
-let ex4 = ExcerciseWorkout(id: "4", name: "Chin ups", location: "", muscleGroup: "Biceps", sets: ["12"], isAddedIn: true)
+let ex1 = ExcerciseWorkout(name: "Hack Squat", location: "", muscleGroup: "Legs", sets: ["12"], isAddedIn: true)
+let ex2 = ExcerciseWorkout(name: "Bulgarian Split Squat DB", location: "", muscleGroup: "Legs", sets: ["12", "1"], isAddedIn: true)
+let ex3 = ExcerciseWorkout(name: "Leg Press", location: "By Front", muscleGroup: "Legs", sets: ["12"], isAddedIn: true)
+let ex4 = ExcerciseWorkout(name: "Chin ups", location: "", muscleGroup: "Biceps", sets: ["12"], isAddedIn: true)
 
 struct MockMuscleGroupWorkout {
     var mockDataList: [MuscleGroupWorkout] = [
         MuscleGroupWorkout(
-            id: "2",
+            id: "1",
             muscleGroup: "Shoulders",
-            excercises: [ex1, ex2, ex3, ex4],
-            date: Date()
+            exercises: [ex1, ex2, ex3, ex4],
+            date: Timestamp()
         )
     ]
 }
 
-struct MuscleGroupWorkout: Hashable{
+struct MuscleGroupWorkout: Hashable, Codable {
     var id: String
     var muscleGroup: String
-    var excercises: [ExcerciseWorkout]
-    var date: Date
+    var exercises: [ExcerciseWorkout]
+    var date: Timestamp
 }

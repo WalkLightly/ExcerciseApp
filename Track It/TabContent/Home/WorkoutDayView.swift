@@ -27,7 +27,16 @@ struct WorkoutDayView: View {
                     .padding(.leading, 20)
                 Spacer()
                 Button {
-                    addNewMuscleGroup()// excerciseList.insert( MockExc(id: "3", msclGroup: "Arms", mockExcercises: ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]), at: 0)
+                    Task {
+                        do {
+                            var data = try await MuscleGroupWorkoutsAPI.shared.getAllMuscleGroupWorkouts()
+                            
+                            //print(data)
+                        } catch {
+                            
+                        }
+                    }
+                    //addNewMuscleGroup()// excerciseList.insert( MockExc(id: "3", msclGroup: "Arms", mockExcercises: ["Leg Curls", "Leg Press", "Bulgarian Split Squat"]), at: 0)
                 } label: {
                     Image(systemName: "plus")
                         .foregroundStyle(.darkBlue)
@@ -40,7 +49,7 @@ struct WorkoutDayView: View {
                 ForEach($workoutData, id: \.self) {
                     $exc in
                     HStack(alignment: .top) {
-                        WorkoutDayMuscleGroupView(addNewSet: addNewSet, muscleGroup: $exc.muscleGroup, excercises: $exc.excercises)
+                        WorkoutDayMuscleGroupView(addNewSet: addNewSet, muscleGroup: $exc.muscleGroup, excercises: $exc.exercises)
                     }
                     .frame(width: 380, height: 300)
                     

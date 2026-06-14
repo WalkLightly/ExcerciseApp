@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct AddingNewExcercise: Hashable {
     var name: String
@@ -31,16 +32,16 @@ struct HomeView: View {
     
     @State private var data: [MuscleGroupWorkout] = [
         MuscleGroupWorkout(
-            id: "s1",
+            id: "1",
             muscleGroup: "Shoulders",
-            excercises: [ex1, ex2, ex3, ex4],
-            date: Date()
+            exercises: [ex1, ex2, ex3, ex4],
+            date: Timestamp()
         ),
         MuscleGroupWorkout(
-            id: "l3",
+            id: "2",
             muscleGroup: "Legs",
-            excercises: [ex3, ex4],
-            date: Date()
+            exercises: [ex3, ex4],
+            date: Timestamp()
         ),
     ]
 
@@ -394,7 +395,6 @@ struct HomeView: View {
                                     Button {
                                         newExcercises.insert(
                                             ExcerciseWorkout(
-                                                 id: "",
                                                  name: newExcerciseName,
                                                  location: "",
                                                  muscleGroup: newMuscleGroup,
@@ -596,7 +596,7 @@ struct HomeView: View {
                             Button {
                                 showAddWorkoutDayMuscleGroup = false
                                 data.insert(
-                                    MuscleGroupWorkout(id: "mm4", muscleGroup: newMuscleGroup, excercises: newExcercises, date: Date()), at: 0)
+                                    MuscleGroupWorkout(id: "1", muscleGroup: newMuscleGroup, exercises: newExcercises, date: Timestamp()), at: 0)
                                 newMuscleGroup = "Muscle Group"
                                 newExcercises = []
                             } label: {

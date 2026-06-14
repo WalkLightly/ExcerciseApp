@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 struct WorkoutSet {
     var id: String
-    var date: Date
+    var date: Timestamp
     var muscleGroup: String
     var reps: Int
     var weight: String

@@ -1,3 +1,4 @@
+import FirebaseFirestore
 //
 //  ExcercisesAPI.swift
 //  Track It
@@ -5,52 +6,63 @@
 //  Created by Michael Knight on 6/13/26.
 //
 import Foundation
-import FirebaseFirestore
-
 
 class ExcercisesAPI {
     static let shared = ExcercisesAPI()
     var db = Firestore.firestore()
-    
+
     private init() {
-        
+
     }
-    
-    func getAllExcercises () async throws -> [Excercise] {
+
+    func getAllExcercises() async throws -> [Excercise] {
         var excercises: [Excercise] = []
-        
+
         do {
-          let querySnapshot = try await db.collection("exercises").getDocuments()
-//          for document in querySnapshot.documents {
-//              let bookData = document.data()
-//              let author = bookData["author"] as? [String] ?? [""]
-//              let book = Book(id: document.documentID,
-//                              name: bookData["name"] as? String ?? "",
-//                              series: bookData["series"] as? String ?? "",
-//                              orderInSeries: bookData["orderInSeries"] as? String ?? "",
-//                              author: author[0],
-//                              genres: bookData["genres"] as? [String] ?? [""],
-//                              format: bookData["format"] as? String ?? "",
-//                              ageRange: bookData["ageRange"] as? String ?? "",
-//                              language: bookData["language"] as? String ?? "")
-//              books.append(book)
-           // print("\(book)")
-            for document in querySnapshot.documents {
-                let excerciseData = document.data()
-                let excercise = Excercise(id: document.documentID,
-                                          name: excerciseData["name"] as? String ?? "",
-                                          location: excerciseData["location"] as? String ?? "",
-                                          muscleGroup: excerciseData["muscleGroup"] as? String ?? "")
-                
-                excercises.append(excercise)
+            let snapshot = try await db.collection("exercises").getDocuments()
+
+            for document in snapshot.documents {
+                do {
+                    let exercise = try document.data(as: Excercise.self)
+                    excercises.append(exercise)
+
+                } catch {
+                    print("Error decoding a specific document: \(error)")
+                }
             }
-            print(excercises)
-          //}
         } catch {
-          print("Error getting excercises: \(error)")
+            print("Error fetching collection: \(error.localizedDescription)")
         }
-        
+
         return excercises
+
+        //        do {
+        //            let querySnapshot = try await db.collection("exercises")
+        //                .getDocuments()
+        //
+        //            for document in querySnapshot.documents {
+        //                let excerciseData = document.data()
+        //
+        //                var setsData =  excerciseData["workouts"]
+        //
+        //                print(setsData)
+        //
+        //                let excercise = Excercise(
+        //                    id: document.documentID,
+        //                    name: excerciseData["name"] as? String ?? "",
+        //                    location: excerciseData["location"] as? String ?? "",
+        //                    muscleGroup: excerciseData["muscleGroup"] as? String ?? "",
+        //                    startingWeight: excerciseData["startingWeight"] as? String ?? "",
+        //                    startingWeightDate: excerciseData["startingWeightDate"] as? Timestamp ?? Timestamp(),
+        //                    sets: excerciseData["workouts"] as? [SetsData] ?? [],
+        //                )
+        //
+        //                excercises.append(excercise)
+        //            }
+        //            //}
+        //            print(excercises)
+        //        } catch {
+        //            print("Error getting excercises: \(error)")
+        //        }
     }
-    
 }

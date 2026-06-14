@@ -15,7 +15,7 @@ struct MockMuscleGrpData {
     ]
 }
 
-struct MuscleGroup {
+struct MuscleGroup: Codable {
     var id: String
     var name: String
     var excercises: [String]
