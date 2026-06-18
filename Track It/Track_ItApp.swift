@@ -24,7 +24,7 @@ struct Track_ItApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(newMuscleGroupWorkout: MockMuscleGroupWorkout().mockDataList[0])
                 .preferredColorScheme(.dark)
         }
     }

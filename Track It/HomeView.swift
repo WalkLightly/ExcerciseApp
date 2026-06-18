@@ -24,20 +24,6 @@ var MuscleGroupColorMap: [String: Color] = [
 struct HomeView: View {
     @State private var dateHolder = DateHolder()
     
-    @State private var data: [MuscleGroupWorkout] = [
-        MuscleGroupWorkout(
-            id: "1",
-            muscleGroup: "Shoulders",
-            exercises: [ex1, ex2, ex3, ex4],
-            date: "01/12/2026"
-        ),
-        MuscleGroupWorkout(
-            id: "2",
-            muscleGroup: "Legs",
-            exercises: [ex3, ex4],
-            date: "01/12/2026"
-        ),
-    ]
     
     @StateObject private var viewModel = HomeViewModel()
 
@@ -54,9 +40,9 @@ struct HomeView: View {
 
     @State private var newMuscleGroup: String = "Muscle Group"
     @State private var newExcercises: [ExcerciseWorkout] = []
-        //AddingNewExcercise(name: "test", addedIn: true) ]
     @State private var newExcerciseName: String = ""
     @State private var showMuscleGroupDropdown: Bool = false
+    @State var newMuscleGroupWorkout: MuscleGroupWorkout
 
     @StateObject private var stopwatch = Stopwatch()
 
@@ -599,10 +585,15 @@ struct HomeView: View {
                                 .padding(.top, 10)
                             Button {
                                 showAddWorkoutDayMuscleGroup = false
-                                data.insert(
-                                    MuscleGroupWorkout(id: "1", muscleGroup: newMuscleGroup, exercises: newExcercises, date: ""), at: 0)
+                                newMuscleGroupWorkout =
+                                    MuscleGroupWorkout(id: "-1", muscleGroup: newMuscleGroup, exercises: newExcercises, date: selectedDate)
+                                
                                 newMuscleGroup = "Muscle Group"
                                 newExcercises = []
+                                
+                                Task {
+                                    try await viewModel.addNewWorkoutDay(workout: newMuscleGroupWorkout)
+                                }
                             } label: {
                                 Text("Save")
                                     .font(.custom("Inder-Regular", size: 23))
@@ -651,5 +642,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(newMuscleGroupWorkout: MockMuscleGroupWorkout().mockDataList[0])
 }

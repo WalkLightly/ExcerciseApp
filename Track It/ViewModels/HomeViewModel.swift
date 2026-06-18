@@ -25,5 +25,14 @@ class HomeViewModel: ObservableObject {
         
         return self.exercisesForToday
     }
+    
+    func addNewWorkoutDay(workout: MuscleGroupWorkout) async throws -> Void {
+        
+        do {
+            try await MuscleGroupWorkoutsAPI.shared.addNewMuscleGroupWorkout(workout: workout)
+        } catch {
+            print("Error adding workout BOI")
+        }
+    }
 }
     

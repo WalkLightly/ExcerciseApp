@@ -48,6 +48,10 @@ class MuscleGroupWorkoutsAPI {
 
         return data
     }
+    
+    func addNewMuscleGroupWorkout(workout: MuscleGroupWorkout) async throws -> Void {
+        print(workout)
+    }
 
     func removeExerciseFromWorkout(workoutId: String, exerciseName: String)
         async throws
