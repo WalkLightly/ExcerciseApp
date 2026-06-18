@@ -61,7 +61,11 @@ class CalendarHelper
         let month = Calendar.current.dateComponents([.month], from: Date())
         let year = Calendar.current.dateComponents([.year], from: Date())
 
-        let monthString = String(month.month ?? -1)
+        var monthString = String(month.month ?? -1)
+        if monthString.count == 1 {
+            monthString = "0\(monthString)"
+        }
+        
         let dayString = String(day.day ?? -1)
         let yearString = String(year.year ?? -1)
         

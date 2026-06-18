@@ -64,6 +64,8 @@ struct HomeView: View {
     func addNewExcercise() { showAddExerciseModal = true }
 
     func changeSelectedDate(date: String) -> Void {
+        selectedDate = date
+        print(date)
         Task {
             try await viewModel.getWorkoutsForDate(date: date)
         }

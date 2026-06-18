@@ -44,13 +44,55 @@ class MuscleGroupWorkoutsAPI {
             print("Error fetching collection: \(error.localizedDescription)")
         }
 
-        //print(data)
+        print(data)
 
         return data
     }
-    
-    func addNewMuscleGroupWorkout(workout: MuscleGroupWorkout) async throws -> Void {
-        print(workout)
+
+    func addNewMuscleGroupWorkout(workout: MuscleGroupWorkout) async throws {
+
+        var exerciseDictionaries: [[String: Any]] = []
+        
+        
+        for exc in workout.exercises {
+            exerciseDictionaries.append(exc.toDictionary)
+        }
+        
+
+        let query = db.collection("muscle_group_workouts")
+            .whereField("date", isEqualTo: workout.date)
+            .whereField("muscleGroup", isEqualTo: workout.muscleGroup)  // <-- Second where statement
+
+        do {
+            // 2. Execute the query to find matching documents
+            let snapshot = try await query.getDocuments()
+
+            if let existingDocument = snapshot.documents.first {
+                // we found one, so just update it
+                let docRef = existingDocument.reference
+                try await docRef.updateData([
+                    "exercises": FieldValue.arrayUnion(exerciseDictionaries)
+                ])
+                print("Successfully updated existing document.")
+
+            } else {
+                // None found, so create a new one
+                let newDocRef = db.collection("muscle_group_workouts").document()
+                try await newDocRef.setData([
+                    "date": workout.date,
+                    "muscleGroup": workout.muscleGroup,
+                    "exercises": exerciseDictionaries
+                ])
+                print(
+                    "Successfully created a new document with an empty array."
+                )
+            }
+
+        } catch {
+            print(
+                "Error processing Firestore operation: \(error.localizedDescription)"
+            )
+        }
     }
 
     func removeExerciseFromWorkout(workoutId: String, exerciseName: String)
