@@ -56,4 +56,16 @@ class CalendarHelper
         return components.weekday! - 1
     }
     
+    func formattedDate() -> String {
+        let day = Calendar.current.dateComponents([.day], from: Date())
+        let month = Calendar.current.dateComponents([.month], from: Date())
+        let year = Calendar.current.dateComponents([.year], from: Date())
+
+        let monthString = String(month.month ?? -1)
+        let dayString = String(day.day ?? -1)
+        let yearString = String(year.year ?? -1)
+        
+        return monthString + "/" + dayString + "/" + yearString
+    }
+    
 }

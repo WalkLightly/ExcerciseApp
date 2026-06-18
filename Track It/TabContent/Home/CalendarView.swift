@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct CalendarView: View {
+    let changeDate: (String) -> Void
+
     let gridData: [[Int]] = (0...7).map { row in
         (1...7).map { col in (row * 6) + col }
     }
@@ -159,6 +161,32 @@ struct CalendarView: View {
                             daysInPrevMonth: daysInPrevMonth
                         )
                         .environmentObject(dateHolder)
+                        .onTapGesture {
+                            let start = startingSpaces == 0 ? startingSpaces + 7 : startingSpaces
+                            var dayInt = -1
+                            if count <= start {
+                                let day = daysInPrevMonth + count - start
+                                dayInt = MonthStruct(monthType: MonthType.Previous, dayInt: day).dayInt
+                            } else if count - start > daysInMonth {
+                                let day = count - start - daysInMonth
+                                dayInt = MonthStruct(monthType: MonthType.Next, dayInt: day).dayInt
+                            }
+                            
+                            if (dayInt == -1) {
+                                let day = count - start
+                                dayInt = MonthStruct(monthType: MonthType.Current, dayInt: day).dayInt
+                            }
+                            
+                            let monthYearStr = CalendarHelper().monthYearString(dateHolder.date)
+                            var monthStr = String(CalendarHelper().monthInt(dateHolder.date))
+                            
+                            if monthStr.count == 1 {
+                                monthStr = "0\(monthStr)"
+                            }
+                            
+                            let dateString = "\(monthStr)/\(dayInt)/\(monthYearStr.split(separator: " ")[1])"
+                            changeDate(dateString)
+                        }
 
                     }
                 }
@@ -172,7 +200,7 @@ struct CalendarView: View {
 
 #Preview {
     let dateHolder = DateHolder()
-    CalendarView()
+    CalendarView(changeDate: { _ in })
         .environmentObject(dateHolder)
 }
 

@@ -13,7 +13,7 @@ class HomeViewModel: ObservableObject {
     @Published var exercisesForToday: [MuscleGroupWorkout] = []
     @Published var isLoadingData: Bool = false
     
-    func getWorkoutsForToday(date: String) async throws -> [MuscleGroupWorkout] {
+    func getWorkoutsForDate(date: String) async throws -> [MuscleGroupWorkout] {
         self.isLoadingData = true
         
         do {

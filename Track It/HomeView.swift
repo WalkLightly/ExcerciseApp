@@ -8,12 +8,6 @@
 import SwiftUI
 import FirebaseFirestore
 
-struct AddingNewExcercise: Hashable {
-    var name: String
-    var addedIn: Bool
-    var sets : [String] = []
-}
-
 var MuscleGroupColorMap: [String: Color] = [
     "Shoulders": .shouldersAccent,
     "Legs": .legsAccent,
@@ -47,6 +41,8 @@ struct HomeView: View {
     
     @StateObject private var viewModel = HomeViewModel()
 
+    @State private var selectedDate: String = ""
+    
     @State private var tab: String = "home"
     @State private var xOffset = -116
     @State private var stopWatchActive: Bool = false
@@ -81,6 +77,12 @@ struct HomeView: View {
     func addNewMuscleGroup() { showAddWorkoutDayMuscleGroup = true }
     func addNewExcercise() { showAddExerciseModal = true }
 
+    func changeSelectedDate(date: String) -> Void {
+        Task {
+            try await viewModel.getWorkoutsForDate(date: date)
+        }
+    }
+    
     var body: some View {
         ZStack {
             Color(.backgroundBlue)
@@ -158,7 +160,7 @@ struct HomeView: View {
                 
                 Spacer()
                 ScrollView {
-                    CalendarView()
+                    CalendarView(changeDate: changeSelectedDate)
                         .frame(width: 430)
                         .environmentObject(dateHolder)
                         .padding(.top, 8)
@@ -638,8 +640,11 @@ struct HomeView: View {
         .edgesIgnoringSafeArea(.all)
         .frame(width: 400, height: 1000)
         .onAppear() {
+            let dateStr = CalendarHelper().formattedDate()
+            selectedDate = dateStr
+
             Task {
-                try await viewModel.getWorkoutsForToday(date: "01/12/2026")
+                try await viewModel.getWorkoutsForDate(date: dateStr)
             }
         }
     }

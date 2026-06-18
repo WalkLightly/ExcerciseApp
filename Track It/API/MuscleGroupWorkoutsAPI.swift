@@ -19,9 +19,11 @@ class MuscleGroupWorkoutsAPI {
         -> [MuscleGroupWorkout]
     {
         var data: [MuscleGroupWorkout] = []
+        print(date)
 
         do {
             let snapshot = try await db.collection("muscle_group_workouts")
+                .whereField("date", isEqualTo: date)
                 .getDocuments()
 
             for document in snapshot.documents {
@@ -42,7 +44,7 @@ class MuscleGroupWorkoutsAPI {
             print("Error fetching collection: \(error.localizedDescription)")
         }
 
-        print(data)
+        //print(data)
 
         return data
     }
