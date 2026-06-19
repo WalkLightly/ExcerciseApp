@@ -23,7 +23,7 @@ struct MockMuscleGroupWorkout {
     ]
 }
 
-struct MuscleGroupWorkout: Hashable, Codable {
+struct MuscleGroupWorkout: Hashable, Codable, Identifiable {
     var id: String
     var muscleGroup: String
     var exercises: [ExcerciseWorkout]

@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct CalendarCell: View {
+    @StateObject private var viewModel = HomeViewModel()
+    
     @EnvironmentObject var dateHolder: DateHolder
     let count: Int
     let startingSpaces: Int
     let daysInMonth: Int
     let daysInPrevMonth: Int
+    let workoutData: [MuscleGroupWorkout]
     
     func getDayBackground() -> Color {
         
@@ -51,43 +54,56 @@ struct CalendarCell: View {
         }
     }
     
+    func getCurrentDate() -> String {
+        var day = -1
+        let start = startingSpaces == 0 ? startingSpaces + 7 : startingSpaces
+        if count <= start {
+            let tDay = daysInPrevMonth + count - start
+            day = MonthStruct(monthType: MonthType.Previous, dayInt: tDay).dayInt
+        } else if count - start > daysInMonth {
+            let tDay = count - start - daysInMonth
+            day = MonthStruct(monthType: MonthType.Next, dayInt: tDay).dayInt
+        }
+
+        if day == -1 {
+            
+        let tDay = count - start
+            day = MonthStruct(monthType: MonthType.Current, dayInt: tDay).dayInt
+        }
+        
+        let monthYearStr = CalendarHelper().monthYearString(dateHolder.date)
+        var monthStr = String(CalendarHelper().monthInt(dateHolder.date))
+        
+        if monthStr.count == 1 {
+            monthStr = "0\(monthStr)"
+        }
+        
+        var dateString = monthStr + "/"
+        dateString += String(day) + "/"
+        dateString += monthYearStr.split(separator: " ")[1]
+        
+        return dateString
+    }
+    
+    func getExercisesForToday() -> [MuscleGroupWorkout] {
+        return workoutData.filter({$0.date == getCurrentDate()})
+    }
+    
     var body: some View {
         VStack {
             if monthStruct().monthType == MonthType.Current {
                 Text(monthStruct().day())
+                //Text(getCurrentDate())
                     .font(.custom("Poppins-Regular", size: 15))
                     .foregroundStyle(getDayText())
                 HStack(spacing: -10) {
                     // loop over the excercises for this day
-                    if monthStruct().dayInt == 4 {
+                    ForEach(getExercisesForToday()) { data in
                         Rectangle()
-                            .fill(.shouldersAccent)
-                            .frame(width: 20, height: 20)
-                            .clipShape(Capsule())
-                        Rectangle()
-                            .fill(.legsAccent)
-                            .frame(width: 20, height: 20)
-                            .clipShape(Capsule())
-                    } else if monthStruct().dayInt == 5 {
-                        Rectangle()
-                            .fill(.chestAccent)
+                            .fill(MuscleGroupColorMap[data.muscleGroup] ?? .darkBlue)
                             .frame(width: 20, height: 20)
                             .clipShape(Capsule())
                     }
-                    else if monthStruct().dayInt == 7 {
-                       Rectangle()
-                           .fill(.backAccent)
-                           .frame(width: 20, height: 20)
-                           .clipShape(Capsule())
-                       Rectangle()
-                           .fill(.bicepsAccent)
-                           .frame(width: 20, height: 20)
-                           .clipShape(Capsule())
-                       Rectangle()
-                           .fill(.cardioAccent)
-                           .frame(width: 20, height: 20)
-                           .clipShape(Capsule())
-                   }
                 }
                 .padding(.top, -10)
                 .frame(height: 15)
@@ -102,6 +118,13 @@ struct CalendarCell: View {
            getDayBackground()
         )
         .cornerRadius(10)
+        .onAppear {
+            
+           
+//            Task {
+//                try await viewModel.getWorkoutsForDate(date: dateString)
+//            }
+        }
     }
 
     func monthStruct() -> MonthStruct {
@@ -126,7 +149,8 @@ struct CalendarCell_Previews: PreviewProvider {
             count: 1,
             startingSpaces: 1,
             daysInMonth: 1,
-            daysInPrevMonth: 1
+            daysInPrevMonth: 1,
+            workoutData: MockMuscleGroupWorkout().mockDataList
         )
         .environmentObject(dateHolder)
     }

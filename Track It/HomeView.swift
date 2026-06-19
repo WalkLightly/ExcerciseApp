@@ -62,6 +62,12 @@ struct HomeView: View {
     func addNewSet() { showAddSetModal = true }
     func addNewMuscleGroup() { showAddWorkoutDayMuscleGroup = true }
     func addNewExcercise() { showAddExerciseModal = true }
+    
+    func deleteMuscleGroupWorkout(id: String) {
+        Task {
+            try await viewModel.getWorkoutsForDate(date: selectedDate)
+        }
+    }
 
     func changeSelectedDate(date: String) -> Void {
         selectedDate = date
@@ -148,15 +154,16 @@ struct HomeView: View {
                 
                 Spacer()
                 ScrollView {
-                    CalendarView(changeDate: changeSelectedDate)
+                    CalendarView(changeDate: changeSelectedDate, workoutData: viewModel.exercisesMasterList)
                         .frame(width: 430)
                         .environmentObject(dateHolder)
                         .padding(.top, 8)
                     WorkoutDayView(
                         addNewSet: addNewSet,
                         addNewMuscleGroup: addNewMuscleGroup,
-                        workoutData: $viewModel.exercisesForToday
-                    )
+                        workoutData: $viewModel.exercisesForToday,
+                        selectedDate: selectedDate,
+                        deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
                     .padding(.top, 30)
                     .padding(.bottom, 10)
                 }
@@ -595,6 +602,8 @@ struct HomeView: View {
                                 
                                 Task {
                                     try await viewModel.addNewWorkoutDay(workout: newMuscleGroupWorkout)
+                                    
+                                    try await viewModel.getWorkoutsForDate(date: selectedDate)
                                 }
                             } label: {
                                 Text("Save")
@@ -638,6 +647,7 @@ struct HomeView: View {
 
             Task {
                 try await viewModel.getWorkoutsForDate(date: dateStr)
+                try await viewModel.getAllWorkoutData()
             }
         }
     }

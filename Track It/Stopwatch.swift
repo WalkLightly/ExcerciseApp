@@ -9,8 +9,12 @@ class Stopwatch: ObservableObject {
     
     func start() {
         isRunning = true
-        timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-            self.counter += 0.05
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
+            self.counter += 0.01
+        }
+        
+        if let activeTimer = self.timer {
+            RunLoop.current.add(activeTimer, forMode: .common)
         }
     }
     

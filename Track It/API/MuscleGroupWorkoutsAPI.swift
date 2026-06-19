@@ -44,13 +44,41 @@ class MuscleGroupWorkoutsAPI {
             print("Error fetching collection: \(error.localizedDescription)")
         }
 
-        print(data)
+        return data
+    }
+    
+    func getAllMuscleGroupWorkouts()  async throws
+    -> [MuscleGroupWorkout] {
+        var data: [MuscleGroupWorkout] = []
+
+        do {
+            let snapshot = try await db.collection("muscle_group_workouts")
+                .getDocuments()
+
+            for document in snapshot.documents {
+                let dbData = document.data()
+
+                let excercise = MuscleGroupWorkout(
+                    id: document.documentID,
+                    muscleGroup: dbData["muscleGroup"] as? String ?? "",
+                    exercises: parseExcercisesData(
+                        data: dbData["exercises"] as? [[String: Any]] ?? [[:]]
+                    ),
+                    date: dbData["date"] as? String ?? ""
+                )
+
+                data.append(excercise)
+            }
+        } catch {
+            print("Error fetching collection: \(error.localizedDescription)")
+        }
 
         return data
     }
 
     func addNewMuscleGroupWorkout(workout: MuscleGroupWorkout) async throws {
 
+        // TODO: Also add the exercies into the exercises collection
         var exerciseDictionaries: [[String: Any]] = []
         
         
@@ -96,10 +124,15 @@ class MuscleGroupWorkoutsAPI {
     }
 
     func removeExerciseFromWorkout(workoutId: String, exerciseName: String)
-        async throws
+        async throws -> Void
     {
         // find the correct one to delete with the workoutId, and the exercise name
         // remove it also from the associated record in the 'exercises' db
+    }
+    
+    func removeMuscleGroupWorkout(workoutId: String) async throws -> Void {
+        // TODO: Also remove the exercies from the exercises collection. Remove it from the workouts collection
+
     }
 
     func parseExcercisesData(data: [[String: Any]]) -> [ExcerciseWorkout] {

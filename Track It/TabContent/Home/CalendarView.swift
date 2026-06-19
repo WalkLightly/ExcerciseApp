@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CalendarView: View {
     let changeDate: (String) -> Void
+    let workoutData: [MuscleGroupWorkout]
 
     let gridData: [[Int]] = (0...7).map { row in
         (1...7).map { col in (row * 6) + col }
@@ -158,7 +159,8 @@ struct CalendarView: View {
                             count: count,
                             startingSpaces: startingSpaces,
                             daysInMonth: daysInMonth,
-                            daysInPrevMonth: daysInPrevMonth
+                            daysInPrevMonth: daysInPrevMonth,
+                            workoutData: workoutData
                         )
                         .environmentObject(dateHolder)
                         .onTapGesture {
@@ -200,7 +202,7 @@ struct CalendarView: View {
 
 #Preview {
     let dateHolder = DateHolder()
-    CalendarView(changeDate: { _ in })
+    CalendarView(changeDate: { _ in }, workoutData: MockMuscleGroupWorkout().mockDataList)
         .environmentObject(dateHolder)
 }
 

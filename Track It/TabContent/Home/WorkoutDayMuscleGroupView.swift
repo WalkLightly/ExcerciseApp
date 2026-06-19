@@ -12,11 +12,18 @@ struct WorkoutDayMuscleGroupView: View {
     let addNewSet: () -> Void
     @Binding var muscleGroup: String
     @Binding var excercises: [ExcerciseWorkout]
+    let docId: String
+    let deleteMuscleGroupWorkout: (String) -> Void
 
-    func deleteExcercise(at offsets: IndexSet) {
-        excercises.remove(atOffsets: offsets)
+    @State private var isEditing = false
+    @State private var workoutToDeleteId: String = ""
+
+    func deleteExcercise() {
+        //excercises.remove(atOffsets: offsets)
+        print(docId)
+        isEditing = false
     }
-    
+
     var body: some View {
         HStack(alignment: .top) {
             Rectangle()
@@ -36,26 +43,29 @@ struct WorkoutDayMuscleGroupView: View {
                     .padding(5)
                     Spacer()
                     Button {
-                      //  excercises.insert("Calf Raises", at: 0)
+                        //  excercises.insert("Calf Raises", at: 0)
                     } label: {
                         Text("Add")
-                        .font(.custom("PTSans-NarrowBold", size: 25))
-                        .foregroundStyle(.skyBlue)
+                            .font(.custom("PTSans-NarrowBold", size: 25))
+                            .foregroundStyle(.skyBlue)
                     }
                     .padding(.top, 5)
                     .padding(.trailing, 15)
                 }
                 ScrollView {
-                   // List {
-                        ForEach($excercises, id: \.self) {
-                            $excercise in
-                            WorkoutDayExerciseView(addNewSet: addNewSet, excercise: $excercise)
-                        }
-                     //   .onDelete(perform: deleteExcercise)
+                    // List {
+                    ForEach($excercises, id: \.self) {
+                        $excercise in
+                        WorkoutDayExerciseView(
+                            addNewSet: addNewSet,
+                            excercise: $excercise
+                        )
                     }
-                    //.scrollContentBackground(.hidden)
-                   // .listStyle(.plain)
-               // }
+                    //   .onDelete(perform: deleteExcercise)
+                }
+                //.scrollContentBackground(.hidden)
+                // .listStyle(.plain)
+                // }
                 .padding(.top, 5)
                 .padding(.bottom, 20)
             }
@@ -80,6 +90,37 @@ struct WorkoutDayMuscleGroupView: View {
             y: 2
         )
         .padding()
+        .onLongPressGesture(minimumDuration: 0.5) {
+            // This triggers after the full hold duration
+            withAnimation {
+                self.isEditing = true
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if isEditing {
+                Button(action: deleteExcercise) {
+                    Text("DELETE")
+                        .font( .custom(
+                            "PTSans-NarrowBold",
+                            size: 20
+                        ))
+                      
+                        .foregroundColor(.black)
+                        .padding(.leading, 10)
+                        .padding(.trailing, 10)
+                        .padding(.top, 5)
+                        .padding(.bottom, 5)
+                }
+                .transition(.scale.combined(with: .opacity)) // Animate it popping in
+                .background(.red.opacity(0.5))
+                .cornerRadius(10)
+                .offset(x: -105, y: 25)
+
+            }
+        }
+        .onTapGesture {
+            isEditing = false
+        }
     }
 }
 
@@ -87,6 +128,8 @@ struct WorkoutDayMuscleGroupView: View {
     WorkoutDayMuscleGroupView(
         addNewSet: {},
         muscleGroup: .constant("Shoulders"),
-        excercises: .constant([])
+        excercises: .constant([]),
+        docId: "",
+        deleteMuscleGroupWorkout: { _ in }
     )
 }

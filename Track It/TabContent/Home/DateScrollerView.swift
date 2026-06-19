@@ -27,6 +27,7 @@ struct DateScrollerView: View
             }
             Text(CalendarHelper().monthYearString(dateHolder.date))
                 .font(.custom("Inder-Regular", size: 30))
+                .foregroundStyle(.black)
                 .bold()
                 .transition(
                     .move(edge: .leading).combined(with: .opacity)
