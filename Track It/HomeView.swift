@@ -300,14 +300,21 @@ struct HomeView: View {
                 VStack {
                     VStack {
                         HStack(alignment: .top) {
-                            Rectangle()
-                                .fill(
-                                    Color(
-                                        MuscleGroupColorMap[newMuscleGroup]
-                                            ?? .gray
+                            VStack {
+                                Spacer()
+                                Rectangle()
+                                    .fill(
+                                        Color(
+                                            MuscleGroupColorMap[newMuscleGroup]
+                                                ?? .gray
+                                        )
                                     )
-                                )
-                                .frame(width: 20)
+                                    .frame(width: 20)
+                                    .cornerRadius(20)
+                                    .padding(.leading, 10)
+                                Spacer()
+                            }
+                           
                             VStack(alignment: .leading) {
                                 HStack {
                                     VStack(alignment: .leading) {
@@ -379,10 +386,10 @@ struct HomeView: View {
                                             .background(.white)
                                             .clipShape(
                                                 UnevenRoundedRectangle(
-                                                    topLeadingRadius: 0,
+                                                    topLeadingRadius: 10,
                                                     bottomLeadingRadius: 10,
                                                     bottomTrailingRadius: 10,
-                                                    topTrailingRadius: 0
+                                                    topTrailingRadius: 10
                                                 )
                                             )
                                             .offset(x: -10, y: 125)
@@ -565,8 +572,8 @@ struct HomeView: View {
                         .background(.offWhite)
                         .clipShape(
                             UnevenRoundedRectangle(
-                                topLeadingRadius: 0,
-                                bottomLeadingRadius: 0,
+                                topLeadingRadius: 10,
+                                bottomLeadingRadius: 10,
                                 bottomTrailingRadius: 10,
                                 topTrailingRadius: 10
                             )

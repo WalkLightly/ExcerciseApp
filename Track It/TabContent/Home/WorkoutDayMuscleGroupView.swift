@@ -26,9 +26,16 @@ struct WorkoutDayMuscleGroupView: View {
 
     var body: some View {
         HStack(alignment: .top) {
-            Rectangle()
-                .fill(MuscleGroupColorMap[muscleGroup] ?? .darkBlue)
-                .frame(width: 20)
+            VStack {
+                Spacer()
+                Rectangle()
+                    .fill(MuscleGroupColorMap[muscleGroup] ?? .darkBlue)
+                    .frame(width: 20, height: 280)
+                    .cornerRadius(20)
+                    .padding(.leading, 10)
+                Spacer()
+            }
+        
             VStack(alignment: .leading) {
                 HStack {
                     VStack {
@@ -77,8 +84,8 @@ struct WorkoutDayMuscleGroupView: View {
         .background(.offWhite)
         .clipShape(
             UnevenRoundedRectangle(
-                topLeadingRadius: 0,
-                bottomLeadingRadius: 0,
+                topLeadingRadius: 10,
+                bottomLeadingRadius: 10,
                 bottomTrailingRadius: 10,
                 topTrailingRadius: 10
             )

@@ -49,8 +49,8 @@ struct WorkoutDayView: View {
                     .background(.offWhite)
                     .clipShape(
                         UnevenRoundedRectangle(
-                            topLeadingRadius: 0,
-                            bottomLeadingRadius: 0,
+                            topLeadingRadius: 10,
+                            bottomLeadingRadius: 10,
                             bottomTrailingRadius: 10,
                             topTrailingRadius: 10
                         )
