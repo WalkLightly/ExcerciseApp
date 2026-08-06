@@ -5,6 +5,13 @@
 //  Created by Michael Knight on 5/30/26.
 //
 import Foundation
+/***
+ Adding a new set:
+ Find the muscle group workout in the muscle_group_workout table
+ 
+ 
+ */
+
 
 struct MockExcData {
     let excerciseList: [ExcerciseWorkout] = [

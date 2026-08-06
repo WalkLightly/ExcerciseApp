@@ -15,6 +15,15 @@ class HomeViewModel: ObservableObject {
 
     @Published var isLoadingData: Bool = false
     
+    func getAllExercises() async throws -> [Excercise] {
+        var exercises: [Excercise] = []
+        do {
+            exercises = try await ExcercisesAPI.shared.getAllExcercises()
+        }
+        
+        return exercises
+    }
+    
     func getWorkoutsForDate(date: String) async throws -> [MuscleGroupWorkout] {
         self.isLoadingData = true
         
@@ -45,6 +54,14 @@ class HomeViewModel: ObservableObject {
         }
         
         return self.exercisesMasterList
+    }
+    
+    func addSetToWorkout(muscleGroupWorkoutId: String, excerciseName: String, setWeight: String) async throws -> Void {
+        do {
+            try await MuscleGroupWorkoutsAPI.shared.addSetToWorkout(muscleGroupWorkoutId: muscleGroupWorkoutId, excerciseName: excerciseName, setWeight: setWeight)
+        } catch {
+            print("error fetching workouts")
+        }
     }
 }
     

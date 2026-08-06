@@ -14,7 +14,7 @@ struct MockExc : Hashable {
 }
 
 struct WorkoutDayView: View {
-    let addNewSet: () -> Void
+    let addNewSet: (String, String) -> Void
     let addNewMuscleGroup: () -> Void
     @Binding var workoutData: [MuscleGroupWorkout]
     let selectedDate: String
@@ -42,7 +42,12 @@ struct WorkoutDayView: View {
                 ForEach($workoutData, id: \.self) {
                     $exc in
                     HStack(alignment: .top) {
-                        WorkoutDayMuscleGroupView(addNewSet: addNewSet, muscleGroup: $exc.muscleGroup, excercises: $exc.exercises, docId: exc.id, deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
+                        WorkoutDayMuscleGroupView(
+                            addNewSet: addNewSet,
+                            muscleGroup: $exc.muscleGroup,
+                            excercises: $exc.exercises,
+                            muscleGroupWorkoutId: exc.id,
+                            deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
                     }
                     .frame(width: 380, height: 300)
                     
@@ -78,5 +83,5 @@ struct WorkoutDayView: View {
 }
 
 #Preview {
-    WorkoutDayView(addNewSet: {}, addNewMuscleGroup: {}, workoutData: .constant([]), selectedDate: "06/18/2026", deleteMuscleGroupWorkout: {_ in})
+    WorkoutDayView(addNewSet: { _ , _ in }, addNewMuscleGroup: {}, workoutData: .constant([]), selectedDate: "06/18/2026", deleteMuscleGroupWorkout: {_ in})
 }

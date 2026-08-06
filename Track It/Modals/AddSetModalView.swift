@@ -10,6 +10,7 @@ import SwiftUI
 struct AddSetModalView: View {
     @Binding var newSetWeight : String
     @Binding var showAddSetModal: Bool
+    let addNewSetData: () -> Void
     
     var body: some View {
         VStack {
@@ -36,7 +37,6 @@ struct AddSetModalView: View {
                     )
                     VStack {
                         VStack {
-
                             TextField("", text: $newSetWeight)
                                 .frame(width: 150, height: 55)
                                 .foregroundStyle(.darkBlue)
@@ -86,6 +86,8 @@ struct AddSetModalView: View {
                         .frame(width: 1, height: 55)
                     Button {
                         // showConfirmDeleteDialog = false
+                        showAddSetModal = false
+                        addNewSetData()
                     } label: {
                         Text("Save")
                             .font(.custom("Inder-Regular", size: 23))
@@ -107,5 +109,5 @@ struct AddSetModalView: View {
 }
 
 #Preview {
-    AddSetModalView(newSetWeight: .constant(""), showAddSetModal: .constant(true))
+    AddSetModalView(newSetWeight: .constant(""), showAddSetModal: .constant(true), addNewSetData: {})
 }

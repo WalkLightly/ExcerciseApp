@@ -9,10 +9,10 @@ import SwiftUI
 
 struct WorkoutDayMuscleGroupView: View {
 
-    let addNewSet: () -> Void
+    let addNewSet: (String, String) -> Void
     @Binding var muscleGroup: String
     @Binding var excercises: [ExcerciseWorkout]
-    let docId: String
+    @State var muscleGroupWorkoutId: String
     let deleteMuscleGroupWorkout: (String) -> Void
 
     @State private var isEditing = false
@@ -20,7 +20,6 @@ struct WorkoutDayMuscleGroupView: View {
 
     func deleteExcercise() {
         //excercises.remove(atOffsets: offsets)
-        print(docId)
         isEditing = false
     }
 
@@ -65,7 +64,8 @@ struct WorkoutDayMuscleGroupView: View {
                         $excercise in
                         WorkoutDayExerciseView(
                             addNewSet: addNewSet,
-                            excercise: $excercise
+                            excercise: $excercise,
+                            muscleGroupWorkoutId: muscleGroupWorkoutId
                         )
                     }
                     //   .onDelete(perform: deleteExcercise)
@@ -133,10 +133,10 @@ struct WorkoutDayMuscleGroupView: View {
 
 #Preview {
     WorkoutDayMuscleGroupView(
-        addNewSet: {},
+        addNewSet: { _, _ in },
         muscleGroup: .constant("Shoulders"),
         excercises: .constant([]),
-        docId: "",
+        muscleGroupWorkoutId: "",
         deleteMuscleGroupWorkout: { _ in }
     )
 }

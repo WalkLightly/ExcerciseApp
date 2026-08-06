@@ -24,7 +24,6 @@ var MuscleGroupColorMap: [String: Color] = [
 struct HomeView: View {
     @State private var dateHolder = DateHolder()
     
-    
     @StateObject private var viewModel = HomeViewModel()
 
     @State private var selectedDate: String = ""
@@ -33,6 +32,8 @@ struct HomeView: View {
     @State private var xOffset = -116
     @State private var stopWatchActive: Bool = false
     @State private var newSetWeight: String = ""
+    @State private var muscleGroupToAddSetTo: String = ""
+    @State private var excerciseSetName: String = ""
 
     @State private var showAddSetModal: Bool = false
     @State private var showAddExerciseModal: Bool = false
@@ -59,7 +60,27 @@ struct HomeView: View {
     }
 
     // toggle modal buttons
-    func addNewSet() { showAddSetModal = true }
+    // here I need to pass in the muscelgroup workout id, and the name of the excercise
+    func addNewSet(muscleGroupWorkoutId: String, excerciseName: String) {
+        showAddSetModal = true
+        muscleGroupToAddSetTo = muscleGroupWorkoutId
+        excerciseSetName = excerciseName
+    }
+    
+    func addNewSetData() {
+        print(muscleGroupToAddSetTo)
+        print(excerciseSetName)
+        print(newSetWeight)
+        
+        Task {
+            try await viewModel.addSetToWorkout(muscleGroupWorkoutId: muscleGroupToAddSetTo, excerciseName: excerciseSetName, setWeight: newSetWeight)
+            newSetWeight = ""
+            muscleGroupToAddSetTo = ""
+            excerciseSetName = ""
+        }
+        
+    }
+    
     func addNewMuscleGroup() { showAddWorkoutDayMuscleGroup = true }
     func addNewExcercise() { showAddExerciseModal = true }
     
@@ -71,7 +92,6 @@ struct HomeView: View {
 
     func changeSelectedDate(date: String) -> Void {
         selectedDate = date
-        print(date)
         Task {
             try await viewModel.getWorkoutsForDate(date: date)
         }
@@ -295,7 +315,7 @@ struct HomeView: View {
 
             }
             if showAddSetModal {
-                AddSetModalView(newSetWeight: $newSetWeight, showAddSetModal: $showAddSetModal)
+                AddSetModalView(newSetWeight: $newSetWeight, showAddSetModal: $showAddSetModal, addNewSetData: addNewSetData)
             } else if showAddWorkoutDayMuscleGroup {
                 VStack {
                     VStack {
@@ -608,9 +628,10 @@ struct HomeView: View {
                                 newExcercises = []
                                 
                                 Task {
+                                    
                                     try await viewModel.addNewWorkoutDay(workout: newMuscleGroupWorkout)
                                     
-                                    try await viewModel.getWorkoutsForDate(date: selectedDate)
+                                   // try await viewModel.getWorkoutsForDate(date: selectedDate)
                                 }
                             } label: {
                                 Text("Save")
@@ -649,12 +670,15 @@ struct HomeView: View {
         .edgesIgnoringSafeArea(.all)
         .frame(width: 400, height: 1000)
         .onAppear() {
+            muscleGroupToAddSetTo = ""
+            excerciseSetName = ""
             let dateStr = CalendarHelper().formattedDate()
             selectedDate = dateStr
 
             Task {
-                try await viewModel.getWorkoutsForDate(date: dateStr)
                 try await viewModel.getAllWorkoutData()
+                try await viewModel.getAllExercises()
+
             }
         }
     }

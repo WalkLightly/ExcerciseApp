@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct AddItem: View {
-    //@StateObject var viewModel = NewItemViewModel()
+    @StateObject var viewModel = NewItemViewModel()
 
     @State private var tab = "excercise"
     @State private var xOffset = -116
@@ -24,6 +24,19 @@ struct AddItem: View {
     @State private var bodyPart: String = ""
     @State private var measurement: String = ""
     @State private var measurementDate: Date = Date()
+    @State private var bodyParts: [String] = [
+        "Right Arm",
+        "Left Arm",
+        "Shoulders",
+        "Chest",
+        "Stomach",
+        "Right Forearm",
+        "Left Forearm",
+        "Left Leg",
+        "Right Leg",
+        "Left Calf",
+        "Right Calf"
+    ]
 
     // weight obj
     @State private var weight: String = ""
@@ -32,6 +45,25 @@ struct AddItem: View {
     // muslegroup obj
     @State private var muscName: String = ""
     @State private var excercises: [String] = []
+    
+    func addWeight() -> Void {
+        Task {
+            try await viewModel.addWeight(weight: weight)
+            
+            weight = ""
+            weighDate = Date()
+        }
+    }
+    
+    func addMeasurement() -> Void {
+        Task {
+            try await viewModel.addMeasurement(bodyPart: bodyPart, measurement: measurement)
+            
+            bodyPart = ""
+            measurement = ""
+            measurementDate = Date()
+        }
+    }
 
     //scalemass ruler figure.strengthtraining.traditional figure list.clipboard
     var body: some View {
@@ -284,7 +316,7 @@ struct AddItem: View {
                                 }
                                 GridRow {
                                     Button {
-                                        // addItem()
+                                        addWeight()
                                     } label: {
                                         Text("Add Weight")
                                             .frame(width: 350, height: 50)
@@ -379,7 +411,7 @@ struct AddItem: View {
                                             )
                                         VStack {
 
-                                            Text(weighDate.formatted())
+                                            Text(measurementDate.formatted())
                                                 .foregroundStyle(.darkBlue)
                                                 .font(
                                                     .custom(
@@ -401,7 +433,7 @@ struct AddItem: View {
                                 }
                                 GridRow {
                                     Button {
-                                        // addItem()
+                                        addMeasurement()
                                     } label: {
                                         Text("Add Measurement")
                                             .frame(width: 350, height: 50)
@@ -522,6 +554,15 @@ struct AddItem: View {
         }
         .onAppear {
             tab = "excercise"
+            weighDate = Date()
+            measurementDate = Date()
+            weight = ""
+            measurement = ""
+            bodyPart = ""
+            
+            Task {
+                try await viewModel.getAllWeights()
+            }
         }
     }
 }

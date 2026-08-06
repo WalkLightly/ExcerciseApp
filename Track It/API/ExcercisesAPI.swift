@@ -1,10 +1,10 @@
-import FirebaseFirestore
 //
 //  ExcercisesAPI.swift
 //  Track It
 //
 //  Created by Michael Knight on 6/13/26.
 //
+import FirebaseFirestore
 import Foundation
 
 class ExcercisesAPI {
@@ -33,8 +33,29 @@ class ExcercisesAPI {
         } catch {
             print("Error fetching collection: \(error.localizedDescription)")
         }
-
+        
         return excercises
+    }
+    
+    func updateStartingWeight(exerciseName: String, newWeight: String) async throws -> Void {
+        
+        do {
+            let snapshot = try await db.collection("exercises")
+                .whereField("name", isEqualTo: exerciseName)
+                .getDocuments()
+            
+            guard let document = snapshot.documents.first else {
+                print("No document found with name: \(exerciseName)")
+                return
+            }
+            
+            // 3. Update the field
+            try await document.reference.updateData([
+                "startingWeight": newWeight
+            ])
+        } catch {
+            print("Error updating document")
+        }
     }
     
     func deleteWorkoutFromExerciseList(exerciseName: String, date: String) {

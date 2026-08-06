@@ -19,8 +19,7 @@ class MuscleGroupWorkoutsAPI {
         -> [MuscleGroupWorkout]
     {
         var data: [MuscleGroupWorkout] = []
-        print(date)
-
+        
         do {
             let snapshot = try await db.collection("muscle_group_workouts")
                 .whereField("date", isEqualTo: date)
@@ -161,5 +160,50 @@ class MuscleGroupWorkoutsAPI {
 
         return exercises
     }
+    
+    func addSetToWorkout(muscleGroupWorkoutId: String, excerciseName: String, setWeight: String) async throws -> Void {
+        var data: MuscleGroupWorkout
+        print(muscleGroupWorkoutId)
+        do {
+            let docRef = db.collection("muscle_group_workouts")
+                .document(muscleGroupWorkoutId)
+            let document = try await docRef.getDocument()
 
+                    // 2. Ensure the document actually exists in Firestore
+            if document.exists, let dbData = document.data() {
+                let exercise = MuscleGroupWorkout(
+                    id: document.documentID,
+                    muscleGroup: dbData["muscleGroup"] as? String ?? "",
+                    exercises: parseExcercisesData(
+                        data: dbData["exercises"] as? [[String: Any]] ?? [[:]]
+                    ),
+                    date: dbData["date"] as? String ?? ""
+                )
+                
+                data = exercise
+                if let index = data.exercises.firstIndex(where: { $0.name == excerciseName }) {
+                    data.exercises[index].sets.append(setWeight)
+                    
+                    var exerciseDictionaries: [[String: Any]] = []
+                    
+                    
+                    for exc in data.exercises {
+                        exerciseDictionaries.append(exc.toDictionary)
+                    }
+                        
+                        try await docRef.updateData([
+                            "exercises": exerciseDictionaries
+                        ])
+                        print("Successfully added set to \(excerciseName)")
+                    } else {
+                        print("Exercise with name \(excerciseName) not found.")
+                    }
+            }
+            
+                        
+        } catch {
+            print("Error fetching collection: \(error.localizedDescription)")
+        }
+    }
+    
 }

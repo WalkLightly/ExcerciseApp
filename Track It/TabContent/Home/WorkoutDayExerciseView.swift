@@ -8,23 +8,41 @@
 import SwiftUI
 
 struct WorkoutDayExerciseView: View {
-    let addNewSet: () -> Void
+    @StateObject private var viewModel = HomeViewModel()
+    let addNewSet: (String, String) -> Void
     @State var showModal: Bool = true
     @Binding var excercise: ExcerciseWorkout
+    @State var muscleGroupWorkoutId: String
+    
+    @State private var excercisesList: [Excercise] = []
+
+    func getStartingWeightForExcercise(name: String) -> String {
+        return excercisesList.first(where: { $0.name == name})?.startingWeight ?? ""
+    }
+    
+    func getStartingWeightDateForExcercise(name: String) -> String {
+        return excercisesList.first(where: { $0.name == name})?.startingWeightDate ?? ""
+    }
+    
     
     var body: some View {
         ZStack {
             VStack {
                 HStack {
-                    Text(excercise.name)
-                        .font(
-                            .custom("Inder-Regular", size: 18)
-                        )
-                        .foregroundStyle(.darkBlue)
-                        .padding(.leading, 10)
-                        .padding(.top, 10)
+                    HStack {
+                        Text(excercise.name)
+                            .font(
+                                .custom("Inder-Regular", size: 18)
+                            )
+                            .foregroundStyle(.darkBlue)
+                            .padding(.leading, 10)
+                            .padding(.top, 10)
+                        
+                    }
                     Spacer()
                     Button {
+                        print(muscleGroupWorkoutId)
+                        print(excercise.name)
                     } label: {
                         Image(
                             systemName:
@@ -36,7 +54,38 @@ struct WorkoutDayExerciseView: View {
                         .padding(.trailing, 5)
                     }
                 }
-                Spacer()
+                HStack {
+                    VStack {
+                        Text(getStartingWeightForExcercise(name: excercise.name))
+                            .font(
+                                .custom("Inder-Regular", size: 18)
+                            )
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 10)
+                    }
+                    .frame(height: 30)
+                    .background(.darkBlue)
+                    .padding(.leading, 15)
+                    VStack {
+                        Text(getStartingWeightDateForExcercise(name: excercise.name))
+                            .font(
+                                .custom("Inder-Regular", size: 18)
+                            )
+                            .foregroundStyle(.darkBlue)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 10)
+                    }
+                    .frame(height: 30)
+                    .padding(.leading, 15)
+                    
+                    Spacer()
+                }
+                .padding(.top, -10)
+                .padding(.bottom, 10)
+                .onTapGesture {
+                    
+                }
                 HStack(spacing: 30) {
                     HStack(spacing: 0) {
                         ForEach(excercise.sets, id: \.self) {
@@ -61,7 +110,7 @@ struct WorkoutDayExerciseView: View {
                     }
                     .frame(width: 250, height: 35)
                     Button {
-                        addNewSet()//sets.append("90")
+                        addNewSet(muscleGroupWorkoutId, excercise.name)
                     } label: {
                         Image(systemName: "plus")
                             .foregroundStyle(.darkBlue)
@@ -71,7 +120,7 @@ struct WorkoutDayExerciseView: View {
                 }
                 .padding(.bottom, 10)
             }
-            .frame(width: 320, height: 70)
+            .frame(width: 320, height: 130)
             .background(.white)
             .cornerRadius(10)
             .shadow(
@@ -83,13 +132,18 @@ struct WorkoutDayExerciseView: View {
             .padding(.trailing, 10)
             .padding(.leading, 10)
             .padding(.bottom, 5)
+        }.onAppear {
+            Task {
+                excercisesList = try await viewModel.getAllExercises()
+            }
         }
     }
 }
 
 #Preview {
     WorkoutDayExerciseView(
-        addNewSet: {},
-        excercise: .constant(ex1),
+        addNewSet: {_, _ in },
+        excercise: .constant(ex2),
+        muscleGroupWorkoutId: ""
     )
 }
