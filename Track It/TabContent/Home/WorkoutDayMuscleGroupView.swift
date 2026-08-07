@@ -29,7 +29,7 @@ struct WorkoutDayMuscleGroupView: View {
                 Spacer()
                 Rectangle()
                     .fill(MuscleGroupColorMap[muscleGroup] ?? .darkBlue)
-                    .frame(width: 20, height: 280)
+                    .frame(width: 20, height: 430)
                     .cornerRadius(20)
                     .padding(.leading, 10)
                 Spacer()
@@ -79,7 +79,7 @@ struct WorkoutDayMuscleGroupView: View {
             Spacer()
 
         }
-        .frame(width: 380, height: 300)
+        .frame(width: 380, height: 450)
 
         .background(.offWhite)
         .clipShape(

@@ -12,8 +12,8 @@ internal import Combine
 class HomeViewModel: ObservableObject {
     @Published var exercisesForToday: [MuscleGroupWorkout] = []
     @Published var exercisesMasterList: [MuscleGroupWorkout] = []
-
     @Published var isLoadingData: Bool = false
+    
     
     func getAllExercises() async throws -> [Excercise] {
         var exercises: [Excercise] = []

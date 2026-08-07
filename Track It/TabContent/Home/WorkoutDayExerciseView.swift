@@ -21,7 +21,7 @@ struct WorkoutDayExerciseView: View {
     }
     
     func getStartingWeightDateForExcercise(name: String) -> String {
-        return excercisesList.first(where: { $0.name == name})?.startingWeightDate ?? ""
+        return excercisesList.first(where: { $0.name == name})?.startingWeightDate.formatted() ?? ""
     }
     
     
@@ -135,6 +135,7 @@ struct WorkoutDayExerciseView: View {
         }.onAppear {
             Task {
                 excercisesList = try await viewModel.getAllExercises()
+                print(excercisesList)
             }
         }
     }

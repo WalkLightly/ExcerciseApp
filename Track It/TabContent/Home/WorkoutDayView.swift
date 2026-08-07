@@ -49,7 +49,7 @@ struct WorkoutDayView: View {
                             muscleGroupWorkoutId: exc.id,
                             deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
                     }
-                    .frame(width: 380, height: 300)
+                    .frame(width: 380, height: 450)
                     
                     .background(.offWhite)
                     .clipShape(

@@ -68,15 +68,15 @@ struct HomeView: View {
     }
     
     func addNewSetData() {
-        print(muscleGroupToAddSetTo)
-        print(excerciseSetName)
-        print(newSetWeight)
         
         Task {
             try await viewModel.addSetToWorkout(muscleGroupWorkoutId: muscleGroupToAddSetTo, excerciseName: excerciseSetName, setWeight: newSetWeight)
             newSetWeight = ""
             muscleGroupToAddSetTo = ""
             excerciseSetName = ""
+            
+            // refresh the data
+            try await viewModel.getWorkoutsForDate(date: selectedDate)
         }
         
     }
@@ -678,7 +678,7 @@ struct HomeView: View {
             Task {
                 try await viewModel.getAllWorkoutData()
                 try await viewModel.getAllExercises()
-
+                try await viewModel.getWorkoutsForDate(date: selectedDate)
             }
         }
     }

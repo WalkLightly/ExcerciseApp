@@ -64,6 +64,16 @@ struct AddItem: View {
             measurementDate = Date()
         }
     }
+    
+    func addExcercise() -> Void {
+        Task {
+            try await viewModel.addExcercise(name: eName, location: location, muscleGroup: muscleGroup[0])
+            
+            eName = ""
+            location = ""
+            muscleGroup = []
+        }
+    }
 
     //scalemass ruler figure.strengthtraining.traditional figure list.clipboard
     var body: some View {
@@ -213,7 +223,7 @@ struct AddItem: View {
                                 }
                                 GridRow {
                                     Button {
-                                        // addItem()
+                                        addExcercise()
                                     } label: {
                                         Text("Add Excercise")
                                             .frame(width: 350, height: 50)

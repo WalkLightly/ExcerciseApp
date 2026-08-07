@@ -23,7 +23,7 @@ class ExcercisesAPI {
 
             for document in snapshot.documents {
                 do {
-                    let exercise = try document.data(as: Excercise.self)
+                    let exercise = try document.data(as: Excercise.self, decoder: Firestore.Decoder())
                     excercises.append(exercise)
 
                 } catch {
@@ -33,6 +33,8 @@ class ExcercisesAPI {
         } catch {
             print("Error fetching collection: \(error.localizedDescription)")
         }
+        
+        print("hi")
         
         return excercises
     }
@@ -60,5 +62,19 @@ class ExcercisesAPI {
     
     func deleteWorkoutFromExerciseList(exerciseName: String, date: String) {
         // this will be called once it's deleted yo
+    }
+    
+    func addExcercise(name: String, location: String, muscleGroup: String) async throws -> Void {
+        let newDocRef = db.collection("exercises").document()
+        try await newDocRef.setData([
+            "name": name,
+            "location": location,
+            "muscleGroup": muscleGroup,
+            "startingWeight": "",
+            "startingWeightDate": Date()
+        ])
+        print(
+            "Successfully created a new document with an empty array."
+        )
     }
 }

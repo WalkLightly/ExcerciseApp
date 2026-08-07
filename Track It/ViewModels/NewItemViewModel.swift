@@ -33,4 +33,10 @@ class NewItemViewModel : ObservableObject {
             try await WeightAPI.shared.addMeasurement(bodyPart: bodyPart, measurement: measurement)
         }
     }
+    
+    func addExcercise(name: String, location: String, muscleGroup: String) async throws -> Void {
+        do {
+            try await ExcercisesAPI.shared.addExcercise(name: name, location: location, muscleGroup: muscleGroup)
+        }
+    }
 }
