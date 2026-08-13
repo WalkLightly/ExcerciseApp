@@ -40,7 +40,8 @@ class ExcercisesAPI {
     }
     
     func updateStartingWeight(exerciseName: String, newWeight: String) async throws -> Void {
-        
+        print(exerciseName)
+        print(newWeight)
         do {
             let snapshot = try await db.collection("exercises")
                 .whereField("name", isEqualTo: exerciseName)
@@ -53,7 +54,8 @@ class ExcercisesAPI {
             
             // 3. Update the field
             try await document.reference.updateData([
-                "startingWeight": newWeight
+                "startingWeight": newWeight,
+                "startingWeightDate": Date()
             ])
         } catch {
             print("Error updating document")

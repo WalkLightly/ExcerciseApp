@@ -8,7 +8,7 @@ import Foundation
 import FirebaseFirestore
 
 let ex1 = ExcerciseWorkout(name: "Hack Squat", location: "", muscleGroup: "Legs", sets: ["12"], isAddedIn: true)
-let ex2 = ExcerciseWorkout(name: "Bulgarian Split Squat DB", location: "", muscleGroup: "Legs", sets: ["12", "1"], isAddedIn: true)
+let ex2 = ExcerciseWorkout(name: "Chest Fly", location: "", muscleGroup: "Chest", sets: ["12", "1"], isAddedIn: true)
 let ex3 = ExcerciseWorkout(name: "Leg Press", location: "By Front", muscleGroup: "Legs", sets: ["12"], isAddedIn: true)
 let ex4 = ExcerciseWorkout(name: "Chin ups", location: "", muscleGroup: "Biceps", sets: ["12"], isAddedIn: true)
 

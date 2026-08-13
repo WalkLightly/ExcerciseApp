@@ -35,7 +35,8 @@ struct AddItem: View {
         "Left Leg",
         "Right Leg",
         "Left Calf",
-        "Right Calf"
+        "Right Calf",
+        "Glutes"
     ]
 
     // weight obj
@@ -49,19 +50,12 @@ struct AddItem: View {
     func addWeight() -> Void {
         Task {
             try await viewModel.addWeight(weight: weight)
-            
-            weight = ""
-            weighDate = Date()
         }
     }
     
     func addMeasurement() -> Void {
         Task {
             try await viewModel.addMeasurement(bodyPart: bodyPart, measurement: measurement)
-            
-            bodyPart = ""
-            measurement = ""
-            measurementDate = Date()
         }
     }
     
@@ -375,12 +369,36 @@ struct AddItem: View {
                                                     size: 20
                                                 )
                                             )
-                                        TextField("", text: $bodyPart)
-                                            .frame(width: 350, height: 40)
-                                            .foregroundStyle(.white)
-                                            .font(.custom(chosenFont, size: 20))
-                                            .padding(.leading, 5)
-                                            .padding(.top, -15)
+                                        Menu {
+                                            ForEach(bodyParts, id: \.self) { bp in
+                                                Button {
+                                                    bodyPart = bp
+                                                } label: {
+                                                    Text(bp)
+                                                        .font(
+                                                            .custom("Inder-Regular", size: 25)
+                                                        )
+                                                }
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Text(bodyPart)
+                                                    .frame(height: 40)
+                                                    .foregroundStyle(.black)
+                                                    .font(
+                                                        .custom("Inder-Regular", size: 25)
+                                                    )
+                                                Spacer()
+                                            }
+                                            .frame(width: 300)
+                                            .padding(.leading, 10)
+                                        }
+//                                        TextField("", text: $bodyPart)
+//                                            .frame(width: 350, height: 40)
+//                                            .foregroundStyle(.white)
+//                                            .font(.custom(chosenFont, size: 20))
+//                                            .padding(.leading, 5)
+//                                            .padding(.top, -15)
                                         Rectangle()
                                             .fill(.darkBlue)
                                             .frame(width: 350, height: 2)
@@ -400,7 +418,7 @@ struct AddItem: View {
                                         TextField("", text: $measurement)
                                             .frame(width: 350, height: 40)
                                             .foregroundStyle(.white)
-                                            .font(.custom(chosenFont, size: 20))
+                                            .font(.custom(chosenFont, size: 25))
                                             .padding(.leading, 5)
                                             .padding(.top, -15)
                                         Rectangle()
@@ -469,7 +487,7 @@ struct AddItem: View {
                                 }
                             }
                         }
-                        .frame(width: 380, height: 310)
+                        .frame(width: 380, height: 325)
                         .transition(
                             .move(edge: .leading).combined(with: .opacity)
                         )

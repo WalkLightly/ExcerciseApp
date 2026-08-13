@@ -18,6 +18,7 @@ var MuscleGroupColorMap: [String: Color] = [
     "Cardio": .cardioAccent,
     "Abs": .absAccent,
     "Muscle Group": .black,
+    "Forearms": .forearmsAccent
 ]
 
 
@@ -44,6 +45,8 @@ struct HomeView: View {
     @State private var newExcerciseName: String = ""
     @State private var showMuscleGroupDropdown: Bool = false
     @State var newMuscleGroupWorkout: MuscleGroupWorkout
+    
+    @State private var allExercises: [Excercise] = []
 
     @StateObject private var stopwatch = Stopwatch()
 
@@ -57,6 +60,12 @@ struct HomeView: View {
         )
 
         return String(format: "%02d:%02d.%02d", minutes, seconds, milliseconds)
+    }
+    
+    func fetchData() async throws -> Void {
+        try await viewModel.getAllWorkoutData()
+        allExercises = try await viewModel.getAllExercises()
+        try await viewModel.getWorkoutsForDate(date: selectedDate)
     }
 
     // toggle modal buttons
@@ -173,29 +182,39 @@ struct HomeView: View {
                 }
                 
                 Spacer()
-                ScrollView {
-                    CalendarView(changeDate: changeSelectedDate, workoutData: viewModel.exercisesMasterList)
-                        .frame(width: 430)
-                        .environmentObject(dateHolder)
-                        .padding(.top, 8)
-                    WorkoutDayView(
-                        addNewSet: addNewSet,
-                        addNewMuscleGroup: addNewMuscleGroup,
-                        workoutData: $viewModel.exercisesForToday,
-                        selectedDate: selectedDate,
-                        deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
-                    .padding(.top, 30)
-                    .padding(.bottom, 10)
+                if tab == "home" {
+                    ScrollView {
+                        CalendarView(changeDate: changeSelectedDate, workoutData: viewModel.exercisesMasterList)
+                            .frame(width: 430)
+                            .environmentObject(dateHolder)
+                            .padding(.top, 8)
+                        WorkoutDayView(
+                            addNewSet: addNewSet,
+                            addNewMuscleGroup: addNewMuscleGroup,
+                            workoutData: $viewModel.exercisesForToday,
+                            selectedDate: selectedDate,
+                            deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
+                        .padding(.top, 30)
+                        .padding(.bottom, 10)
+                    }
+                    .frame(width: 450, height: 720)
+                    //.background(.primaryBlue)
+                    .cornerRadius(10)
+                } else if tab == "settings" {
+                    ScrollView {
+
+                    }
+                    .frame(width: 450, height: 720)
                 }
-                .frame(width: 450, height: 720)
-                //.background(.primaryBlue)
-                .cornerRadius(10)
                 HStack {
                     Button(action: {
                         withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
                         {
                             tab = "home"
                             xOffset = -116
+                            Task {
+                                try await fetchData()
+                            }
                         }
                     }) {
                         if tab == "home" {
@@ -479,19 +498,40 @@ struct HomeView: View {
                                             } else {
                                                 HStack {
                                                     VStack {
-                                                        TextField(
-                                                            "",
-                                                            text:
-                                                                $newExcerciseName
-                                                        )
-                                                        .font(
-                                                            .custom(
-                                                                "Inder-Regular",
-                                                                size: 18
-                                                            )
-                                                        )
-                                                        .frame(width: 300)
-                                                        .padding(.leading, 10)
+                                                        Menu {
+                                                            ForEach(allExercises.filter{ $0.muscleGroup == newMuscleGroup}, id: \.self) { exer in
+                                                                Button {
+                                                                    newExcerciseName = exer.name
+                                                                } label: {
+                                                                    Text(exer.name)
+                                                                }
+                                                            }
+                                                        } label: {
+                                                            HStack {
+                                                                Text(newExcerciseName)
+                                                                    .frame(height: 40)
+                                                                    .foregroundStyle(.black)
+                                                                    .font(
+                                                                        .custom("Inder-Regular", size: 18)
+                                                                    )
+                                                                Spacer()
+                                                            }
+                                                            .frame(width: 300)
+                                                            .padding(.leading, 10)
+                                                        }
+//                                                        TextField(
+//                                                            "",
+//                                                            text:
+//                                                                $newExcerciseName
+//                                                        )
+//                                                        .font(
+//                                                            .custom(
+//                                                                "Inder-Regular",
+//                                                                size: 18
+//                                                            )
+//                                                        )
+//                                                        .frame(width: 300)
+//                                                        .padding(.leading, 10)
                                                     }
                                                     .frame(
                                                         width: 300,
@@ -676,9 +716,7 @@ struct HomeView: View {
             selectedDate = dateStr
 
             Task {
-                try await viewModel.getAllWorkoutData()
-                try await viewModel.getAllExercises()
-                try await viewModel.getWorkoutsForDate(date: selectedDate)
+               try await fetchData()
             }
         }
     }

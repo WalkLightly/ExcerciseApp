@@ -24,6 +24,12 @@ class HomeViewModel: ObservableObject {
         return exercises
     }
     
+    func updateStartingWeightForExcercise(name: String, newWeight: String) async throws -> Void {
+        do {
+            try await ExcercisesAPI.shared.updateStartingWeight(exerciseName: name, newWeight: newWeight)
+        }
+    }
+    
     func getWorkoutsForDate(date: String) async throws -> [MuscleGroupWorkout] {
         self.isLoadingData = true
         

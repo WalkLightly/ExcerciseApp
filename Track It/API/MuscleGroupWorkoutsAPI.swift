@@ -163,7 +163,6 @@ class MuscleGroupWorkoutsAPI {
     
     func addSetToWorkout(muscleGroupWorkoutId: String, excerciseName: String, setWeight: String) async throws -> Void {
         var data: MuscleGroupWorkout
-        print(muscleGroupWorkoutId)
         do {
             let docRef = db.collection("muscle_group_workouts")
                 .document(muscleGroupWorkoutId)

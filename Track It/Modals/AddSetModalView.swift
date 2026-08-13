@@ -17,7 +17,9 @@ struct AddSetModalView: View {
             VStack {
                 HStack {
                     Button {
-
+                        newSetWeight = "💀"
+                        showAddSetModal = false
+                        addNewSetData()
                     } label: {
                         Text("💀")
                             .font(

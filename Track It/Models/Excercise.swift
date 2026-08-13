@@ -8,7 +8,7 @@ import Foundation
 import FirebaseFirestore
 
 
-struct Excercise: Codable {
+struct Excercise: Codable, Hashable {
     var name: String
     var location: String
     var muscleGroup: String

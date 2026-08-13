@@ -11,8 +11,10 @@ struct WorkoutDayExerciseView: View {
     @StateObject private var viewModel = HomeViewModel()
     let addNewSet: (String, String) -> Void
     @State var showModal: Bool = true
+    @State private var showNewWeightModal: Bool = false
     @Binding var excercise: ExcerciseWorkout
     @State var muscleGroupWorkoutId: String
+    @State private var newStartingWeight: String = ""
     
     @State private var excercisesList: [Excercise] = []
 
@@ -22,6 +24,12 @@ struct WorkoutDayExerciseView: View {
     
     func getStartingWeightDateForExcercise(name: String) -> String {
         return excercisesList.first(where: { $0.name == name})?.startingWeightDate.formatted() ?? ""
+    }
+    
+    func updateStartingWeightForExcercise() {
+        Task {
+            try await viewModel.updateStartingWeightForExcercise(name: excercise.name, newWeight: newStartingWeight)
+        }
     }
     
     
@@ -41,8 +49,6 @@ struct WorkoutDayExerciseView: View {
                     }
                     Spacer()
                     Button {
-                        print(muscleGroupWorkoutId)
-                        print(excercise.name)
                     } label: {
                         Image(
                             systemName:
@@ -55,31 +61,79 @@ struct WorkoutDayExerciseView: View {
                     }
                 }
                 HStack {
-                    VStack {
-                        Text(getStartingWeightForExcercise(name: excercise.name))
-                            .font(
-                                .custom("Inder-Regular", size: 18)
-                            )
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 10)
+                    if showNewWeightModal {
+                        VStack {
+                            TextField(newStartingWeight, text: $newStartingWeight)
+                                .font(
+                                    .custom("Inder-Regular", size: 15)
+                                )
+                                .foregroundStyle(.black)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 10)
+                        }
+                        .frame( width: 50, height: 30)
+                        .background(.grayBlue)
+                        .cornerRadius(5)
+                        .padding(.leading, 15)
+                        .shadow(
+                            color: Color.black.opacity(0.4),
+                            radius: 2,
+                            x: 1,
+                            y: 2
+                        )
+                        Button {
+                            showNewWeightModal = false
+                            updateStartingWeightForExcercise()
+                        } label: {
+                            Text("SAVE")
+                                .font(.custom("Inder-Regular", size: 15))
+                        }
+                        .padding(.leading, 20)
+                        .padding(.trailing, 10)
+                        Button {
+                            showNewWeightModal = false
+                        } label: {
+                            Text("CANCEL")
+                                .font(.custom("Inder-Regular", size: 15))
+                                .foregroundStyle(.red)
+                        }
+                        Spacer()
+                    } else {
+                        VStack {
+                            Text(getStartingWeightForExcercise(name: excercise.name))
+                                .font(
+                                    .custom("Inder-Regular", size: 15)
+                                )
+                                .foregroundStyle(.black)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 10)
+                        }
+                        .frame( width: 50, height: 30)
+                        .background(.grayBlue)
+                        .cornerRadius(5)
+                        .padding(.leading, 15)
+                        .shadow(
+                            color: Color.black.opacity(0.4),
+                            radius: 2,
+                            x: 1,
+                            y: 2
+                        )
+                        .onTapGesture {
+                            newStartingWeight = getStartingWeightForExcercise(name: excercise.name)
+                            showNewWeightModal = true
+                        }
+                        VStack {
+                            Text(getStartingWeightDateForExcercise(name: excercise.name))
+                                .font(
+                                    .custom("Inder-Regular", size: 15)
+                                )
+                                .foregroundStyle(.gray)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 10)
+                        }
+                        .frame(height: 30)
+                        Spacer()
                     }
-                    .frame(height: 30)
-                    .background(.darkBlue)
-                    .padding(.leading, 15)
-                    VStack {
-                        Text(getStartingWeightDateForExcercise(name: excercise.name))
-                            .font(
-                                .custom("Inder-Regular", size: 18)
-                            )
-                            .foregroundStyle(.darkBlue)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 10)
-                    }
-                    .frame(height: 30)
-                    .padding(.leading, 15)
-                    
-                    Spacer()
                 }
                 .padding(.top, -10)
                 .padding(.bottom, 10)
@@ -135,7 +189,6 @@ struct WorkoutDayExerciseView: View {
         }.onAppear {
             Task {
                 excercisesList = try await viewModel.getAllExercises()
-                print(excercisesList)
             }
         }
     }
