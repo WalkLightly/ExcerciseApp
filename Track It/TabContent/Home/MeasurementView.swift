@@ -14,6 +14,16 @@ struct MeasurementView: View {
     var body: some View {
         
         VStack {
+            VStack {
+                Text(measurements.count > 0 ? measurements[0].dateRecorded.split(separator: ",")[0] : "-")
+                    .font(.custom("PTSans-NarrowBold", size: 30))
+                    .foregroundStyle(.black)
+                    .padding(.vertical, 3)
+                    .padding(.horizontal, 5)
+            }
+            .background(.cornflowerBlue)
+            .cornerRadius(5)
+            .padding(.top, 5)
             ForEach(measurements, id: \.id) { measurement in
                 HStack {
                     HStack {
@@ -41,7 +51,7 @@ struct MeasurementView: View {
             .padding(.top, 5)
             Spacer()
         }
-        .frame(width: 350, height: 700)
+        .frame(width: 350, height: 760)
         .background(.white)
         .cornerRadius(20)
         .shadow(
