@@ -35,10 +35,13 @@ struct HomeView: View {
     @State private var newSetWeight: String = ""
     @State private var muscleGroupToAddSetTo: String = ""
     @State private var excerciseSetName: String = ""
+    
+    @State private var currentMeasurements: [Measurement] = []
 
     @State private var showAddSetModal: Bool = false
     @State private var showAddExerciseModal: Bool = false
     @State private var showAddWorkoutDayMuscleGroup: Bool = false
+    @State private var showMeasurementsModal: Bool = false
 
     @State private var newMuscleGroup: String = "Muscle Group"
     @State private var newExcercises: [ExcerciseWorkout] = []
@@ -66,6 +69,7 @@ struct HomeView: View {
         try await viewModel.getAllWorkoutData()
         allExercises = try await viewModel.getAllExercises()
         try await viewModel.getWorkoutsForDate(date: selectedDate)
+        currentMeasurements = try await viewModel.getCurrentMeasurements()
     }
 
     // toggle modal buttons
@@ -110,75 +114,90 @@ struct HomeView: View {
         ZStack {
             Color(.backgroundBlue)
             VStack {
-                ZStack {
-                    VStack {
-
-                    }
-                    .frame(width: 345, height: 30)
-                    .background(.skyBlue)
-                    .cornerRadius(18)
-                    .offset(y: 100)
-                    HStack {
-                        Button {
-                            stopwatch.reset()
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 30))
-                                .foregroundStyle(.accentGrey)
+                HStack {
+                    ZStack {
+                        VStack {
+                            
                         }
-                        .frame(width: 60, height: 60)
-                        .background(.accentGrey.opacity(0.5))
-                        .clipShape(Capsule())
-
+                        .frame(width: 345, height: 30)
+                        .background(.skyBlue)
+                        .cornerRadius(18)
+                        .offset(y: 100)
                         HStack {
-                            Text(timeString)
-                                .font(.custom("PTSans-NarrowBold", size: 50))
-                                .foregroundStyle(.steelBlue)
-                        }
-                        .frame(width: 200, height: 70)
-                        //.background(.accent)
-                        .cornerRadius(10)
-                        .sensoryFeedback(
-                            .impact(weight: .heavy),
-                            trigger: stopwatch.isRunning
-                        )
-
-                        Button {
-                            withAnimation(.smooth(duration: 0.2)) {
-                                if stopwatch.isRunning {
-                                    stopwatch.pause()
-                                } else {
-                                    stopwatch.start()
-                                }
+                            Button {
+                                stopwatch.reset()
+                            } label: {
+                                Image(systemName: "arrow.clockwise")
+                                    .font(.system(size: 30))
+                                    .foregroundStyle(.accentGrey)
                             }
-                        } label: {
-                            Image(
-                                systemName: !stopwatch.isRunning
+                            .frame(width: 60, height: 60)
+                            .background(.accentGrey.opacity(0.5))
+                            .clipShape(Capsule())
+                            
+                            HStack {
+                                Text(timeString)
+                                    .font(.custom("PTSans-NarrowBold", size: 50))
+                                    .foregroundStyle(.steelBlue)
+                            }
+                            .frame(width: 200, height: 70)
+                            //.background(.accent)
+                            .cornerRadius(10)
+                            .sensoryFeedback(
+                                .impact(weight: .heavy),
+                                trigger: stopwatch.isRunning
+                            )
+                            
+                            Button {
+                                withAnimation(.smooth(duration: 0.2)) {
+                                    if stopwatch.isRunning {
+                                        stopwatch.pause()
+                                    } else {
+                                        stopwatch.start()
+                                    }
+                                }
+                            } label: {
+                                Image(
+                                    systemName: !stopwatch.isRunning
                                     ? "play.fill" : "xmark"
-                            )
-                            .font(.system(size: 30))
-                            .foregroundStyle(
-                                !stopwatch.isRunning
+                                )
+                                .font(.system(size: 30))
+                                .foregroundStyle(
+                                    !stopwatch.isRunning
                                     ? Color.green : .red.opacity(0.8)
-                            )
-                        }
-                        .frame(width: 60, height: 60)
-                        .background(
-                            !stopwatch.isRunning
+                                )
+                            }
+                            .frame(width: 60, height: 60)
+                            .background(
+                                !stopwatch.isRunning
                                 ? Color.green.opacity(0.3) : .red.opacity(0.2)
-                        )
-                        .clipShape(Capsule())
-                        .sensoryFeedback(
-                            .impact(weight: .heavy),
-                            trigger: stopwatch.isRunning
-                        )
-
+                            )
+                            .clipShape(Capsule())
+                            .sensoryFeedback(
+                                .impact(weight: .heavy),
+                                trigger: stopwatch.isRunning
+                            )
+                            
+                        }
+                        .frame(width: 349, height: 80)
+                        .background(.darkBlue)
+                        .cornerRadius(12)
+                        .offset(y: 70)
+                        
                     }
-                    .frame(width: 349, height: 80)
-                    .background(.darkBlue)
-                    .cornerRadius(12)
+                    Button(action: {
+                        withAnimation(.smooth(duration: 0.6, extraBounce: 0.2))
+                        {
+                            showMeasurementsModal.toggle()                            
+                        }
+                    }) {
+                        Image(systemName: "pencil.and.ruler")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.white)
+                        
+                    }
+                    .sensoryFeedback(.impact(weight: .light), trigger: tab)
                     .offset(y: 70)
-
                 }
                 
                 Spacer()
@@ -202,7 +221,7 @@ struct HomeView: View {
                     .cornerRadius(10)
                 } else if tab == "settings" {
                     ScrollView {
-
+                        
                     }
                     .frame(width: 450, height: 720)
                 }
@@ -230,7 +249,7 @@ struct HomeView: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
-
+                    
                     Button(action: {
                         withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
                         {
@@ -251,7 +270,7 @@ struct HomeView: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
-
+                    
                     Button(action: {
                         withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
                         {
@@ -272,7 +291,7 @@ struct HomeView: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
-
+                    
                     Button(action: {
                         withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
                         {
@@ -293,7 +312,7 @@ struct HomeView: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
-
+                    
                     Button(action: {
                         withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
                         {
@@ -314,24 +333,24 @@ struct HomeView: View {
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .sensoryFeedback(.impact(weight: .light), trigger: tab)
-
                 }
                 .frame(width: 300, height: 60)
                 .background(.darkBlue)
                 .cornerRadius(30)
                 .shadow(
-                    color: .white.opacity(0.9), 
+                    color: .white.opacity(0.9),
                     radius: 4,
                     x: 0,
                     y: 0
                 )
-
+                
                 Rectangle()
                     .fill(.pinkAccent.opacity(0.3))
                     .frame(width: 50, height: 40)
                     .cornerRadius(50)
                     .offset(x: CGFloat(xOffset), y: -58)
-
+                
+                
             }
             if showAddSetModal {
                 AddSetModalView(newSetWeight: $newSetWeight, showAddSetModal: $showAddSetModal, addNewSetData: addNewSetData)
@@ -345,7 +364,7 @@ struct HomeView: View {
                                     .fill(
                                         Color(
                                             MuscleGroupColorMap[newMuscleGroup]
-                                                ?? .gray
+                                            ?? .gray
                                         )
                                     )
                                     .frame(width: 20)
@@ -353,7 +372,7 @@ struct HomeView: View {
                                     .padding(.leading, 10)
                                 Spacer()
                             }
-                           
+                            
                             VStack(alignment: .leading) {
                                 HStack {
                                     VStack(alignment: .leading) {
@@ -375,52 +394,52 @@ struct HomeView: View {
                                                 .cornerRadius(5)
                                             Spacer()
                                         }
-                                    
+                                        
                                     }
                                     .frame(width: 220)
                                     .padding(5)
                                     .overlay(
                                         showMuscleGroupDropdown ?
-                                            ScrollView {
-                                                VStack {
-                                                    ForEach(
-                                                        MuscleGroupColorMap.sorted(by: {
-                                                            $0.key < $1.key
-                                                        }),
-                                                        id: \.key
-                                                    ) {
-                                                        muscleGroup in
-                                                        if muscleGroup.key != "Muscle Group" {
-                                                            HStack {
-                                                                Rectangle()
-                                                                    .fill(
-                                                                        Color(
-                                                                            muscleGroup.value
-                                                                        )
+                                        ScrollView {
+                                            VStack {
+                                                ForEach(
+                                                    MuscleGroupColorMap.sorted(by: {
+                                                        $0.key < $1.key
+                                                    }),
+                                                    id: \.key
+                                                ) {
+                                                    muscleGroup in
+                                                    if muscleGroup.key != "Muscle Group" {
+                                                        HStack {
+                                                            Rectangle()
+                                                                .fill(
+                                                                    Color(
+                                                                        muscleGroup.value
                                                                     )
-                                                                    .frame(width: 10)
-                                                                Text(muscleGroup.key)
-                                                                    .font(
-                                                                        .custom(
-                                                                            "PTSans-Narrow",
-                                                                            size: 25
-                                                                        )
+                                                                )
+                                                                .frame(width: 10)
+                                                            Text(muscleGroup.key)
+                                                                .font(
+                                                                    .custom(
+                                                                        "PTSans-Narrow",
+                                                                        size: 25
                                                                     )
-                                                                    .padding(.leading, 5)
-                                                                    .padding(.trailing, 5)
-                                                                    .padding(.top, -5)
-                                                                    .foregroundStyle(.darkBlue)
-                                                                Spacer()
-                                                            }
-                                                            .frame(height: 40)
-                                                            .onTapGesture {
-                                                                showMuscleGroupDropdown = false;
-                                                                newMuscleGroup = muscleGroup.key
-                                                            }
+                                                                )
+                                                                .padding(.leading, 5)
+                                                                .padding(.trailing, 5)
+                                                                .padding(.top, -5)
+                                                                .foregroundStyle(.darkBlue)
+                                                            Spacer()
+                                                        }
+                                                        .frame(height: 40)
+                                                        .onTapGesture {
+                                                            showMuscleGroupDropdown = false;
+                                                            newMuscleGroup = muscleGroup.key
                                                         }
                                                     }
                                                 }
                                             }
+                                        }
                                             .frame(width: 200, height: 200)
                                             .background(.white)
                                             .clipShape(
@@ -433,18 +452,18 @@ struct HomeView: View {
                                             )
                                             .offset(x: -10, y: 125)
                                         :
-                                        nil
+                                            nil
                                         
                                     )
                                     Spacer()
                                     Button {
                                         newExcercises.insert(
                                             ExcerciseWorkout(
-                                                 name: newExcerciseName,
-                                                 location: "",
-                                                 muscleGroup: newMuscleGroup,
-                                                 sets: [],
-                                                 isAddedIn: false
+                                                name: newExcerciseName,
+                                                location: "",
+                                                muscleGroup: newMuscleGroup,
+                                                sets: [],
+                                                isAddedIn: false
                                             ),
                                             at: 0
                                         )
@@ -519,19 +538,19 @@ struct HomeView: View {
                                                             .frame(width: 300)
                                                             .padding(.leading, 10)
                                                         }
-//                                                        TextField(
-//                                                            "",
-//                                                            text:
-//                                                                $newExcerciseName
-//                                                        )
-//                                                        .font(
-//                                                            .custom(
-//                                                                "Inder-Regular",
-//                                                                size: 18
-//                                                            )
-//                                                        )
-//                                                        .frame(width: 300)
-//                                                        .padding(.leading, 10)
+                                                        //                                                        TextField(
+                                                        //                                                            "",
+                                                        //                                                            text:
+                                                        //                                                                $newExcerciseName
+                                                        //                                                        )
+                                                        //                                                        .font(
+                                                        //                                                            .custom(
+                                                        //                                                                "Inder-Regular",
+                                                        //                                                                size: 18
+                                                        //                                                            )
+                                                        //                                                        )
+                                                        //                                                        .frame(width: 300)
+                                                        //                                                        .padding(.leading, 10)
                                                     }
                                                     .frame(
                                                         width: 300,
@@ -559,7 +578,7 @@ struct HomeView: View {
                                                             newExcercises
                                                                 .removeFirst()
                                                             newExcerciseName =
-                                                                ""
+                                                            ""
                                                         } label: {
                                                             Text("Cancel")
                                                                 .font(
@@ -574,11 +593,11 @@ struct HomeView: View {
                                                         }
                                                         Button {
                                                             excercise.isAddedIn =
-                                                                true
+                                                            true
                                                             excercise.name =
-                                                                newExcerciseName
+                                                            newExcerciseName
                                                             newExcerciseName =
-                                                                ""
+                                                            ""
                                                         } label: {
                                                             Text("Save")
                                                                 .font(
@@ -589,15 +608,15 @@ struct HomeView: View {
                                                                 )
                                                                 .foregroundStyle(
                                                                     newExcerciseName
-                                                                        != ""
-                                                                        ? .blue
-                                                                        : .gray
+                                                                    != ""
+                                                                    ? .blue
+                                                                    : .gray
                                                                 )
-
+                                                            
                                                         }
                                                         .disabled(
                                                             newExcerciseName
-                                                                == ""
+                                                            == ""
                                                         )
                                                     }
                                                     .padding(.trailing, 10)
@@ -608,7 +627,7 @@ struct HomeView: View {
                                         .frame(width: 330, height: 70)
                                         .background(
                                             excercise.isAddedIn
-                                                ? .white : .offWhite
+                                            ? .white : .offWhite
                                         )
                                         .cornerRadius(10)
                                         .shadow(
@@ -626,7 +645,7 @@ struct HomeView: View {
                                 .padding(.bottom, 20)
                             }
                             Spacer()
-
+                            
                         }
                         .frame(width: 380, height: 400)
                         .background(.offWhite)
@@ -638,7 +657,7 @@ struct HomeView: View {
                                 topTrailingRadius: 10
                             )
                         )
-
+                        
                         HStack {
                             Button {
                                 showAddWorkoutDayMuscleGroup = false
@@ -662,7 +681,7 @@ struct HomeView: View {
                             Button {
                                 showAddWorkoutDayMuscleGroup = false
                                 newMuscleGroupWorkout =
-                                    MuscleGroupWorkout(id: "-1", muscleGroup: newMuscleGroup, exercises: newExcercises, date: selectedDate)
+                                MuscleGroupWorkout(id: "-1", muscleGroup: newMuscleGroup, exercises: newExcercises, date: selectedDate)
                                 
                                 newMuscleGroup = "Muscle Group"
                                 newExcercises = []
@@ -671,7 +690,7 @@ struct HomeView: View {
                                     
                                     try await viewModel.addNewWorkoutDay(workout: newMuscleGroupWorkout)
                                     
-                                   // try await viewModel.getWorkoutsForDate(date: selectedDate)
+                                    // try await viewModel.getWorkoutsForDate(date: selectedDate)
                                 }
                             } label: {
                                 Text("Save")
@@ -698,13 +717,21 @@ struct HomeView: View {
                 .frame(width: 600, height: 1000)
                 .background(.black.opacity(0.7))
             }
-
+            
             VStack {
                 AddItem()
             }
             .frame(height: 1000)
             .offset(x: 0, y: tab == "add" ? 110 : 2000)
             .opacity(tab == "add" ? 1 : 0.2)
+           // if (showMeasurementsModal) {
+                
+                VStack {
+                    MeasurementView(measurements: currentMeasurements)
+                }
+                .frame(width: 600, height: 1000)
+                .offset(x: showMeasurementsModal ? 30 : 2000, y: -10)
+            //}
 
         }
         .edgesIgnoringSafeArea(.all)

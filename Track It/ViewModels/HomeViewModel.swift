@@ -69,5 +69,16 @@ class HomeViewModel: ObservableObject {
             print("error fetching workouts")
         }
     }
+    
+    func getCurrentMeasurements() async throws -> [Measurement] {
+        do {
+            let m = try await WeightAPI.shared.getCurrentMeasurements()
+            print(m.count)
+            return m//try await WeightAPI.shared.getCurrentMeasurements()
+        } catch {
+            print("error fetching workouts")
+            return []
+        }
+    }
 }
     
