@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WorkoutDayMuscleGroupView: View {
 
+    @State private var isExpanded = false
     let addNewSet: (String, String) -> Void
     @Binding var muscleGroup: String
     @Binding var excercises: [ExcerciseWorkout]
@@ -24,6 +25,75 @@ struct WorkoutDayMuscleGroupView: View {
     }
 
     var body: some View {
+        DisclosureGroup(
+                    isExpanded: $isExpanded,
+                    content: {
+                        // 1. Nilalaman sa LOOB kapag binuksan
+                        VStack(alignment: .leading) {
+                            HStack {
+                                VStack {
+                                    Text(muscleGroup)
+                                        .font(.custom("PTSans-Narrow", size: 35))
+                                        .foregroundStyle(.white)
+                                        .padding(.leading, 20)
+                                        .padding(.trailing, 20)
+                                }
+                                .background(.darkBlue)
+                                .cornerRadius(5)
+                                .padding(5)
+                                Spacer()
+                                Button {
+                                    //  excercises.insert("Calf Raises", at: 0)
+                                } label: {
+                                    Text("Add")
+                                        .font(.custom("PTSans-NarrowBold", size: 25))
+                                        .foregroundStyle(.skyBlue)
+                                }
+                                .padding(.top, 5)
+                                .padding(.trailing, 15)
+                            }
+                            ScrollView {
+                                // List {
+                                ForEach($excercises, id: \.self) {
+                                    $excercise in
+                                    WorkoutDayExerciseView(
+                                        addNewSet: addNewSet,
+                                        excercise: $excercise,
+                                        muscleGroupWorkoutId: muscleGroupWorkoutId
+                                    )
+                                }
+                                //   .onDelete(perform: deleteExcercise)
+                            }
+                            //.scrollContentBackground(.hidden)
+                            // .listStyle(.plain)
+                            // }
+                            .padding(.top, 5)
+                            .padding(.bottom, 20)
+                        }
+                    },
+                    label: {
+                        // 2. Ang CUSTOM LABEL (Header)
+                        HStack(spacing: 12) {
+                            Image(systemName: "shield.lock.fill")
+                                .foregroundColor(.blue)
+                                .font(.title2)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Seguridad")
+                                    .font(.headline)
+                                Text(isExpanded ? "I-tap para itago" : "I-tap para makita")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            Spacer()
+                        }
+                    }
+                )
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding()
         HStack(alignment: .top) {
             VStack {
                 Spacer()
@@ -35,47 +105,7 @@ struct WorkoutDayMuscleGroupView: View {
                 Spacer()
             }
         
-            VStack(alignment: .leading) {
-                HStack {
-                    VStack {
-                        Text(muscleGroup)
-                            .font(.custom("PTSans-Narrow", size: 35))
-                            .foregroundStyle(.white)
-                            .padding(.leading, 20)
-                            .padding(.trailing, 20)
-                    }
-                    .background(.darkBlue)
-                    .cornerRadius(5)
-                    .padding(5)
-                    Spacer()
-                    Button {
-                        //  excercises.insert("Calf Raises", at: 0)
-                    } label: {
-                        Text("Add")
-                            .font(.custom("PTSans-NarrowBold", size: 25))
-                            .foregroundStyle(.skyBlue)
-                    }
-                    .padding(.top, 5)
-                    .padding(.trailing, 15)
-                }
-                ScrollView {
-                    // List {
-                    ForEach($excercises, id: \.self) {
-                        $excercise in
-                        WorkoutDayExerciseView(
-                            addNewSet: addNewSet,
-                            excercise: $excercise,
-                            muscleGroupWorkoutId: muscleGroupWorkoutId
-                        )
-                    }
-                    //   .onDelete(perform: deleteExcercise)
-                }
-                //.scrollContentBackground(.hidden)
-                // .listStyle(.plain)
-                // }
-                .padding(.top, 5)
-                .padding(.bottom, 20)
-            }
+           
             Spacer()
 
         }
