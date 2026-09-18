@@ -21,7 +21,6 @@ var MuscleGroupColorMap: [String: Color] = [
     "Forearms": .forearmsAccent
 ]
 
-
 struct HomeView: View {
     @State private var dateHolder = DateHolder()
     
