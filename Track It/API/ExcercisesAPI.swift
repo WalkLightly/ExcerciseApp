@@ -34,7 +34,6 @@ class ExcercisesAPI {
             print("Error fetching collection: \(error.localizedDescription)")
         }
         
-        print("hi")
         
         return excercises
     }
