@@ -20,6 +20,9 @@ struct ChartView: View {
     @State private var chartData: String = "weight"
     @State private var weightData: [WeightChartData] = []
     @State private var isLoading = true
+    @State private var highestWeight: Double = 0.0
+    @State private var lowestWeight: Double = 10000.0
+    @State private var chartDataFormat: String = "chart"
     private var chartColor = Color(red: 30/255, green: 30/255, blue: 30/255)
     
     @State private var bodyPart: String = "Body Part"
@@ -50,7 +53,15 @@ struct ChartView: View {
                 // Wrap the throwing API call in a do-catch block
             weights = try await viewModel.getAllWeights()
             for weight in weights {
-                weightData.append(WeightChartData(id: weight.id, date: formatDate(dateString: weight.date)!, weight: Double(weight.weight) ?? 0.0))
+                let _weight = Double(weight.weight) ?? 0.0
+                if _weight > highestWeight {
+                    highestWeight = _weight
+                }
+                
+                if _weight < lowestWeight {
+                    lowestWeight = _weight
+                }
+                weightData.append(WeightChartData(id: weight.id, date: formatDate(dateString: weight.date)!, weight: _weight))
             }
             
             weightData.sort { $0.date < $1.date }
@@ -161,7 +172,6 @@ struct ChartView: View {
                         x: 0,  // Horizontal offset
                         y: 0  // Vertical offset (pushes shadow down)
                     )
-                    
                     Menu {
                         ForEach(bodyParts, id: \.self) { bp in
                             Button {
@@ -195,11 +205,45 @@ struct ChartView: View {
                             y: 0  // Vertical offset (pushes shadow down)
                         )
                     }
+                    .offset(y: chartData == "weight" ? -200 : 1)
                 }
                 .frame(width: 420)
                 .padding(.top, 5)
+       
                 if (!isLoading) {
                     VStack {
+                        HStack {
+                            Button {
+                                chartDataFormat = "chart"
+                            } label: {
+                                Image(systemName: "chart.xyaxis.line")
+                                    .font(.system(size: 20))
+                                    .foregroundStyle(chartDataFormat == "chart" ? .white : .black)
+
+                            }
+                            .frame(width: 50, height: 30)
+                            .background(chartDataFormat == "chart" ? .backgroundBlue : .skyBlue)
+                            .cornerRadius(10)
+                            .sensoryFeedback(.impact(weight: .light), trigger: chartDataFormat)
+                            
+                            Button {
+                                chartDataFormat = "list"
+                            } label: {
+                                Image(systemName: "list.bullet")
+                                    .font(.system(size: 20))
+                                    .foregroundStyle(chartDataFormat == "list" ? .white : .black)
+                            }
+                            .frame(width: 50, height: 30)
+                            .background(chartDataFormat == "list" ? .backgroundBlue : .skyBlue)
+                            .cornerRadius(10)
+                            .sensoryFeedback(.impact(weight: .light), trigger: chartDataFormat)
+                        }
+                        .frame(width: 120, height: 45)
+                        .background(.skyBlue)
+                        .cornerRadius(10)
+                        .padding(.leading, 290)
+                        .padding(.bottom, 5)
+                        .padding(.top, -10)
                         Chart(weightData) { item in
                             LineMark(
                                 x: .value("Date", item.date),
@@ -216,7 +260,7 @@ struct ChartView: View {
                                     .foregroundStyle(.secondary)
                             }
                         }
-                        .frame(width: 360, height: 400)
+                        .frame(width: 405, height: 350)
                         .chartXAxis {
                             AxisMarks { value in
                                 AxisValueLabel()
@@ -243,7 +287,7 @@ struct ChartView: View {
                         }
                         .chartYScale(domain: 180...210)
                     }
-                    .frame(width: 420, height: 420)
+                    .frame(width: 420, height: 430)
                     .background(chartColor)
                     .cornerRadius(10)
                     .shadow(
@@ -350,7 +394,7 @@ struct ChartView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        Text("200.00")
+                        Text("\(String(format: "%.1f", lowestWeight))")
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
                             .font(
@@ -364,14 +408,17 @@ struct ChartView: View {
                             .padding(.vertical, 5)
                             .font(
                                 .custom(
-                                    "PTSans-Narrow",
-                                    size: 30
+                                    "Poppins-Bold",
+                                    size: 40
                                 )
                             )
+                            .foregroundStyle(.darkBlue)
                     }
-                    Spacer()
+                    Rectangle()
+                        .fill(Color.black.opacity(0.1))
+                        .frame(width: 5, height: 180)
                     VStack {
-                        Text("200.00")
+                        Text("\(String(format: "%.1f", highestWeight))")
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
                             .font(
@@ -385,10 +432,11 @@ struct ChartView: View {
                             .padding(.vertical, 5)
                             .font(
                                 .custom(
-                                    "PTSans-Narrow",
-                                    size: 30
+                                    "Poppins-Bold",
+                                    size: 40
                                 )
                             )
+                            .foregroundStyle(.darkBlue)
                         
                     }
                     Spacer()
