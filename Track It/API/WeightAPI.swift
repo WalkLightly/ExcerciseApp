@@ -18,18 +18,21 @@ class WeightAPI {
     func getWeights() async throws -> [Weight] {
         
         var weights: [Weight] = []
-        
+
         do {
-            let snapshot = try await db.collection("weights").getDocuments()
+            let querySnapshot = try await db.collection("weights")
+                .getDocuments()
+            
+            for document in querySnapshot.documents {
+                let data = document.data()
+                
+                let weight = Weight(
+                    weight: data["weight"] as? String ?? "",
+                    date: data["date"] as? String ?? "",
+                    id: document.documentID
+                )
 
-            for document in snapshot.documents {
-                do {
-                    let weight = try document.data(as: Weight.self)
-                    weights.append(weight)
-
-                } catch {
-                    print("Error decoding a specific document: \(error)")
-                }
+                weights.append(weight)
             }
         } catch {
             print("Error fetching collection: \(error.localizedDescription)")

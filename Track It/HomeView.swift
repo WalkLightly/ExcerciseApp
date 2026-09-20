@@ -28,7 +28,7 @@ struct HomeView: View {
 
     @State private var selectedDate: String = ""
     
-    @State private var tab: String = "chart"
+    @State private var tab: String = "home"
     @State private var xOffset = -116
     @State private var stopWatchActive: Bool = false
     @State private var newSetWeight: String = ""
@@ -224,7 +224,11 @@ struct HomeView: View {
                     }
                     .frame(width: 450, height: 720)
                 } else if tab == "chart" {
-                    ChartView()
+                    VStack {
+                        ChartView()
+                    }
+                    .frame(width: 430, height: 900)
+                    .padding(.top, -200)
                 }
                 HStack {
                     Button(action: {
@@ -344,6 +348,7 @@ struct HomeView: View {
                     x: 0,
                     y: 0
                 )
+                .padding(.top, -30)
                 
                 Rectangle()
                     .fill(.pinkAccent.opacity(0.3))

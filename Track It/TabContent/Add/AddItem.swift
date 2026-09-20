@@ -21,9 +21,9 @@ struct AddItem: View {
     @State private var mscGroupTxt = ""
 
     // measurement obj
-    @State private var bodyPart: String = ""
     @State private var measurement: String = ""
     @State private var measurementDate: Date = Date()
+    @State private var bodyPart: String = ""
     @State private var bodyParts: [String] = [
         "Right Arm",
         "Left Arm",

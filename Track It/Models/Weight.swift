@@ -7,7 +7,8 @@
 import Foundation
 import FirebaseFirestore
 
-struct Weight: Codable {
+struct Weight: Codable, Identifiable {
     var weight: String
-    var date: Date
+    var date: String
+    var id: String
 }
