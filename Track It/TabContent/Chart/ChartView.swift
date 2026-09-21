@@ -8,7 +8,7 @@
 import SwiftUI
 import Charts
 
-struct WeightChartData: Identifiable {
+struct WeightChartData: Identifiable, Hashable {
     var id: String
     var date: Date
     var weight: Double
@@ -23,6 +23,8 @@ struct ChartView: View {
     @State private var highestWeight: Double = 0.0
     @State private var lowestWeight: Double = 10000.0
     @State private var chartDataFormat: String = "chart"
+    @State private var lowestWeightDate: Date = Date()
+    @State private var highestWeightDate: Date = Date()
     private var chartColor = Color(red: 30/255, green: 30/255, blue: 30/255)
     
     @State private var bodyPart: String = "Body Part"
@@ -54,12 +56,19 @@ struct ChartView: View {
             weights = try await viewModel.getAllWeights()
             for weight in weights {
                 let _weight = Double(weight.weight) ?? 0.0
+                let formatter = DateFormatter()
+                    formatter.dateFormat = "M/d/yyyy, HH:mm" // Match your exact date string format
+                    formatter.locale = Locale(identifier: "en_US_POSIX")
+                
+                let _date = formatter.date(from: weight.date)
                 if _weight > highestWeight {
                     highestWeight = _weight
+                    highestWeightDate = _date ?? Date()
                 }
                 
                 if _weight < lowestWeight {
                     lowestWeight = _weight
+                    lowestWeightDate = _date ?? Date()
                 }
                 weightData.append(WeightChartData(id: weight.id, date: formatDate(dateString: weight.date)!, weight: _weight))
             }
@@ -78,8 +87,7 @@ struct ChartView: View {
             formatter.dateFormat = "M/d/yyyy, HH:mm" // Match your exact date string format
             formatter.locale = Locale(identifier: "en_US_POSIX")
         print("date")
-        print(formatter.date(from: dateString))
-            return formatter.date(from: dateString)
+        return formatter.date(from: dateString)
     }
     
     var body: some View {
@@ -168,7 +176,7 @@ struct ChartView: View {
                     .padding(.bottom, 5)
                     .shadow(
                         color: .white.opacity(0.9),  // Soft, subtle shadow color
-                        radius: 4,  // Blur radius
+                        radius: 2,  // Blur radius
                         x: 0,  // Horizontal offset
                         y: 0  // Vertical offset (pushes shadow down)
                     )
@@ -200,7 +208,7 @@ struct ChartView: View {
                         .padding(.bottom, 5)
                         .shadow(
                             color: .white.opacity(0.9),  // Soft, subtle shadow color
-                            radius: 4,  // Blur radius
+                            radius: 2,  // Blur radius
                             x: 0,  // Horizontal offset
                             y: 0  // Vertical offset (pushes shadow down)
                         )
@@ -214,78 +222,127 @@ struct ChartView: View {
                     VStack {
                         HStack {
                             Button {
-                                chartDataFormat = "chart"
+                                withAnimation(.smooth(duration: 0.3))
+                                {
+                                    chartDataFormat = "chart"
+                                }
                             } label: {
                                 Image(systemName: "chart.xyaxis.line")
                                     .font(.system(size: 20))
-                                    .foregroundStyle(chartDataFormat == "chart" ? .white : .black)
+                                    .foregroundStyle(.white)
 
                             }
                             .frame(width: 50, height: 30)
-                            .background(chartDataFormat == "chart" ? .backgroundBlue : .skyBlue)
+                            .background(chartDataFormat == "chart" ? Color(red: 48/255, green: 48/255, blue: 48/255) : chartColor)
                             .cornerRadius(10)
                             .sensoryFeedback(.impact(weight: .light), trigger: chartDataFormat)
                             
                             Button {
-                                chartDataFormat = "list"
+                                withAnimation(.smooth(duration: 0.3))
+                                {
+                                    chartDataFormat = "list"
+                                }
                             } label: {
                                 Image(systemName: "list.bullet")
                                     .font(.system(size: 20))
-                                    .foregroundStyle(chartDataFormat == "list" ? .white : .black)
+                                    .foregroundStyle(.white)
                             }
                             .frame(width: 50, height: 30)
-                            .background(chartDataFormat == "list" ? .backgroundBlue : .skyBlue)
+                            .background(chartDataFormat == "list" ? Color(red: 48/255, green: 48/255, blue: 48/255) : chartColor)
                             .cornerRadius(10)
                             .sensoryFeedback(.impact(weight: .light), trigger: chartDataFormat)
                         }
                         .frame(width: 120, height: 45)
-                        .background(.skyBlue)
+                        .background(chartColor)
                         .cornerRadius(10)
                         .padding(.leading, 290)
                         .padding(.bottom, 5)
                         .padding(.top, -10)
-                        Chart(weightData) { item in
-                            LineMark(
-                                x: .value("Date", item.date),
-                                y: .value("Weight", item.weight)
-                            )
-                            PointMark(
-                                x: .value("Date", item.date),
-                                y: .value("Weight", item.weight)
-                            )
-                            // 3. Displays the weight value directly above each dot
-                            .annotation(position: .leading, alignment: .center, spacing: 6) {
-                                Text("\(item.weight, specifier: "%.1f")")
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.secondary)
+                        .shadow(
+                            color: .white.opacity(0.3),  // Soft, subtle shadow color
+                            radius: 2,  // Blur radius
+                            x: 0,  // Horizontal offset
+                            y: 0  // Vertical offset (pushes shadow down)
+                        )
+                        ZStack {
+                            Chart(weightData) { item in
+                                LineMark(
+                                    x: .value("Date", item.date),
+                                    y: .value("Weight", item.weight)
+                                )
+                                PointMark(
+                                    x: .value("Date", item.date),
+                                    y: .value("Weight", item.weight)
+                                )
+                                // 3. Displays the weight value directly above each dot
+                                .annotation(position: .leading, alignment: .center, spacing: 6) {
+                                    Text("\(item.weight, specifier: "%.1f")")
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
-                        }
-                        .frame(width: 405, height: 350)
-                        .chartXAxis {
-                            AxisMarks { value in
-                                AxisValueLabel()
-                                    .foregroundStyle(.white)
-                                    .font(
-                                        .custom(
-                                            "PTSans-Narrow",
-                                            size: 15
+                            .frame(width: 405, height: 350)
+                            .chartXAxis {
+                                AxisMarks { value in
+                                    AxisValueLabel()
+                                        .foregroundStyle(.white)
+                                        .font(
+                                            .custom(
+                                                "PTSans-Narrow",
+                                                size: 15
+                                            )
                                         )
-                                    )
+                                }
                             }
-                        }
-                        .chartYAxis {
-                            AxisMarks { value in
-                                AxisValueLabel()
-                                    .foregroundStyle(.white)
-                                    .font(
-                                        .custom(
-                                            "PTSans-Narrow",
-                                            size: 20
+                            .chartYAxis {
+                                AxisMarks { value in
+                                    AxisValueLabel()
+                                        .foregroundStyle(.white)
+                                        .font(
+                                            .custom(
+                                                "PTSans-Narrow",
+                                                size: 20
+                                            )
                                         )
-                                    )
+                                }
                             }
+                            .chartYScale(domain: 180...210)
+                            VStack {
+                                List(weightData) { weight in
+                                    HStack {
+                                        Text("\(String(format: "%.1f", weight.weight))")
+                                            .font(
+                                                .custom(
+                                                    "PTSans-Narrow",
+                                                    size: 20
+                                                )
+                                            )
+                                        Text(" - ")
+                                        Text(weight.date.formatted().split(separator: ",").first!)
+                                            .font(
+                                                .custom(
+                                                    "PTSans-Narrow",
+                                                    size: 20
+                                                )
+                                            )
+                                    }
+                                    .foregroundStyle(.white)
+                                    .listRowBackground(Color.clear)
+                                }
+                                .listStyle(.plain)
+                                .scrollContentBackground(.hidden)
+                            }
+                            .frame(width: 180, height: 300)
+                            .background(chartColor)
+                            .cornerRadius(10)
+                            .offset(x: chartDataFormat == "list" ?  110 : 3000, y: -30)
+                            .shadow(
+                                color: .white.opacity(0.9),  // Soft, subtle shadow color
+                                radius: 3,  // Blur radius
+                                x: 0,  // Horizontal offset
+                                y: 0  // Vertical offset (pushes shadow down)
+                            )
                         }
-                        .chartYScale(domain: 180...210)
                     }
                     .frame(width: 420, height: 430)
                     .background(chartColor)
@@ -391,58 +448,101 @@ struct ChartView: View {
                 .padding(.top, 20)
                 .cornerRadius(10)
                 .background(.backgroundBlue)
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text("\(String(format: "%.1f", lowestWeight))")
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .font(
-                                .custom(
-                                    "PTSans-Narrow",
-                                    size: 50
-                                )
-                            )
+                VStack {
+                    HStack {
+                        VStack {
+                            
+                        }
+                        .frame(width: 5, height: 60)
+                        .background(.backAccent)
+                        .cornerRadius(20)
+                        .padding(.leading, 10)
+                        .padding(.top, 30)
                         Text("Lowest")
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
                             .font(
                                 .custom(
                                     "Poppins-Bold",
                                     size: 40
                                 )
                             )
-                            .foregroundStyle(.darkBlue)
+                            .foregroundStyle(.calendarAccent)
+                            .padding(.top, 30)
+                        Spacer()
+                        VStack {
+                            Text("\(String(format: "%.1f", lowestWeight))")
+                                .font(
+                                    .custom(
+                                        "PTSans-Narrow",
+                                        size: 50
+                                    )
+                                )
+                                .foregroundStyle(.cornflowerBlue)
+                            Text("\(lowestWeightDate.formatted().split(separator: ",").first!)")
+                                .font(
+                                    .custom(
+                                        "PTSans-Narrow",
+                                        size: 20
+                                    )
+                                )
+                                .padding(.top, -40)
+                                .padding(.bottom, 10)
+                                .foregroundStyle(.calendarAccent)
+                        }
+                        .frame(width: 100)
+                        .padding(.top, 40)
+                        .padding(.trailing, 50)
                     }
+                    .frame(height: 90)
                     Rectangle()
-                        .fill(Color.black.opacity(0.1))
-                        .frame(width: 5, height: 180)
-                    VStack {
-                        Text("\(String(format: "%.1f", highestWeight))")
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
-                            .font(
-                                .custom(
-                                    "PTSans-Narrow",
-                                    size: 50
-                                )
-                            )
+                        .fill(.calendarAccent)
+                        .frame(width: 420, height: 1)
+                    HStack {
+                        VStack {
+                            
+                        }
+                        .frame(width: 5, height: 60)
+                        .background(.backAccent)
+                        .cornerRadius(20)
+                        .padding(.leading, 10)
+                        .padding(.top, 30)
                         Text("Highest")
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 5)
                             .font(
                                 .custom(
                                     "Poppins-Bold",
                                     size: 40
                                 )
                             )
-                            .foregroundStyle(.darkBlue)
-                        
+                            .foregroundStyle(.calendarAccent)
+                            .padding(.top, 30)
+                        Spacer()
+                        VStack {
+                            Text("\(String(format: "%.1f", highestWeight))")
+                                .font(
+                                    .custom(
+                                        "PTSans-Narrow",
+                                        size: 50
+                                    )
+                                )
+                                .foregroundStyle(.cornflowerBlue)
+                            Text("\(highestWeightDate.formatted().split(separator: ",").first!)")
+                                .font(
+                                    .custom(
+                                        "PTSans-Narrow",
+                                        size: 20
+                                    )
+                                )
+                                .padding(.top, -40)
+                                .foregroundStyle(.calendarAccent)
+                        }
+                        .frame(width: 100)
+                        .padding(.top, 40)
+                        .padding(.trailing, 50)
                     }
-                    Spacer()
+                    .padding(.top, -60)
+                    .frame(height: 90)
                 }
                 .frame(width: 420, height: 180)
-                .background(.calendarAccent)
+                .background(chartColor)
                 .cornerRadius(10)
                 .padding(.top, 30)
                 .shadow(
