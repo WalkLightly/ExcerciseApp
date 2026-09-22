@@ -461,8 +461,8 @@ struct ChartView: View {
                         Text("Lowest")
                             .font(
                                 .custom(
-                                    "Poppins-Bold",
-                                    size: 40
+                                    "Inder-Regular",
+                                    size: 30
                                 )
                             )
                             .foregroundStyle(.calendarAccent)
@@ -508,8 +508,8 @@ struct ChartView: View {
                         Text("Highest")
                             .font(
                                 .custom(
-                                    "Poppins-Bold",
-                                    size: 40
+                                    "Inder-Regular",
+                                    size: 30
                                 )
                             )
                             .foregroundStyle(.calendarAccent)

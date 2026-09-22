@@ -211,7 +211,8 @@ struct HomeView: View {
                             addNewMuscleGroup: addNewMuscleGroup,
                             workoutData: $viewModel.exercisesForToday,
                             selectedDate: selectedDate,
-                            deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
+                            deleteMuscleGroupWorkout: deleteMuscleGroupWorkout,
+                            allExercises: $allExercises)
                         .padding(.top, 30)
                         .padding(.bottom, 10)
                     }
@@ -544,19 +545,6 @@ struct HomeView: View {
                                                             .frame(width: 300)
                                                             .padding(.leading, 10)
                                                         }
-                                                        //                                                        TextField(
-                                                        //                                                            "",
-                                                        //                                                            text:
-                                                        //                                                                $newExcerciseName
-                                                        //                                                        )
-                                                        //                                                        .font(
-                                                        //                                                            .custom(
-                                                        //                                                                "Inder-Regular",
-                                                        //                                                                size: 18
-                                                        //                                                            )
-                                                        //                                                        )
-                                                        //                                                        .frame(width: 300)
-                                                        //                                                        .padding(.leading, 10)
                                                     }
                                                     .frame(
                                                         width: 300,
@@ -598,6 +586,8 @@ struct HomeView: View {
                                                                 )
                                                         }
                                                         Button {
+                                                            // save it to the database.
+                                                            // I need the id
                                                             excercise.isAddedIn =
                                                             true
                                                             excercise.name =

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct WorkoutDayMuscleGroupView: View {
 
+    @StateObject private var viewModel = HomeViewModel()
+
     @State private var isExpanded = false
     let addNewSet: (String, String) -> Void
     @Binding var muscleGroup: String
@@ -18,6 +20,8 @@ struct WorkoutDayMuscleGroupView: View {
 
     @State private var isEditing = false
     @State private var workoutToDeleteId: String = ""
+    @State private var newExcerciseName: String = ""
+    @Binding var allExercises: [Excercise]
 
     func deleteExcercise() {
         //excercises.remove(atOffsets: offsets)
@@ -50,7 +54,16 @@ struct WorkoutDayMuscleGroupView: View {
                     .padding(5)
                     Spacer()
                     Button {
-                        //  excercises.insert("Calf Raises", at: 0)
+                        excercises.insert(
+                            ExcerciseWorkout(
+                                name: newExcerciseName,
+                                location: "",
+                                muscleGroup: muscleGroup,
+                                sets: [],
+                                isAddedIn: false
+                            ),
+                            at: 0
+                        )
                     } label: {
                         Text("Add")
                             .font(.custom("PTSans-NarrowBold", size: 25))
@@ -63,11 +76,139 @@ struct WorkoutDayMuscleGroupView: View {
                     // List {
                     ForEach($excercises, id: \.self) {
                         $excercise in
-                        WorkoutDayExerciseView(
-                            addNewSet: addNewSet,
-                            excercise: $excercise,
-                            muscleGroupWorkoutId: muscleGroupWorkoutId
-                        )
+                        if excercise.isAddedIn {
+                            WorkoutDayExerciseView(
+                                addNewSet: addNewSet,
+                                excercise: $excercise,
+                                muscleGroupWorkoutId: muscleGroupWorkoutId
+                            )
+                        } else {
+                            VStack {
+                                HStack {
+                                    VStack {
+                                        Menu {
+                                            ForEach(allExercises.filter{ $0.muscleGroup == muscleGroup}, id: \.self) { exer in
+                                                Button {
+                                                    newExcerciseName = exer.name
+                                                } label: {
+                                                    Text(exer.name)
+                                                }
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Text(newExcerciseName)
+                                                    .frame(height: 40)
+                                                    .foregroundStyle(.black)
+                                                    .font(
+                                                        .custom("Inder-Regular", size: 18)
+                                                    )
+                                                Spacer()
+                                            }
+                                            .frame(width: 300)
+                                            .padding(.leading, 10)
+                                        }
+                                    }
+                                    .frame(
+                                        width: 300,
+                                        height: 30
+                                    )
+                                    .background(
+                                        Color.gray.brightness(
+                                            0.30
+                                        )
+                                    )
+                                    .foregroundStyle(.darkBlue)
+                                    .cornerRadius(10)
+                                    .padding(.leading, 5)
+                                    .padding(.top, 5)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Spacer()
+                                    HStack(spacing: 30) {
+                                        Button {
+                                            excercises
+                                                .removeFirst()
+                                            newExcerciseName =
+                                            ""
+                                        } label: {
+                                            Text("Cancel")
+                                                .font(
+                                                    .custom(
+                                                        "Inder-Regular",
+                                                        size: 18
+                                                    )
+                                                )
+                                                .foregroundStyle(
+                                                    .red
+                                                )
+                                        }
+                                        Button {
+                                            print(muscleGroupWorkoutId)
+//                                            excercise.isAddedIn = true
+//                                            excercise.name = newExcerciseName
+//                                            newExcerciseName = ""
+                                            
+                                            // NEW METHOD CALLED ADD EXCERCISE TO WORKOUT MUSCLE GROUP
+                                            //   ExcerciseWorkout(
+//                                            name: "Hack Squat",
+//                                            location: "",
+//                                            muscleGroup: "Legs",
+//                                            sets: ["12"],
+//                                            isAddedIn: true
+//                                        ),
+                                            
+                                           // newMuscleGroup = "Muscle Group"
+                                            //newExcercises = []
+                                            
+//                                            Task {
+//                                                
+//                                                try await viewModel.addNewWorkoutDay(workout: newMuscleGroupWorkout)
+//                                                
+//                                                // try await viewModel.getWorkoutsForDate(date: selectedDate)
+//                                            }
+                                        } label: {
+                                            Text("Save")
+                                                .font(
+                                                    .custom(
+                                                        "Inder-Regular",
+                                                        size: 18
+                                                    )
+                                                )
+                                                .foregroundStyle(
+                                                    newExcerciseName
+                                                    != ""
+                                                    ? .blue
+                                                    : .gray
+                                                )
+                                            
+                                        }
+                                        .disabled(
+                                            newExcerciseName
+                                            == ""
+                                        )
+                                    }
+                                    .padding(.trailing, 10)
+                                    .padding(.bottom, 5)
+                                }
+                            }
+                            .frame(width: 330, height: 70)
+                            .background(
+                                excercise.isAddedIn
+                                ? .white : .offWhite
+                            )
+                            .cornerRadius(10)
+                            .shadow(
+                                color: Color.black.opacity(0.4),
+                                radius: 2,
+                                x: 1,
+                                y: 2
+                            )
+                            .padding(.trailing, 5)
+                            .padding(.leading, 5)
+                            .padding(.top, 5)
+                        }
+
                     }
                     //   .onDelete(perform: deleteExcercise)
                 }
@@ -140,6 +281,7 @@ struct WorkoutDayMuscleGroupView: View {
         muscleGroup: .constant("Shoulders"),
         excercises: .constant([]),
         muscleGroupWorkoutId: "",
-        deleteMuscleGroupWorkout: { _ in }
+        deleteMuscleGroupWorkout: { _ in },
+        allExercises: .constant([])
     )
 }

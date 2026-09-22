@@ -19,6 +19,8 @@ struct WorkoutDayView: View {
     @Binding var workoutData: [MuscleGroupWorkout]
     let selectedDate: String
     let deleteMuscleGroupWorkout: (String) -> Void
+    @Binding var allExercises: [Excercise]
+
     
     var body: some View {
         VStack {
@@ -47,7 +49,8 @@ struct WorkoutDayView: View {
                             muscleGroup: $exc.muscleGroup,
                             excercises: $exc.exercises,
                             muscleGroupWorkoutId: exc.id,
-                            deleteMuscleGroupWorkout: deleteMuscleGroupWorkout)
+                            deleteMuscleGroupWorkout: deleteMuscleGroupWorkout,
+                            allExercises: $allExercises)
                     }
                     .frame(width: 380, height: 450)
                     
@@ -83,5 +86,5 @@ struct WorkoutDayView: View {
 }
 
 #Preview {
-    WorkoutDayView(addNewSet: { _ , _ in }, addNewMuscleGroup: {}, workoutData: .constant([]), selectedDate: "06/18/2026", deleteMuscleGroupWorkout: {_ in})
+    WorkoutDayView(addNewSet: { _ , _ in }, addNewMuscleGroup: {}, workoutData: .constant([]), selectedDate: "06/18/2026", deleteMuscleGroupWorkout: {_ in}, allExercises: .constant([]))
 }
