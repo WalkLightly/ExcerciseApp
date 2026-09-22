@@ -77,10 +77,13 @@ class MuscleGroupWorkoutsAPI {
     
 //    func addNewExcerciseToMuscleGroupWorkout(selectedDate: String, muscleGroup: String, exercise: ExcerciseWorkout) async throws {
 //        // follow the logic for adding the set
-//        // first query the database for the record where date is selected date and musclegroup is the passed in one
-//        // then assign that to a value
-//        // get a docRef in the original query
-//        // add the new passed in excercise value to the array, then update the exercises array, like I do in the set array
+//        // 1. first query the muscle_group_workouts database via the musclegroupid
+//        // 2. then assign that to a value
+//        // 3. get a docRef in the original query in step 1
+//        // 4. add the new passed in excercise value to the array
+          // 5. then update the exercises array, like I do in the set array, by referencing the docRef.update() method
+          // 6. save!
+
 //    }
         
 

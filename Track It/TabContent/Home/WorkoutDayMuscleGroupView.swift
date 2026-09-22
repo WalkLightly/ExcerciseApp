@@ -149,6 +149,14 @@ struct WorkoutDayMuscleGroupView: View {
 //                                            excercise.name = newExcerciseName
 //                                            newExcerciseName = ""
                                             
+                                            // PAS THIS TO THE VIEW MODEL, ALONG WITH THE MUSCLEGROUPWORKOUTID
+                                            // ExcerciseWorkout(
+                                        //    name: newExcerciseName,
+                                        //    location: "",
+                                        //    muscleGroup: newMuscleGroup,
+                                        //    sets: [],
+                                        //    isAddedIn: false
+                                            
                                             // NEW METHOD CALLED ADD EXCERCISE TO WORKOUT MUSCLE GROUP
                                             //   ExcerciseWorkout(
 //                                            name: "Hack Squat",
