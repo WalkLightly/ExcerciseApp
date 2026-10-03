@@ -219,14 +219,15 @@ struct HomeView: View {
                     .frame(width: 450, height: 720)
                     //.background(.primaryBlue)
                     .cornerRadius(10)
-                } else if tab == "settings" {
-                    ScrollView {
-                        
-                    }
-                    .frame(width: 450, height: 720)
                 } else if tab == "chart" {
                     VStack {
                         ChartView()
+                    }
+                    .frame(width: 430, height: 900)
+                    .padding(.top, -200)
+                } else if tab == "settings" {
+                    VStack {
+                        SettingsView()
                     }
                     .frame(width: 430, height: 900)
                     .padding(.top, -200)
