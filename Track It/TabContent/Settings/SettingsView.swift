@@ -46,6 +46,7 @@ struct SettingsView: View {
                     .font(.custom("PTSans-Narrow", size: 55))
                     .padding(.top, 20)
                     .padding(.leading, -200)
+                    .foregroundStyle(.black)
                 ScrollView {
                     LazyVStack (spacing: 12) {
                         ForEach(MuscleGroups, id: \.self) { muscle in
@@ -58,9 +59,12 @@ struct SettingsView: View {
                                                 .onTapGesture {
                                                     showEditModal = true
                                                 }
+                                                .foregroundStyle(.black)
+
                                             Spacer()
                                             Text(excercise.startingWeight)
                                                 .font(.custom("Poppins-Bold", size: 25))
+                                                .foregroundStyle(.black)
                                         }
                                         .padding(.bottom, 2)
                                     }
