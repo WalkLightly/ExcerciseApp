@@ -113,90 +113,92 @@ struct HomeView: View {
         ZStack {
             Color(.backgroundBlue)
             VStack {
-                HStack {
-                    ZStack {
-                        VStack {
-                            
-                        }
-                        .frame(width: 345, height: 30)
-                        .background(.skyBlue)
-                        .cornerRadius(18)
-                        .offset(y: 100)
-                        HStack {
-                            Button {
-                                stopwatch.reset()
-                            } label: {
-                                Image(systemName: "arrow.clockwise")
-                                    .font(.system(size: 30))
-                                    .foregroundStyle(.accentGrey)
+                if tab == "home" {
+                    HStack {
+                        ZStack {
+                            VStack {
+                                
                             }
-                            .frame(width: 60, height: 60)
-                            .background(.accentGrey.opacity(0.5))
-                            .clipShape(Capsule())
-                            
+                            .frame(width: 345, height: 30)
+                            .background(.skyBlue)
+                            .cornerRadius(18)
+                            .offset(y: 100)
                             HStack {
-                                Text(timeString)
-                                    .font(.custom("PTSans-NarrowBold", size: 50))
-                                    .foregroundStyle(.steelBlue)
-                            }
-                            .frame(width: 200, height: 70)
-                            //.background(.accent)
-                            .cornerRadius(10)
-                            .sensoryFeedback(
-                                .impact(weight: .heavy),
-                                trigger: stopwatch.isRunning
-                            )
-                            
-                            Button {
-                                withAnimation(.smooth(duration: 0.2)) {
-                                    if stopwatch.isRunning {
-                                        stopwatch.pause()
-                                    } else {
-                                        stopwatch.start()
-                                    }
+                                Button {
+                                    stopwatch.reset()
+                                } label: {
+                                    Image(systemName: "arrow.clockwise")
+                                        .font(.system(size: 30))
+                                        .foregroundStyle(.accentGrey)
                                 }
-                            } label: {
-                                Image(
-                                    systemName: !stopwatch.isRunning
-                                    ? "play.fill" : "xmark"
+                                .frame(width: 60, height: 60)
+                                .background(.accentGrey.opacity(0.5))
+                                .clipShape(Capsule())
+                                
+                                HStack {
+                                    Text(timeString)
+                                        .font(.custom("PTSans-NarrowBold", size: 50))
+                                        .foregroundStyle(.steelBlue)
+                                }
+                                .frame(width: 200, height: 70)
+                                //.background(.accent)
+                                .cornerRadius(10)
+                                .sensoryFeedback(
+                                    .impact(weight: .heavy),
+                                    trigger: stopwatch.isRunning
                                 )
-                                .font(.system(size: 30))
-                                .foregroundStyle(
+                                
+                                Button {
+                                    withAnimation(.smooth(duration: 0.2)) {
+                                        if stopwatch.isRunning {
+                                            stopwatch.pause()
+                                        } else {
+                                            stopwatch.start()
+                                        }
+                                    }
+                                } label: {
+                                    Image(
+                                        systemName: !stopwatch.isRunning
+                                        ? "play.fill" : "xmark"
+                                    )
+                                    .font(.system(size: 30))
+                                    .foregroundStyle(
+                                        !stopwatch.isRunning
+                                        ? Color.green : .red.opacity(0.8)
+                                    )
+                                }
+                                .frame(width: 60, height: 60)
+                                .background(
                                     !stopwatch.isRunning
-                                    ? Color.green : .red.opacity(0.8)
+                                    ? Color.green.opacity(0.3) : .red.opacity(0.2)
                                 )
+                                .clipShape(Capsule())
+                                .sensoryFeedback(
+                                    .impact(weight: .heavy),
+                                    trigger: stopwatch.isRunning
+                                )
+                                
                             }
-                            .frame(width: 60, height: 60)
-                            .background(
-                                !stopwatch.isRunning
-                                ? Color.green.opacity(0.3) : .red.opacity(0.2)
-                            )
-                            .clipShape(Capsule())
-                            .sensoryFeedback(
-                                .impact(weight: .heavy),
-                                trigger: stopwatch.isRunning
-                            )
+                            .frame(width: 349, height: 80)
+                            .background(.darkBlue)
+                            .cornerRadius(12)
+                            .offset(y: 70)
                             
                         }
-                        .frame(width: 349, height: 80)
-                        .background(.darkBlue)
-                        .cornerRadius(12)
-                        .offset(y: 70)
-                        
-                    }
-                    Button(action: {
-                        withAnimation(.smooth(duration: 0.6, extraBounce: 0.2))
-                        {
-                            showMeasurementsModal.toggle()                            
+                        Button(action: {
+                            withAnimation(.smooth(duration: 0.6, extraBounce: 0.2))
+                            {
+                                showMeasurementsModal.toggle()
+                            }
+                        }) {
+                            Image(systemName: "pencil.and.ruler")
+                                .font(.system(size: 40))
+                                .foregroundStyle(.white)
+                            
                         }
-                    }) {
-                        Image(systemName: "pencil.and.ruler")
-                            .font(.system(size: 40))
-                            .foregroundStyle(.white)
-                        
+                        .sensoryFeedback(.impact(weight: .light), trigger: tab)
+                        .offset(y: 70)
                     }
-                    .sensoryFeedback(.impact(weight: .light), trigger: tab)
-                    .offset(y: 70)
                 }
                 
                 Spacer()
