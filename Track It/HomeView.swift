@@ -231,6 +231,12 @@ struct HomeView: View {
                     }
                     .frame(width: 430, height: 900)
                     .padding(.top, -200)
+                } else if tab == "search" {
+                    VStack {
+                        SearchView()
+                    }
+                    .frame(width: 430, height: 900)
+                    .padding(.top, -200)
                 }
                 HStack {
                     Button(action: {

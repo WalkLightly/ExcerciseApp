@@ -24,6 +24,9 @@ struct SettingsView: View {
     @StateObject private var viewModel = ExerciseCardViewModel()
     @State private var exercises: [Excercise] = []
     @State private var showEditModal: Bool = false
+    @State private var chosenExName: String = ""
+    @State private var chosenExWeight: String = ""
+
     
     func fetchData() async throws -> Void {
         exercises = try await viewModel.getAllExercises()
@@ -58,6 +61,8 @@ struct SettingsView: View {
                                                 .font(.custom("Poppins-Regular", size: 20))
                                                 .onTapGesture {
                                                     showEditModal = true
+                                                    chosenExName = excercise.name
+                                                    chosenExWeight = excercise.startingWeight
                                                 }
                                                 .foregroundStyle(.black)
 
@@ -104,7 +109,7 @@ struct SettingsView: View {
             }
             
             if showEditModal {
-                EditExcerciseDetailsModalView(name: .constant("some new name"), startingWeight: .constant("some new weight"), showEditModal: $showEditModal, updateDetails: {})
+                EditExcerciseDetailsModalView(name: $chosenExName, startingWeight: $chosenExWeight, showEditModal: $showEditModal, updateDetails: {})
             }
 
         }
