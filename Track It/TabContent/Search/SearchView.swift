@@ -11,10 +11,10 @@ struct SearchView: View {
     @FocusState var showTypeAhead: Bool
     @State var searchText: String = ""
     @State var muscleGroup: String = ""
-    @State var chosenResult: String = ""
+    @State var chosenResult: String = "Legs"
     @StateObject private var viewModel = ExerciseCardViewModel()
     @State private var exercises: [Excercise] = []
-    @State private var resultIsMuscleGroup: Bool = false
+    @State private var resultIsMuscleGroup: Bool = true
     @State private var typeAheadResults: [String] = []
     let muscleGroups: [String] = ["Shoulders",
                                  "Legs",
@@ -25,6 +25,7 @@ struct SearchView: View {
                                  "Cardio",
                                  "Abs",
                                  "Forearms"]
+    
     
     var ex1Date: String = "10/2/2026"
     var ex2Date: String = "10/2/2026"
@@ -41,7 +42,19 @@ struct SearchView: View {
     var ex3: [String] = ["1","200","34","40"]
     var ex4: [String] = ["1","200","34","40"]
     var ex5: [String] = ["1","200","34","40"]
+    
 
+    func getHeightForMeasurements() -> CGFloat {
+        if chosenResult == "Legs" {
+            return CGFloat(180.0)
+        }
+        
+        return CGFloat(0.0)
+    }
+    
+    func getExcercisesForMuscleGroup() -> [Excercise] {
+        return exercises.filter({ $0.muscleGroup == chosenResult})
+    }
     
     func getMuscleGroupFromName(excerciseName: String) -> String {
         return exercises.filter({$0.name == excerciseName}).first?.muscleGroup ?? ""
@@ -93,13 +106,12 @@ struct SearchView: View {
                         .padding(.top, 30)
                 }
                 else {
-                    VStack(alignment: .leading) {
-                        Text(chosenResult)
-                            .font(.custom("PTSans-Narrow", size: 30))
-                            .foregroundStyle(.black)
-                            .padding(.leading, 20)
-                        
-                        if !resultIsMuscleGroup {
+                    if !resultIsMuscleGroup {
+                        VStack(alignment: .leading) {
+                            Text(chosenResult)
+                                .font(.custom("PTSans-Narrow", size: 30))
+                                .foregroundStyle(.black)
+                                .padding(.leading, 20)
                             
                             HStack {
                                 VStack {
@@ -115,306 +127,508 @@ struct SearchView: View {
                                 .padding(.leading, 20)
                                 Spacer()
                             }
-                        }
-                        HStack {
-                            Text("Last 5 workouts")
-                                .foregroundStyle(.black)
-                                .font(.custom("Poppins-Bold", size: 15))
-                                .padding(.leading, 20)
-                                .padding(.top, 30)
-                            Text("35 Total")
-                                .foregroundStyle(.grayBlue)
-                                .font(.custom("Poppins-Bold", size: 15))
-                                .padding(.leading, 20)
-                                .padding(.top, 30)
-                        }
-                        
-                        
-                        // WORKOUT DATA LAST 5
-                        
-                        VStack(alignment: .leading) {
-                            Text(ex1Date)
-                                .font(
-                                    .custom(
-                                        "Inder-Regular",
-                                        size: 13
-                                    )
-                                )
-                                .foregroundStyle(.black)
-                                .padding(.leading, 5)
-                            HStack(spacing: 0) {
-                                ForEach(ex1, id: \.self) {
-                                    ex in
-                                    VStack {
-                                        Text(ex)
-                                            .font(
-                                                .custom(
-                                                    "Inder-Regular",
-                                                    size: 13
-                                                )
-                                            )
-                                            .foregroundStyle(.white)
-                                    }
-                                    .frame(width: 35, height: 25)
-                                    .background(.brown)
-                                    .cornerRadius(20)
-                                    .padding(.leading, 5)
-                                    
-                                }
-                                Spacer()
+                            HStack {
+                                Text("Last 5 workouts")
+                                    .foregroundStyle(.black)
+                                    .font(.custom("Poppins-Bold", size: 15))
+                                    .padding(.leading, 20)
+                                    .padding(.top, 30)
+                                Text("35 Total")
+                                    .foregroundStyle(.grayBlue)
+                                    .font(.custom("Poppins-Bold", size: 15))
+                                    .padding(.leading, 20)
+                                    .padding(.top, 30)
                             }
-                        }
-                        .frame(width: 300, height: 60)
-                        .background(.white)
-                        .cornerRadius(10)
-                        .shadow(
-                            color: Color.black.opacity(0.4),
-                            radius: 2,
-                            x: 1,
-                            y: 1
-                        )
-                        .padding(.leading, 20)
-                        
-                        VStack(alignment: .leading) {
-                            Text(ex1Date)
-                                .font(
-                                    .custom(
-                                        "Inder-Regular",
-                                        size: 13
-                                    )
-                                )
-                                .foregroundStyle(.black)
-                                .padding(.leading, 5)
-                            HStack(spacing: 0) {
-                                ForEach(ex1, id: \.self) {
-                                    ex in
-                                    VStack {
-                                        Text(ex)
-                                            .font(
-                                                .custom(
-                                                    "Inder-Regular",
-                                                    size: 13
-                                                )
-                                            )
-                                            .foregroundStyle(.white)
-                                    }
-                                    .frame(width: 35, height: 25)
-                                    .background(.brown)
-                                    .cornerRadius(20)
-                                    .padding(.leading, 5)
-                                    
-                                }
-                                Spacer()
-                            }
-                        }
-                        .frame(width: 300, height: 60)
-                        .background(.white)
-                        .cornerRadius(10)
-                        .shadow(
-                            color: Color.black.opacity(0.4),
-                            radius: 2,
-                            x: 1,
-                            y: 1
-                        )
-                        .padding(.leading, 20)
-                        
-                        VStack(alignment: .leading) {
-                            Text(ex1Date)
-                                .font(
-                                    .custom(
-                                        "Inder-Regular",
-                                        size: 13
-                                    )
-                                )
-                                .foregroundStyle(.black)
-                                .padding(.leading, 5)
-                            HStack(spacing: 0) {
-                                ForEach(ex1, id: \.self) {
-                                    ex in
-                                    VStack {
-                                        Text(ex)
-                                            .font(
-                                                .custom(
-                                                    "Inder-Regular",
-                                                    size: 13
-                                                )
-                                            )
-                                            .foregroundStyle(.white)
-                                    }
-                                    .frame(width: 35, height: 25)
-                                    .background(.brown)
-                                    .cornerRadius(20)
-                                    .padding(.leading, 5)
-                                    
-                                }
-                                Spacer()
-                            }
-                        }
-                        .frame(width: 300, height: 60)
-                        .background(.white)
-                        .cornerRadius(10)
-                        .shadow(
-                            color: Color.black.opacity(0.4),
-                            radius: 2,
-                            x: 1,
-                            y: 1
-                        )
-                        .padding(.leading, 20)
-                        
-                        
-                        VStack(alignment: .leading) {
-                            Text(ex1Date)
-                                .font(
-                                    .custom(
-                                        "Inder-Regular",
-                                        size: 13
-                                    )
-                                )
-                                .foregroundStyle(.black)
-                                .padding(.leading, 5)
-                            HStack(spacing: 0) {
-                                ForEach(ex1, id: \.self) {
-                                    ex in
-                                    VStack {
-                                        Text(ex)
-                                            .font(
-                                                .custom(
-                                                    "Inder-Regular",
-                                                    size: 13
-                                                )
-                                            )
-                                            .foregroundStyle(.white)
-                                    }
-                                    .frame(width: 35, height: 25)
-                                    .background(.brown)
-                                    .cornerRadius(20)
-                                    .padding(.leading, 5)
-                                    
-                                }
-                                Spacer()
-                            }
-                        }
-                        .frame(width: 300, height: 60)
-                        .background(.white)
-                        .cornerRadius(10)
-                        .shadow(
-                            color: Color.black.opacity(0.4),
-                            radius: 2,
-                            x: 1,
-                            y: 1
-                        )
-                        .padding(.leading, 20)
-                        
-                        
-                        VStack(alignment: .leading) {
-                            Text(ex1Date)
-                                .font(
-                                    .custom(
-                                        "Inder-Regular",
-                                        size: 13
-                                    )
-                                )
-                                .foregroundStyle(.black)
-                                .padding(.leading, 5)
-                            HStack(spacing: 0) {
-                                ForEach(ex1, id: \.self) {
-                                    ex in
-                                    VStack {
-                                        Text(ex)
-                                            .font(
-                                                .custom(
-                                                    "Inder-Regular",
-                                                    size: 13
-                                                )
-                                            )
-                                            .foregroundStyle(.white)
-                                    }
-                                    .frame(width: 35, height: 25)
-                                    .background(.brown)
-                                    .cornerRadius(20)
-                                    .padding(.leading, 5)
-                                    
-                                }
-                                Spacer()
-                            }
-                        }
-                        .frame(width: 300, height: 60)
-                        .background(.white)
-                        .cornerRadius(10)
-                        .shadow(
-                            color: Color.black.opacity(0.4),
-                            radius: 2,
-                            x: 1,
-                            y: 1
-                        )
-                        .padding(.leading, 20)
-                        HStack {
-                            VStack {
-                                Text("Starting Weight")
+                            
+                            
+                            // WORKOUT DATA LAST 5
+                            
+                            VStack(alignment: .leading) {
+                                Text(ex1Date)
                                     .font(
                                         .custom(
                                             "Inder-Regular",
-                                            size: 20
+                                            size: 13
                                         )
                                     )
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 20)
-                                    .padding(.top, 10)
-                                
-                                Text(startingWeight)
-                                    .font(
-                                        .custom(
-                                            "Inder-Regular",
-                                            size: 30
-                                        )
-                                    )
-                                    .foregroundStyle(.white)
-                                    .padding(.top, -5)
-                                    .padding(.bottom, 10)
+                                    .foregroundStyle(.black)
+                                    .padding(.leading, 5)
+                                HStack(spacing: 0) {
+                                    ForEach(ex1, id: \.self) {
+                                        ex in
+                                        VStack {
+                                            Text(ex)
+                                                .font(
+                                                    .custom(
+                                                        "Inder-Regular",
+                                                        size: 13
+                                                    )
+                                                )
+                                                .foregroundStyle(.white)
+                                        }
+                                        .frame(width: 35, height: 25)
+                                        .background(.brown)
+                                        .cornerRadius(20)
+                                        .padding(.leading, 5)
+                                        
+                                    }
+                                    Spacer()
+                                }
                             }
-                            .background(.darkBlue)
+                            .frame(width: 300, height: 60)
+                            .background(.white)
                             .cornerRadius(10)
+                            .shadow(
+                                color: Color.black.opacity(0.4),
+                                radius: 2,
+                                x: 1,
+                                y: 1
+                            )
                             .padding(.leading, 20)
-                            VStack {
-                                Text("Total Sets")
+                            
+                            VStack(alignment: .leading) {
+                                Text(ex1Date)
                                     .font(
                                         .custom(
                                             "Inder-Regular",
-                                            size: 20
+                                            size: 13
                                         )
                                     )
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 20)
-                                    .padding(.top, 10)
-                                
-                                Text(totalSets)
-                                    .font(
-                                        .custom(
-                                            "Inder-Regular",
-                                            size: 30
-                                        )
-                                    )
-                                    .foregroundStyle(.white)
-                                    .padding(.top, -5)
-                                    .padding(.bottom, 10)
+                                    .foregroundStyle(.black)
+                                    .padding(.leading, 5)
+                                HStack(spacing: 0) {
+                                    ForEach(ex1, id: \.self) {
+                                        ex in
+                                        VStack {
+                                            Text(ex)
+                                                .font(
+                                                    .custom(
+                                                        "Inder-Regular",
+                                                        size: 13
+                                                    )
+                                                )
+                                                .foregroundStyle(.white)
+                                        }
+                                        .frame(width: 35, height: 25)
+                                        .background(.brown)
+                                        .cornerRadius(20)
+                                        .padding(.leading, 5)
+                                        
+                                    }
+                                    Spacer()
+                                }
                             }
-                            .background(.darkBlue)
+                            .frame(width: 300, height: 60)
+                            .background(.white)
                             .cornerRadius(10)
+                            .shadow(
+                                color: Color.black.opacity(0.4),
+                                radius: 2,
+                                x: 1,
+                                y: 1
+                            )
                             .padding(.leading, 20)
-                        }
-                        .padding(.top, 50)
+                            
+                            VStack(alignment: .leading) {
+                                Text(ex1Date)
+                                    .font(
+                                        .custom(
+                                            "Inder-Regular",
+                                            size: 13
+                                        )
+                                    )
+                                    .foregroundStyle(.black)
+                                    .padding(.leading, 5)
+                                HStack(spacing: 0) {
+                                    ForEach(ex1, id: \.self) {
+                                        ex in
+                                        VStack {
+                                            Text(ex)
+                                                .font(
+                                                    .custom(
+                                                        "Inder-Regular",
+                                                        size: 13
+                                                    )
+                                                )
+                                                .foregroundStyle(.white)
+                                        }
+                                        .frame(width: 35, height: 25)
+                                        .background(.brown)
+                                        .cornerRadius(20)
+                                        .padding(.leading, 5)
+                                        
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .frame(width: 300, height: 60)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .shadow(
+                                color: Color.black.opacity(0.4),
+                                radius: 2,
+                                x: 1,
+                                y: 1
+                            )
+                            .padding(.leading, 20)
+                            
+                            
+                            VStack(alignment: .leading) {
+                                Text(ex1Date)
+                                    .font(
+                                        .custom(
+                                            "Inder-Regular",
+                                            size: 13
+                                        )
+                                    )
+                                    .foregroundStyle(.black)
+                                    .padding(.leading, 5)
+                                HStack(spacing: 0) {
+                                    ForEach(ex1, id: \.self) {
+                                        ex in
+                                        VStack {
+                                            Text(ex)
+                                                .font(
+                                                    .custom(
+                                                        "Inder-Regular",
+                                                        size: 13
+                                                    )
+                                                )
+                                                .foregroundStyle(.white)
+                                        }
+                                        .frame(width: 35, height: 25)
+                                        .background(.brown)
+                                        .cornerRadius(20)
+                                        .padding(.leading, 5)
+                                        
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .frame(width: 300, height: 60)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .shadow(
+                                color: Color.black.opacity(0.4),
+                                radius: 2,
+                                x: 1,
+                                y: 1
+                            )
+                            .padding(.leading, 20)
+                            
+                            
+                            VStack(alignment: .leading) {
+                                Text(ex1Date)
+                                    .font(
+                                        .custom(
+                                            "Inder-Regular",
+                                            size: 13
+                                        )
+                                    )
+                                    .foregroundStyle(.black)
+                                    .padding(.leading, 5)
+                                HStack(spacing: 0) {
+                                    ForEach(ex1, id: \.self) {
+                                        ex in
+                                        VStack {
+                                            Text(ex)
+                                                .font(
+                                                    .custom(
+                                                        "Inder-Regular",
+                                                        size: 13
+                                                    )
+                                                )
+                                                .foregroundStyle(.white)
+                                        }
+                                        .frame(width: 35, height: 25)
+                                        .background(.brown)
+                                        .cornerRadius(20)
+                                        .padding(.leading, 5)
+                                        
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .frame(width: 300, height: 60)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .shadow(
+                                color: Color.black.opacity(0.4),
+                                radius: 2,
+                                x: 1,
+                                y: 1
+                            )
+                            .padding(.leading, 20)
+                            HStack {
+                                VStack {
+                                    Text("Starting Weight")
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 20
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.top, 10)
+                                    
+                                    Text(startingWeight)
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 30
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.top, -5)
+                                        .padding(.bottom, 10)
+                                }
+                                .background(.darkBlue)
+                                .cornerRadius(10)
+                                .padding(.leading, 20)
+                                VStack {
+                                    Text("Total Sets")
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 20
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.top, 10)
+                                    
+                                    Text(totalSets)
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 30
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.top, -5)
+                                        .padding(.bottom, 10)
+                                }
+                                .background(.darkBlue)
+                                .cornerRadius(10)
+                                .padding(.leading, 20)
+                            }
+                            .padding(.top, 50)
+                            
+                            
+                        }.frame(width: 390, height: 650)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .padding(.top, 30)
+                            .shadow(
+                                color: Color.black.opacity(0.6),
+                                radius: 4,
+                                x: 1,
+                                y: 3
+                            )
+                    } else {
+                        
+                        // FOR THE MUSCLE GROUP CARD
                         
                         
-                    }.frame(width: 390, height: 650)
-                        .background(.white)
-                        .cornerRadius(10)
-                        .padding(.top, 30)
-                        .shadow(
-                            color: Color.black.opacity(0.6),
-                            radius: 4,
-                            x: 1,
-                            y: 3
-                        )
+                        VStack(alignment: .leading) {
+                            Text(chosenResult)
+                                .font(.custom("PTSans-Narrow", size: 60))
+                                .foregroundStyle(.black)
+                                .padding(.leading, 20)
+                                .padding(.top, -5)
+                            HStack {
+                                Text("Exercises")
+                                    .foregroundStyle(.black)
+                                    .font(.custom("Poppins-Bold", size: 15))
+                                    .padding(.leading, 20)
+                                    .padding(.top, -35)
+                                Text("35 Total")
+                                    .foregroundStyle(.grayBlue)
+                                    .font(.custom("Poppins-Bold", size: 15))
+                                    .padding(.leading, 20)
+                                    .padding(.top, -35)
+                            }
+                            
+                            
+                            // ALL EXERCISES AND MEASUREMENTS
+                            HStack {
+                                ScrollView {
+                                    LazyVStack {
+                                        ForEach(getExcercisesForMuscleGroup(), id: \.self) { exc in
+                                            HStack {
+                                                Text(exc.name)
+                                                    .foregroundStyle(.black)
+                                                    .font(.custom("Inder-Regular", size: 20))
+                                                Spacer()
+                                                Text("23")
+                                                    .foregroundStyle(.black)
+                                                    .font(.custom("Poppins-Bold", size: 20))
+
+                                            }
+                                            .frame(width: 200)
+                                            .padding(.bottom, 5)
+                                        }
+                                    }
+                                }
+                                .frame(width: 220, height: 300)
+                                .background(.white)
+                                .cornerRadius(10)
+                                .shadow(
+                                    color: Color.black.opacity(0.6),
+                                    radius: 4,
+                                    x: 1,
+                                    y: 3
+                                )
+                                VStack {
+                                    VStack {
+                                        Text("Measurements")
+                                            .font(.custom("Poppins-Bold", size: 17))
+                                            .foregroundStyle(.darkBlue)
+                                            .padding(.top, 5)
+                                        
+                                        // MEASUREMENTS
+                                        
+                                        HStack {
+                                            Text("Right Leg")
+                                                .foregroundStyle(.brown)
+                                                .font(.custom("Inder-Regular", size: 17))
+                                            Spacer()
+                                            Text("23")
+                                                .foregroundStyle(.backgroundBlue)
+                                                .font(.custom("Inder-Regular", size: 20))
+                                            
+                                        }.frame(width: 120)
+                                        
+                                        HStack {
+                                            Text("Right Leg")
+                                                .foregroundStyle(.brown)
+                                                .font(.custom("Inder-Regular", size: 17))
+                                            Spacer()
+                                            Text("23")
+                                                .foregroundStyle(.backgroundBlue)
+                                                .font(.custom("Inder-Regular", size: 20))
+                                            
+                                        }.frame(width: 120)
+                                        
+                                        HStack {
+                                            Text("Right Leg")
+                                                .foregroundStyle(.brown)
+                                                .font(.custom("Inder-Regular", size: 17))
+                                            Spacer()
+                                            Text("23")
+                                                .foregroundStyle(.backgroundBlue)
+                                                .font(.custom("Inder-Regular", size: 20))
+                                            
+                                        }.frame(width: 120)
+                                        
+                                        HStack {
+                                            Text("Right Leg")
+                                                .foregroundStyle(.brown)
+                                                .font(.custom("Inder-Regular", size: 17))
+                                            Spacer()
+                                            Text("23")
+                                                .foregroundStyle(.backgroundBlue)
+                                                .font(.custom("Inder-Regular", size: 20))
+                                            
+                                        }.frame(width: 120)
+                                        
+                                        HStack {
+                                            Text("Right Leg")
+                                                .foregroundStyle(.brown)
+                                                .font(.custom("Inder-Regular", size: 17))
+                                            Spacer()
+                                            Text("23")
+                                                .foregroundStyle(.backgroundBlue)
+                                                .font(.custom("Inder-Regular", size: 20))
+                                            
+                                        }.frame(width: 120)
+                                        
+                                        Spacer()
+                                    }
+                                    .frame(width: 150, height: getHeightForMeasurements())
+                                    .background(.white)
+                                    .cornerRadius(3)
+                                    .shadow(
+                                        color: Color.black.opacity(0.6),
+                                        radius: 2,
+                                        x: 1,
+                                        y: 2
+                                    )
+                                    Spacer()
+                                }.frame(width: 150, height: 300)
+                            }
+                            .padding(.top, -20)
+         
+                          
+                            HStack {
+                                VStack {
+                                    Text("Total Sets")
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 20
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.top, 10)
+                                    
+                                    Text(totalSets)
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 30
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.top, -5)
+                                        .padding(.bottom, 10)
+                                }
+                                .background(.darkBlue)
+                                .cornerRadius(10)
+                                .padding(.leading, 20)
+                                VStack {
+                                    Text("Days Worked")
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 20
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.top, 10)
+                                    
+                                    Text(startingWeight)
+                                        .font(
+                                            .custom(
+                                                "Inder-Regular",
+                                                size: 30
+                                            )
+                                        )
+                                        .foregroundStyle(.white)
+                                        .padding(.top, -5)
+                                        .padding(.bottom, 10)
+                                }
+                                .background(.darkBlue)
+                                .cornerRadius(10)
+                                .padding(.leading, 20)
+                            }
+                            .padding(.top, 50)
+                            
+                            
+                        }.frame(width: 390, height: 650)
+                            .background(.white)
+                            .cornerRadius(10)
+                            .padding(.top, 30)
+                            .shadow(
+                                color: Color.black.opacity(0.6),
+                                radius: 4,
+                                x: 1,
+                                y: 3
+                            )
+                    }
                 }
             
             }
