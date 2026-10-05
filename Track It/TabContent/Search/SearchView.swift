@@ -432,16 +432,27 @@ struct SearchView: View {
                         
                         
                         VStack(alignment: .leading) {
-                            Text(chosenResult)
-                                .font(.custom("PTSans-Narrow", size: 60))
-                                .foregroundStyle(.black)
-                                .padding(.leading, 20)
-                                .padding(.top, -5)
+                            HStack {
+                                VStack{
+                                    
+                                }
+                                .frame(width: 10, height: 70)
+                                .background(MuscleGroupColorMap[chosenResult])
+                                .cornerRadius(10)
+                                VStack {
+                                    Text(chosenResult)
+                                        .font(.custom("PTSans-Narrow", size: 60))
+                                        .foregroundStyle(.black)
+                                        .padding(.leading, 5)
+                                        .padding(.top, 15)
+                                }
+                                .padding(.top, -25)
+                            }
                             HStack {
                                 Text("Exercises")
                                     .foregroundStyle(.black)
                                     .font(.custom("Poppins-Bold", size: 15))
-                                    .padding(.leading, 20)
+                                    .padding(.leading, 5)
                                     .padding(.top, -35)
                                 Text("35 Total")
                                     .foregroundStyle(.grayBlue)
@@ -471,15 +482,15 @@ struct SearchView: View {
                                         }
                                     }
                                 }
-                                .frame(width: 220, height: 300)
+                                .frame(width: 220, height: 370)
                                 .background(.white)
-                                .cornerRadius(10)
-                                .shadow(
-                                    color: Color.black.opacity(0.6),
-                                    radius: 4,
-                                    x: 1,
-                                    y: 3
-                                )
+//                                .cornerRadius(10)
+//                                .shadow(
+//                                    color: Color.black.opacity(0.6),
+//                                    radius: 4,
+//                                    x: 1,
+//                                    y: 3
+//                                )
                                 VStack {
                                     VStack {
                                         Text("Measurements")
@@ -556,7 +567,7 @@ struct SearchView: View {
                                         y: 2
                                     )
                                     Spacer()
-                                }.frame(width: 150, height: 300)
+                                }.frame(width: 150, height: 370)
                             }
                             .padding(.top, -20)
          
