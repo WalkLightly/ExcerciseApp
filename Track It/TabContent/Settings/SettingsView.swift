@@ -22,19 +22,81 @@ struct SettingsView: View {
     ]
     
     @StateObject private var viewModel = ExerciseCardViewModel()
+    @StateObject private var homeViewModel = HomeViewModel()
+
     @State private var exercises: [Excercise] = []
     @State private var showEditModal: Bool = false
     @State private var chosenExName: String = ""
     @State private var chosenExWeight: String = ""
 
+    @State private var csvFileURL: URL?
+    @State private var Workouts: [MuscleGroupWorkout] = []
+
+    
+    let headers = ["ID", "JSON"]
+    
+    func formatCSV() -> String {
+               
+        var csvString = ""
+                
+        // Escape helper for commas, quotes, and newlines
+        func sanitize(_ field: String) -> String {
+            if field.contains(",") || field.contains("\"") || field.contains("\n") {
+                let escaped = field.replacingOccurrences(of: "\"", with: "\"\"")
+                return "\"\(escaped)\""
+            }
+            return field
+        }
+        
+        // Append Header Row
+        let headerRow = headers.map { sanitize($0) }.joined(separator: ",")
+        csvString.append(headerRow + "\n")
+        
+        // Append Data Rows
+        for wrkout in Workouts {
+            do {
+                let encoder = JSONEncoder()
+                let jsonData = try encoder.encode(wrkout)
+                let jsonString = String(data: jsonData, encoding: .utf8)
+                
+                let row = ["\(wrkout.id)", jsonString]
+                let rowString = row.map { sanitize($0!) }.joined(separator: ",")
+                csvString.append(rowString + "\n")
+            } catch {
+                print("Failed to convert to JSON: \(error.localizedDescription)")
+            }
+        }
+        
+        return csvString
+    }
+    
+    func generateCSV() -> URL? {
+        let csvDataString = formatCSV()
+        
+        print(csvDataString)
+                
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let fileURL = tempDirectory.appendingPathComponent("musclegroupworkouts.csv")
+                
+        do {
+            try csvDataString.write(to: fileURL, atomically: true, encoding: .utf8)
+            return fileURL
+        } catch {
+            print("Failed to save CSV file: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
     
     func fetchData() async throws -> Void {
         exercises = try await viewModel.getAllExercises()
+        Workouts = try await homeViewModel.getAllWorkoutData()
+        
+        print(Workouts)
     }
     
     func filterExcercises(muscle: String) -> [Excercise] {
         let ex = exercises.filter { $0.muscleGroup == muscle}
-        print(ex)
         return ex
     }
     
@@ -45,11 +107,38 @@ struct SettingsView: View {
             }
             .frame(width: 500, height: 1500)
             VStack {
-                Text("Settings")
-                    .font(.custom("PTSans-Narrow", size: 55))
-                    .padding(.top, 20)
-                    .padding(.leading, -200)
-                    .foregroundStyle(.black)
+                HStack(spacing: 150) {
+                    Text("Settings")
+                        .font(.custom("PTSans-Narrow", size: 55))
+                        .padding(.top, 20)
+                        .foregroundStyle(.black)
+                    if let fileURL = generateCSV() {
+                        ShareLink(item: fileURL, preview: SharePreview("Export CSV Data")) {
+//                            Button(action: {
+//                                withAnimation(.smooth(duration: 0.3, extraBounce: 0.4))
+//                                {
+//                                }
+//                            }) {
+//                                Image(systemName: "arrow.down.to.line")
+//                                    .font(.system(size: 30))
+//                                    .foregroundStyle(.black)
+//                            }
+//                            .frame(width: 80, height: 50)
+//                            .background(.chestAccent)
+//                            .cornerRadius(10)
+//                            .padding(.top, 20)
+                            Label("", systemImage: "arrow.down.to.line")
+                                .padding(.leading, 10)
+                                .foregroundColor(.chestAccent)
+                                .cornerRadius(10)
+                                .font(Font.system(size: 45))
+                        }
+                    } else {
+                        Text("Error preparing CSV file")
+                            .foregroundColor(.red)
+                    }
+                }
+                //.padding(.leading, -200)
                 ScrollView {
                     LazyVStack (spacing: 12) {
                         ForEach(MuscleGroups, id: \.self) { muscle in
