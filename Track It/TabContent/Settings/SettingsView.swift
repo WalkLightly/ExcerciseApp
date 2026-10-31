@@ -72,9 +72,7 @@ struct SettingsView: View {
     
     func generateCSV() -> URL? {
         let csvDataString = formatCSV()
-        
-        print(csvDataString)
-                
+                        
         let tempDirectory = FileManager.default.temporaryDirectory
         let fileURL = tempDirectory.appendingPathComponent("musclegroupworkouts.csv")
                 
@@ -92,7 +90,6 @@ struct SettingsView: View {
         exercises = try await viewModel.getAllExercises()
         Workouts = try await homeViewModel.getAllWorkoutData()
         
-        print(Workouts)
     }
     
     func filterExcercises(muscle: String) -> [Excercise] {

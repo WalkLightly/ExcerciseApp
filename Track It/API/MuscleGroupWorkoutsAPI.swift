@@ -45,7 +45,7 @@ class MuscleGroupWorkoutsAPI {
 
         return data
     }
-    
+        
     func getAllMuscleGroupWorkouts()  async throws
     -> [MuscleGroupWorkout] {
         var data: [MuscleGroupWorkout] = []

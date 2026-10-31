@@ -10,6 +10,7 @@ internal import Combine
 
 class ExerciseCardViewModel: ObservableObject  {
     @Published var exercises: [Excercise] = []
+    @Published var exercisesMasterList: [MuscleGroupWorkout] = []
     
     func getAllExercises() async throws -> [Excercise] {
         var exercises: [Excercise] = []
@@ -18,5 +19,27 @@ class ExerciseCardViewModel: ObservableObject  {
         }
         
         return exercises
+    }
+    
+    func getAllWorkoutData() async throws -> [MuscleGroupWorkout] {
+        do {
+            self.exercisesMasterList = try await MuscleGroupWorkoutsAPI.shared.getAllMuscleGroupWorkouts()
+        } catch {
+            print("error fetching workouts")
+        }
+        
+        return self.exercisesMasterList
+    }
+    
+    func getAllMeasurements() async throws -> [Measurement] {
+        var measurements: [Measurement] = []
+        
+        do {
+            measurements = try await WeightAPI.shared.getCurrentMeasurements()
+        } catch {
+            print("error fetching workouts")
+        }
+        
+        return measurements
     }
 }

@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct SearchView: View {
-    @FocusState var showTypeAhead: Bool
-    @State var searchText: String = ""
-    @State var muscleGroup: String = ""
-    @State var chosenResult: String = "Legs"
     @StateObject private var viewModel = ExerciseCardViewModel()
+    @FocusState var showTypeAhead: Bool
+    
+    @State var searchText: String = ""//DB Bulgarian Split Squat"
+    @State var muscleGroup: String = ""
+    @State var chosenResult: String = "" //DB Bulgarian Split Squat"
     @State private var exercises: [Excercise] = []
     @State private var resultIsMuscleGroup: Bool = true
     @State private var typeAheadResults: [String] = []
+    @State private var measurements: [Measurement] = []
+    @State private var startingWeight: String = ""
     let muscleGroups: [String] = ["Shoulders",
                                  "Legs",
                                  "Triceps",
@@ -25,6 +28,8 @@ struct SearchView: View {
                                  "Cardio",
                                  "Abs",
                                  "Forearms"]
+    @State private var totalSets: Int = 0
+    @State private var daysWorkedOut: Int = 0
     
     
     var ex1Date: String = "10/2/2026"
@@ -33,15 +38,14 @@ struct SearchView: View {
     var ex4Date: String = "10/2/2026"
     var ex5Date: String = "10/2/2026"
     
-    var startingWeight: String = "200"
-    var totalSets: String = "1000"
-    var daysWorkedOut: String = "20"
 
     var ex1: [String] = ["1","200","34","40"]
     var ex2: [String] = ["1","200","34","40"]
     var ex3: [String] = ["1","200","34","40"]
     var ex4: [String] = ["1","200","34","40"]
     var ex5: [String] = ["1","200","34","40"]
+    
+    @State private var workouts: [MuscleGroupWorkout] = []
     
 
     func getHeightForMeasurements() -> CGFloat {
@@ -62,11 +66,52 @@ struct SearchView: View {
     
     func fetchData() async throws -> Void {
         typeAheadResults = muscleGroups
+        workouts = try await viewModel.getAllWorkoutData()
         exercises = try await viewModel.getAllExercises()
+        measurements = try await viewModel.getAllMeasurements()
         
         for ex in exercises {
             typeAheadResults.append(ex.name)
         }
+        
+       // getTotalSetsAndDaysForMuscleGroup()
+        muscleGroup = getMuscleGroupFromName(excerciseName: chosenResult)
+        getTotalSetsForExercise()
+    }
+    
+    func getMeasurements() -> Void {
+        print(measurements)
+    }
+    
+    func getTotalSetsAndDaysForMuscleGroup() -> Void {
+        totalSets = 0
+        daysWorkedOut = 0
+        for workout in workouts {
+            if workout.muscleGroup == searchText {
+                daysWorkedOut += 1
+                for exercise in workout.exercises {
+                    totalSets += exercise.sets.count
+                }
+            }
+        }
+        
+    }
+    
+    func getTotalSetsForExercise() -> Void {
+        totalSets = 0
+        daysWorkedOut = 0
+        startingWeight = exercises.filter({$0.name == chosenResult}).first?.startingWeight ?? ""
+        for workout in workouts {
+            if workout.muscleGroup == muscleGroup {
+                daysWorkedOut += 1
+                for exercise in workout.exercises {
+                    if exercise.name == chosenResult {
+                        totalSets += exercise.sets.count
+                    }
+                }
+            }
+        }
+        
     }
 
     var body: some View {
@@ -77,13 +122,24 @@ struct SearchView: View {
             .frame(width: 500, height: 1500)
             VStack(alignment: .leading) {
                 VStack {
-                    TextField("Search . . .", text: $searchText)
-                        .frame(width: 380, height: 40)
-                        .foregroundStyle(.grayBlue)
-                        .font(.custom("Inder-Regular", size: 30))
-                        .padding(.leading, 5)
-                        .padding(.top, showTypeAhead ? 70 : -15)
-                        .focused($showTypeAhead)
+                    HStack {
+                        TextField("Search . . .", text: $searchText)
+                            .frame(width: 340, height: 40)
+                            .foregroundStyle(.grayBlue)
+                            .font(.custom("Inder-Regular", size: 30))
+                            .padding(.leading, 5)
+                            .focused($showTypeAhead)
+                        Image(systemName: "xmark")
+                            .font(.system(size: 25))
+                            .foregroundStyle(.cornflowerBlue)
+                            .opacity(searchText == "" ? 0 : 1)
+                            .onTapGesture {
+                                searchText = ""
+                                chosenResult = ""
+                            }
+                            .padding(.trailing, 5)
+                    }
+                    .padding(.top, showTypeAhead ? 70 : -15)
                     
                     Rectangle()
                         .fill(.cornflowerBlue)
@@ -125,6 +181,14 @@ struct SearchView: View {
                                 .cornerRadius(5)
                                 .padding(.top, -15)
                                 .padding(.leading, 20)
+                                .onTapGesture {
+                                    chosenResult = muscleGroup
+                                    showTypeAhead = false
+                                    searchText = muscleGroup
+                                    resultIsMuscleGroup = true
+                                    getTotalSetsAndDaysForMuscleGroup()
+                                    getMeasurements()
+                                }
                                 Spacer()
                             }
                             HStack {
@@ -133,7 +197,7 @@ struct SearchView: View {
                                     .font(.custom("Poppins-Bold", size: 15))
                                     .padding(.leading, 20)
                                     .padding(.top, 30)
-                                Text("35 Total")
+                                Text("\(daysWorkedOut)Total")
                                     .foregroundStyle(.grayBlue)
                                     .font(.custom("Poppins-Bold", size: 15))
                                     .padding(.leading, 20)
@@ -398,7 +462,7 @@ struct SearchView: View {
                                         .padding(.horizontal, 20)
                                         .padding(.top, 10)
                                     
-                                    Text(totalSets)
+                                    Text("\(totalSets)")
                                         .font(
                                             .custom(
                                                 "Inder-Regular",
@@ -427,10 +491,6 @@ struct SearchView: View {
                                 y: 3
                             )
                     } else {
-                        
-                        // FOR THE MUSCLE GROUP CARD
-                        
-                        
                         VStack(alignment: .leading) {
                             HStack {
                                 VStack{
@@ -454,11 +514,6 @@ struct SearchView: View {
                                     .font(.custom("Poppins-Bold", size: 15))
                                     .padding(.leading, 5)
                                     .padding(.top, -35)
-                                Text("35 Total")
-                                    .foregroundStyle(.grayBlue)
-                                    .font(.custom("Poppins-Bold", size: 15))
-                                    .padding(.leading, 20)
-                                    .padding(.top, -35)
                             }
                             
                             
@@ -472,13 +527,20 @@ struct SearchView: View {
                                                     .foregroundStyle(.black)
                                                     .font(.custom("Inder-Regular", size: 20))
                                                 Spacer()
-                                                Text("23")
+                                                Text(exc.startingWeight)
                                                     .foregroundStyle(.black)
-                                                    .font(.custom("Poppins-Bold", size: 20))
+                                                    .font(.custom("Poppins-Bold", size: 15))
 
                                             }
                                             .frame(width: 200)
                                             .padding(.bottom, 5)
+                                            .onTapGesture {
+                                                chosenResult = exc.name
+                                                resultIsMuscleGroup = false
+                                                searchText = exc.name
+                                                muscleGroup = getMuscleGroupFromName(excerciseName: chosenResult)
+                                                getTotalSetsForExercise()
+                                            }
                                         }
                                     }
                                 }
@@ -585,7 +647,7 @@ struct SearchView: View {
                                         .padding(.horizontal, 20)
                                         .padding(.top, 10)
                                     
-                                    Text(totalSets)
+                                    Text("\(totalSets)")
                                         .font(
                                             .custom(
                                                 "Inder-Regular",
@@ -611,7 +673,7 @@ struct SearchView: View {
                                         .padding(.horizontal, 20)
                                         .padding(.top, 10)
                                     
-                                    Text(startingWeight)
+                                    Text("\(daysWorkedOut)")
                                         .font(
                                             .custom(
                                                 "Inder-Regular",
@@ -658,7 +720,14 @@ struct SearchView: View {
                                     showTypeAhead = false
                                     searchText = result
                                     resultIsMuscleGroup = muscleGroups.contains(result)
-                                    
+                                    if resultIsMuscleGroup {
+                                        getTotalSetsAndDaysForMuscleGroup()
+                                        getMeasurements()
+                                    } else {
+                                        // find the muscle group for the chosen exercise
+                                        muscleGroup = getMuscleGroupFromName(excerciseName: chosenResult)
+                                        getTotalSetsForExercise()
+                                    }
                                 }
                         }
                     }
